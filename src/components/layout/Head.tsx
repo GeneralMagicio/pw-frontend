@@ -9,7 +9,7 @@ export function Head({ title, description }: HeadProps) {
   return (
     <NextHead>
       <title>{title ?? SITE_NAME}</title>
-      <meta name="description" content={description ?? SITE_DESCRIPTION} />
+      <meta content={description ?? SITE_DESCRIPTION} name="description" />
     </NextHead>
   )
 }

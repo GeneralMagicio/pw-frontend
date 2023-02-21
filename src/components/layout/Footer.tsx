@@ -9,16 +9,16 @@ export function Footer() {
         Made with ❤️ by{' '}
         <a
           className="font-bold"
-          target="_blank"
           href={`https://twitter.com/${SOCIAL_TWITTER}`}
-          rel="noreferrer">
+          rel="noreferrer"
+          target="_blank">
           General Magic
         </a>
       </h4>{' '}
       <a
         href={`https://github.com/${SOCIAL_GITHUB}`}
-        target="_blank"
-        rel="noreferrer">
+        rel="noreferrer"
+        target="_blank">
         <FaGithub />
       </a>
     </footer>

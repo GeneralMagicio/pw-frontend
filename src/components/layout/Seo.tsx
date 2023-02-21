@@ -15,12 +15,10 @@ export function Seo() {
 
   return (
     <DefaultSeo
-      title={SITE_NAME}
-      defaultTitle={SITE_NAME}
-      titleTemplate={`%s | ${SITE_NAME}`}
-      description={SITE_DESCRIPTION}
-      defaultOpenGraphImageWidth={1200}
       defaultOpenGraphImageHeight={630}
+      defaultOpenGraphImageWidth={1200}
+      defaultTitle={SITE_NAME}
+      description={SITE_DESCRIPTION}
       openGraph={{
         type: 'website',
         siteName: SITE_NAME,
@@ -32,6 +30,8 @@ export function Seo() {
           },
         ],
       }}
+      title={SITE_NAME}
+      titleTemplate={`%s | ${SITE_NAME}`}
       twitter={{
         handle: `@${SOCIAL_TWITTER}`,
         site: `@${SOCIAL_TWITTER}`,
