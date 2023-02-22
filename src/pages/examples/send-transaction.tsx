@@ -1,9 +1,10 @@
-import { FormEventHandler, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useDebounce } from 'use-debounce'
 import {
   usePrepareSendTransaction,
   useSendTransaction,
   useWaitForTransaction,
+  useNetwork,
 } from 'wagmi'
 import { utils } from 'ethers'
 import { Head } from '@/components/layout/Head'
@@ -14,6 +15,8 @@ export default function SendTransaction() {
 
   const [amount, setAmount] = useState<string>('')
   const [debouncedAmount] = useDebounce(amount, 500)
+
+  const { chain } = useNetwork()
 
   const prepareSendTransaction = usePrepareSendTransaction({
     request: {
@@ -63,7 +66,7 @@ export default function SendTransaction() {
             value={amount}
           />
           <button
-            className="focus: mt-3 rounded-xl bg-indigo-200 p-3 text-lg font-semibold text-indigo-700 transition  duration-300 focus:ring-2 focus:ring-indigo-500 enabled:hover:bg-indigo-300 disabled:opacity-70"
+            className="mt-3 rounded-xl bg-indigo-200 p-3 text-lg font-semibold text-indigo-700 transition  duration-300 focus:ring-2 focus:ring-indigo-500 enabled:hover:bg-indigo-300 disabled:opacity-70"
             disabled={
               sendTransaction.isLoading ||
               waitForTransaction.isLoading ||
@@ -82,9 +85,18 @@ export default function SendTransaction() {
               <p>
                 Successfully sent {amount} ether to {to}
               </p>
-              <p className="mt-2">
-                Transaction Hash: {sendTransaction.data?.hash}
-              </p>
+              {chain && sendTransaction.data && (
+                <p className="mt-2">
+                  Check the{' '}
+                  <a
+                    className="font-medium text-indigo-500 underline"
+                    href={`${chain.blockExplorers?.default.url}/tx/${sendTransaction.data.hash}`}
+                    rel="noreferrer"
+                    target="_blank">
+                    Transaction Hash in the block explorer
+                  </a>
+                </p>
+              )}
             </div>
           ) : (
             prepareSendTransaction.isError && (
