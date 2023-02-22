@@ -32,4 +32,8 @@ const items = [
     title: 'Contract Write',
     url: '/examples/contract-write',
   },
+  {
+    title: 'Sign-In with Ethereum',
+    url: '/examples/siwe',
+  },
 ]
