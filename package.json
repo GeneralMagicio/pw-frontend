@@ -28,6 +28,7 @@
     "wagmi": "^1.0.5"
   },
   "devDependencies": {
+    "@wagmi/cli": "^1.0.1",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
