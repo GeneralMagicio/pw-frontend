@@ -6,23 +6,20 @@ import {
   useWaitForTransaction,
   useNetwork,
 } from 'wagmi'
-import { utils } from 'ethers'
+import { parseEther } from 'viem'
 import { Head } from '@/components/layout/Head'
 
 export default function SendTransaction() {
   const [to, setTo] = useState<string>('')
   const [debouncedTo] = useDebounce(to, 500)
-
-  const [amount, setAmount] = useState<string>('')
+  const [amount, setAmount] = useState<`${number}`>('0')
   const [debouncedAmount] = useDebounce(amount, 500)
 
   const { chain } = useNetwork()
 
   const prepareSendTransaction = usePrepareSendTransaction({
-    request: {
-      to: debouncedTo,
-      value: debouncedAmount ? utils.parseEther(debouncedAmount) : undefined,
-    },
+    to: debouncedTo,
+    value: debouncedAmount ? parseEther(debouncedAmount) : undefined,
   })
 
   const sendTransaction = useSendTransaction(prepareSendTransaction.config)
@@ -60,7 +57,7 @@ export default function SendTransaction() {
             aria-label="Amount (ether)"
             className="rounded-xl p-3 font-medium text-gray-700"
             id="amount"
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => setAmount(e.target.value as `${number}`)}
             placeholder="0.05"
             type="number"
             value={amount}
