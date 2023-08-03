@@ -1,18 +1,21 @@
 {
-  "name": "next-web3-starter",
+  "name": "pw-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:ssl": "next dev | npx local-ssl-proxy --source 3001 --target 3000"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^1.0.0",
+    "@spruceid/siwe-parser": "^2.0.2",
     "@types/node": "18.14.0",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
+    "axios": "^1.4.0",
     "eslint-config-next": "13.4.2",
     "ethers": "^5.7.2",
     "iron-session": "^6.3.1",
@@ -21,7 +24,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
-    "siwe": "^1.1.6",
+    "siwe": "^2.1.4",
     "typescript": "5.0.4",
     "use-debounce": "^9.0.3",
     "viem": "^0.3.30",

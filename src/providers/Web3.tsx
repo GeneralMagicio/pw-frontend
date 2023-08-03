@@ -12,6 +12,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 const { connectors } = getDefaultWallets({
   appName: SITE_NAME,
   chains,
+  projectId: "55df23aa617b4f9c344451b907c660d1"
 })
 
 const wagmiConfig = createConfig({
