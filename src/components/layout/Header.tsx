@@ -16,11 +16,11 @@ export function Header() {
   useEffect(() => {
     const main = async () => {
         // automatic login when the user connects their wallet
-      if (isConnected && !previousIsConnected.current) {
+      if (isConnected && previousIsConnected.current === false) {
         await login(chain!.id, address!, signMessageAsync)
         
         // automatic logout when the user disconnects their wallet
-      } else if (!isConnected && previousIsConnected.current) {
+      } else if (!isConnected && previousIsConnected.current === true) {
         await logout()
       }
   
