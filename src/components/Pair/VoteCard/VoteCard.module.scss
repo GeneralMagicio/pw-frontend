@@ -1,0 +1,33 @@
+.voteCardWrapper {
+  position: relative;
+  &:hover {
+    button {
+      opacity: 1;
+    }
+
+    .voteCard__shadow {
+      opacity: unset;
+    }
+  }
+  @media screen and (max-width: 1300px) {
+    & > :first-child,
+    & > :last-child {
+      display: none;
+    }
+  }
+}
+.voteCard {
+  &--fade {
+    .voteCard__body {
+      opacity: 0.6;
+    }
+  }
+  &__shadow {
+    transition: 200ms opacity ease-in-out;
+    opacity: 0;
+  }
+  &__body {
+    transition: all 400ms ease-in-out 0s;
+    transform-style: preserve-3d;
+  }
+}
