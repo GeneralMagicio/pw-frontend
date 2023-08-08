@@ -20,13 +20,8 @@ export function Header() {
 
   useEffect(() => {
     const main = async () => {
-<<<<<<< Updated upstream
-        // automatic login when the user connects their wallet
-      if (isConnected && previousIsConnected.current === false) {
-=======
       // automatic login when the user connects their wallet
-      if (isConnected && !previousIsConnected.current) {
->>>>>>> Stashed changes
+      if (isConnected && previousIsConnected.current === false) {
         await login(chain!.id, address!, signMessageAsync)
 
         // automatic logout when the user disconnects their wallet
