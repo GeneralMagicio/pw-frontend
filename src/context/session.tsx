@@ -50,7 +50,13 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   // redirect logic
   useEffect(() => {
-    if (isConnected && !router.pathname.includes('poll')) router.push('/poll/1')
+    console.log({ p: router.pathname })
+    if (
+      isConnected &&
+      !router.pathname.includes('poll') &&
+      !router.pathname.includes('error')
+    )
+      router.push('/poll/1')
     if (!isConnected) router.push('/')
   }, [isConnected, router, session.user])
 

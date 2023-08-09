@@ -43,7 +43,7 @@ export const VoteCard: React.FC<
         )}>
         {!selected && (
           <>
-            {Boolean(item.sumOfChildren) && (
+            {Boolean(item.numOfChildren) && (
               <>
                 <div
                   className={cn(
@@ -106,10 +106,10 @@ export const VoteCard: React.FC<
             <div className="mb-3 flex grow flex-col justify-end">
               <div className="self-start rounded-lg border border-black-3 p-1">
                 <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
-                  {item.sumOfChildren ? <Layers /> : <Browser />}
+                  {item.numOfChildren ? <Layers /> : <Browser />}
                   <span className="font-IBM text-sm">
-                    {item.sumOfChildren
-                      ? `${item.sumOfChildren} + Projcets`
+                    {item.numOfChildren
+                      ? `+${item.numOfChildren} Projcets`
                       : 'Single project'}
                   </span>
                 </div>

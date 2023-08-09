@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
           style={{
             left: `${Math.min(progressPercentage, 96)}%`,
           }}>
-          <span className="text-red">{voted}</span> of 87
+          <span className="text-red">{voted}</span> of {total}
           <div className="absolute top-0 h-0 w-0 -translate-y-full translate-x-5 border-x-8 border-b-8 border-x-transparent border-b-white"></div>
         </div>
       )}
