@@ -7,6 +7,7 @@ import { useAccount, useNetwork, useSignMessage, useSwitchNetwork } from 'wagmi'
 import { login, logout } from '@/utils/auth'
 import { Logo } from '../Icon/Logo'
 import { useRouter } from 'next/router'
+import { ConnectWalletButton } from '../ConnectWalletButton'
 
 export function Header() {
   return (
@@ -16,7 +17,7 @@ export function Header() {
           <Logo />
         </div>
       </Link>
-      <ConnectButton />
+      <ConnectWalletButton />
     </header>
   )
 }
