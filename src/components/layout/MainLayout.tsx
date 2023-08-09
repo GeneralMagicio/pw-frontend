@@ -49,10 +49,10 @@ export function MainLayout({ children, className }: MainLayoutProps) {
       <div
         className={cn(
           className,
-          'main-layout flex min-h-screen shrink-0 flex-col  text-white font-IBM'
+          'main-layout flex min-h-screen shrink-0 flex-col  text-white font-IBM bg-no-repeat bg-cover'
         )}>
         <Header />
-        <div className="mx-auto w-full  grow ">{children}</div>
+        <div className="grow ">{children}</div>
       </div>
     </>
   )
