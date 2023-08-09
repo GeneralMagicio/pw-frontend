@@ -5,5 +5,5 @@ export interface PairType {
   description: string
   collection_id: number
   created_at: string
-  sumOfChildren: number
+  numOfChildren: number
 }

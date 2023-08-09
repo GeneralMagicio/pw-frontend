@@ -22,7 +22,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   })
   const router = useRouter()
   const { isConnected } = useAccount()
-  const previousIsConnected = useRef<boolean | null>(null)
+  const previousIsConnected = useRef<boolean>(false)
 
   const { address } = useAccount()
   const { chain } = useNetwork()
@@ -32,17 +32,20 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const main = async () => {
       // automatic login when the user connects their wallet
       if (isConnected && previousIsConnected.current === false) {
-        const user = await login(chain!.id, address!, signMessageAsync)
-        setSession({ user: 'SUCCESS' })
+        previousIsConnected.current = isConnected
+        console.log('SIGN IN')
+        try {
+          const user = await login(chain!.id, address!, signMessageAsync)
+          setSession({ user: 'SUCCESS' })
+        } catch {}
 
         // automatic logout when the user disconnects their wallet
       } else if (!isConnected && previousIsConnected.current === true) {
+        console.log('LOGOUT')
         await logout()
         setSession({ user: '' })
-        router.push('/')
+        if (router.pathname !== '/') router.push('/')
       }
-
-      previousIsConnected.current = isConnected
     }
 
     main()
@@ -50,8 +53,13 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   // redirect logic
   useEffect(() => {
-    if (isConnected && !router.pathname.includes('poll')) router.push('/poll/1')
-    if (!isConnected) router.push('/')
+    if (
+      isConnected &&
+      previousIsConnected.current &&
+      session.user &&
+      !router.pathname.includes('poll')
+    )
+      router.push('/poll/1')
   }, [isConnected, router, session.user])
 
   return (
