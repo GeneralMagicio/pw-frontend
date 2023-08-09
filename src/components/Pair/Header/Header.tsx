@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
       )}>
       <p>{question}</p>
       <button
-        className="flex items-center gap-2  whitespace-nowrap rounded-xl border-4 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+        className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
         onClick={handleFinishVoting}>
         Finish voting
       </button>
@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
             left: `${Math.min(progressPercentage, 96)}%`,
           }}>
           <span className="text-red">{voted}</span> of 87
-          <div className="absolute top-0 h-0 w-0 -translate-y-full translate-x-full border-x-8 border-b-8 border-x-transparent border-b-white"></div>
+          <div className="absolute top-0 h-0 w-0 -translate-y-full translate-x-5 border-x-8 border-b-8 border-x-transparent border-b-white"></div>
         </div>
       )}
     </div>
