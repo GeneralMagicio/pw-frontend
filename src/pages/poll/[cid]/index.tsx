@@ -20,27 +20,9 @@ export default function Poll() {
   const { isConnected } = useAccount()
 
   useEffect(() => {
-    const { votedPairs, totalPairs } = pairs || {}
-    if (
-      votedPairs &&
-      totalPairs &&
-      votedPairs > 1 &&
-      votedPairs === totalPairs
-    ) {
-      finish()
-    }
-  }, [pairs?.totalPairs, pairs?.votedPairs])
-
-  useEffect(() => {
-    if (isConnected) fetchPairs(router.query.cid).then(setPairs)
+    if (isConnected && router.query.cid)
+      fetchPairs(Number(router.query.cid) || 1).then(setPairs)
   }, [isConnected, router.query])
-
-  const finish = () => {
-    router.push({
-      pathname: `${router.pathname}/ranking`,
-      query: router.query,
-    })
-  }
 
   return (
     <>
@@ -50,7 +32,12 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
-        handleFinishVoting={finish}
+        handleFinishVoting={() => {
+          router.push({
+            pathname: `${router.pathname}/ranking`,
+            query: router.query,
+          })
+        }}
         question={activeQuestion}
         total={pairs?.totalPairs}
         voted={pairs?.votedPairs}
@@ -67,7 +54,7 @@ export default function Poll() {
               id2: b.id,
               pickedId: picked || null,
             }).then(() => {
-              fetchPairs(router.query.cid).then((data) => {
+              fetchPairs(Number(router.query.cid) || 1).then((data) => {
                 if (data)
                   setPairs({ ...data, pairs: [...pairs.pairs, ...data.pairs] })
               })
