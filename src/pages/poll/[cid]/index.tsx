@@ -27,7 +27,11 @@ export default function Poll() {
   return (
     <>
       <Header
-        canFinish={pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold}
+        canFinish={
+          pairs?.votedPairs
+            ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
+            : false
+        }
         handleFinishVoting={() => {
           router.push({
             pathname: `${router.pathname}/ranking`,
