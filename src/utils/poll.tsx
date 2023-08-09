@@ -48,6 +48,6 @@ export async function voteColletions({
 
 export async function getRankings(cid: number) {
   return axiosInstance
-    .get<RankingsType>(`/flow/ranking/${cid}`)
+    .get<RankingsType>(`/flow/ranking`, { params: { cid } })
     .then((res) => res.data)
 }

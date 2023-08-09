@@ -99,18 +99,20 @@ export const VoteCard: React.FC<
               !isSkew ? '0deg' : isRight ? '-33deg' : '33deg'
             })`,
           }}>
-          <div className="flex flex-col   gap-2">
+          <div className="flex h-full grow flex-col  gap-2">
             <img className="h-[170px] w-full rounded-2xl border-0 object-cover"></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
-            <p className="line-clamp-4 font-Inter">{item.description}</p>
-            <div className="self-start rounded-lg border border-black-3 p-1">
-              <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
-                {item.sumOfChildren ? <Layers /> : <Browser />}
-                <span className="font-IBM text-sm">
-                  {item.sumOfChildren
-                    ? `${item.sumOfChildren} + Projcets`
-                    : 'Single project'}
-                </span>
+            <p className="line-clamp-3 font-Inter">{item.description}</p>
+            <div className="mb-3 flex grow flex-col justify-end">
+              <div className="self-start rounded-lg border border-black-3 p-1">
+                <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
+                  {item.sumOfChildren ? <Layers /> : <Browser />}
+                  <span className="font-IBM text-sm">
+                    {item.sumOfChildren
+                      ? `${item.sumOfChildren} + Projcets`
+                      : 'Single project'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

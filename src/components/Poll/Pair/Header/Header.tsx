@@ -1,12 +1,14 @@
 import { Lock } from '@/components/Icon/Lock'
 import styles from './Header.module.scss'
 import cn from 'classnames'
+import { Unlocked } from '@/components/Icon/Unlocked'
 
 interface HeaderProps {
   question: string
   handleFinishVoting: () => void
   total?: number
   voted?: number
+  canFinish?: boolean
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +16,7 @@ export const Header: React.FC<HeaderProps> = ({
   handleFinishVoting,
   total = 0,
   voted = 0,
+  canFinish,
 }) => {
   const progressPercentage = total ? (voted / total) * 100 : 0
   return (
@@ -24,10 +27,14 @@ export const Header: React.FC<HeaderProps> = ({
       )}>
       <p>{question}</p>
       <button
-        className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+        className={cn(
+          { 'opacity-70': !canFinish },
+          'flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg'
+        )}
+        disabled={!canFinish}
         onClick={handleFinishVoting}>
         Finish voting
-        <Lock />
+        {canFinish ? <Unlocked /> : <Lock />}
       </button>
       <div className="absolute inset-x-0 bottom-0 h-1 bg-white"></div>
       <div
