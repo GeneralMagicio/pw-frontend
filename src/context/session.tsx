@@ -33,7 +33,6 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       // automatic login when the user connects their wallet
       if (isConnected && previousIsConnected.current === false) {
         previousIsConnected.current = isConnected
-        console.log('SIGN IN')
         try {
           const user = await login(chain!.id, address!, signMessageAsync)
           setSession({ user: 'SUCCESS' })
@@ -41,9 +40,9 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
         // automatic logout when the user disconnects their wallet
       } else if (!isConnected && previousIsConnected.current === true) {
-        console.log('LOGOUT')
         await logout()
         setSession({ user: '' })
+        previousIsConnected.current = false
         if (router.pathname !== '/') router.push('/')
       }
     }
@@ -60,6 +59,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       !router.pathname.includes('poll')
     )
       router.push('/poll/1')
+    if (!isConnected && router.pathname !== '/') router.push('/')
   }, [isConnected, router, session.user])
 
   return (
