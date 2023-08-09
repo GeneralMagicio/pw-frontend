@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import Modal from '@/components/Modal/Modal'
-import { Question } from '@/components/Pair/Question'
-import { Pairs } from '@/components/Pairs'
-import { Header } from '@/components/Pair/Header'
-import { Footer } from '@/components/Pair/Footer/Footer'
-import { fetchPairs, voteProjects } from '@/utils/poll'
+import { Question } from '@/components/Poll/Pair/Question'
+import { Pairs } from '@/components/Poll/Pairs'
+import { Header } from '@/components/Poll/Pair/Header'
+import { Footer } from '@/components/Poll/Pair/Footer/Footer'
+import { fetchPairs, voteColletions, voteProjects } from '@/utils/poll'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { PairsType } from '@/types/Pairs'
@@ -27,7 +27,12 @@ export default function Poll() {
   return (
     <>
       <Header
-        handleFinishVoting={() => {}}
+        handleFinishVoting={() => {
+          router.push({
+            pathname: `${router.pathname}/ranking`,
+            query: router.query,
+          })
+        }}
         question={activeQuestion}
         total={pairs?.totalPairs}
         voted={pairs?.votedPairs}
@@ -37,9 +42,11 @@ export default function Poll() {
         <Pairs
           onVote={(pair, picked) => {
             const [a, b] = pair
-            return voteProjects({
-              project1Id: a.id,
-              project2Id: b.id,
+            const voteRequest =
+              pairs?.type === 'collection' ? voteColletions : voteProjects
+            return voteRequest({
+              id1: a.id,
+              id2: b.id,
               pickedId: picked || null,
             }).then(() => {
               fetchPairs(Number(router.query.cid) || 1).then((data) => {
@@ -59,7 +66,7 @@ export default function Poll() {
         />
       </Modal>
 
-      <Footer collectionName={activeCollection} onBack={() => {}} />
+      <Footer collectionName={activeCollection} onBack={() => router.back()} />
     </>
   )
 }

@@ -24,7 +24,7 @@ export const Question: React.FC<QuestionProps> = ({
       <h2>{title}</h2>
       <p className="text-center">{question}</p>
       <button
-        className={`mx-auto flex min-w-fit items-center justify-center rounded-full border border-dark p-2 px-8 ${
+        className={`mx-auto flex h-[50px] min-w-fit items-center justify-center rounded-full border border-dark p-2 px-8 ${
           isStarted ? 'border-black bg-black text-white' : ''
         } `}
         onClick={onStart}>

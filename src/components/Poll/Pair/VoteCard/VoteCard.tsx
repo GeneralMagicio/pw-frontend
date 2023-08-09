@@ -5,12 +5,16 @@ import cn from 'classnames'
 import { Expand } from '@/components/Icon/Expand'
 import Image from 'next/image'
 import { PairType } from '@/types/Pairs/Pair'
+import { Layers } from '@/components/Icon/Layers'
+import { Browser } from '@/components/Icon/Browser'
+
 interface VoteCardProps {
   placement: 'left' | 'right'
   varient?: 'skew' | 'normal' | 'fade'
   item: PairType
   selected?: boolean
 }
+
 export const VoteCard: React.FC<
   VoteCardProps & React.HTMLProps<HTMLDivElement>
 > = ({ item, placement = 'left', varient = 'normal', selected, ...props }) => {
@@ -39,24 +43,37 @@ export const VoteCard: React.FC<
         )}>
         {!selected && (
           <>
-            {' '}
-            <div
-              className={cn(
-                styles['voteCard__shadow'],
-                'absolute inset-0 bottom-[-27px] opacity-50 ',
-                {
-                  '-right-[27px]': isRight,
-                  '-left-[27px]': isLeft,
-                },
-                'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
-              )}></div>
-            <div
-              className={cn(
-                styles['voteCard__shadow'],
-                'absolute inset-0 bottom-[-18px] opacity-70',
-                { '-right-[18px]': isRight, '-left-[18px]': isLeft },
-                'rounded-2xl bg-[#FFFFFF80] backdrop-blur-xl'
-              )}></div>
+            {Boolean(item.sumOfChildren) && (
+              <>
+                <div
+                  className={cn(
+                    styles['voteCard__shadow'],
+                    'absolute inset-0 bottom-[-36px] opacity-50 ',
+                    {
+                      '-right-[36px]': isRight,
+                      '-left-[36px]': isLeft,
+                    },
+                    'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+                  )}></div>
+                <div
+                  className={cn(
+                    styles['voteCard__shadow'],
+                    'absolute inset-0 bottom-[-27px] opacity-50 ',
+                    {
+                      '-right-[27px]': isRight,
+                      '-left-[27px]': isLeft,
+                    },
+                    'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+                  )}></div>
+                <div
+                  className={cn(
+                    styles['voteCard__shadow'],
+                    'absolute inset-0 bottom-[-18px] opacity-70',
+                    { '-right-[18px]': isRight, '-left-[18px]': isLeft },
+                    'rounded-2xl bg-[#FFFFFF80] backdrop-blur-xl'
+                  )}></div>
+              </>
+            )}
             <div
               className={cn(
                 styles['voteCard__shadow'],
@@ -86,12 +103,28 @@ export const VoteCard: React.FC<
             <img className="h-[170px] w-full rounded-2xl border-0 object-cover"></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
             <p className="line-clamp-4 font-Inter">{item.description}</p>
+            <div className="self-start rounded-lg border border-black-3 p-1">
+              <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
+                {item.sumOfChildren ? <Layers /> : <Browser />}
+                <span className="font-IBM text-sm">
+                  {item.sumOfChildren
+                    ? `${item.sumOfChildren} + Projcets`
+                    : 'Single project'}
+                </span>
+              </div>
+            </div>
           </div>
-          <p className="text-center">Vote</p>
+          <p
+            className={cn('text-center transition-colors', {
+              'opacity-20': !selected,
+              'text-red': selected,
+            })}>
+            {selected ? 'Voted' : 'Vote'}
+          </p>
         </div>
       </div>
       <button className="mt-16 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity">
-        <span>Exapnd Project</span>
+        <span>Quick view</span>
         <Expand />
       </button>
 

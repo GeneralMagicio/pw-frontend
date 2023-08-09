@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Pair } from '../Pair'
 import { PairsType, VOTES } from '@/types/Pairs'
 import { PairType } from '@/types/Pairs/Pair'
-import { Grid } from '../Icon/Grid'
+import { Grid } from '@/components/Icon/Grid'
+import { Pair } from '../Pair'
 
 interface PairsProps {
   pairs: PairsType['pairs']
@@ -10,14 +10,14 @@ interface PairsProps {
 }
 export const Pairs: React.FC<PairsProps> = ({ pairs = [], onVote }) => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [voted, setVoted] = useState<VOTES>(VOTES.ABSTAIN)
+  const [voted, setVoted] = useState<VOTES>(VOTES.NONE)
 
   useEffect(() => {
     setVoted(VOTES.NONE)
   }, [activeIndex])
-
+  console.log({ voted })
   return (
-    <div className="relative container mx-auto flex min-w-[900px]  overflow-hidden px-16">
+    <div className="container relative mx-auto mt-4 flex min-w-[900px]  overflow-hidden px-16">
       <div className="absolute inset-0 mx-auto -mt-8  flex justify-center overflow-hidden text-black">
         <Grid />
       </div>
@@ -32,11 +32,13 @@ export const Pairs: React.FC<PairsProps> = ({ pairs = [], onVote }) => {
           <Pair
             hidden={activeIndex !== idx}
             key={idx}
-            onVote={(item, voted) => {
-              setVoted(voted)
-              onVote(pair, item?.id).then(() => {
-                setActiveIndex(Math.min(activeIndex + 1, pairs.length - 1))
-              })
+            onVote={(item, newVoted) => {
+              if (voted === VOTES.NONE) {
+                setVoted(newVoted)
+                onVote(pair, item?.id).then(() => {
+                  setActiveIndex(Math.min(activeIndex + 1, pairs.length - 1))
+                })
+              }
             }}
             pair={pair}
             voted={voted}

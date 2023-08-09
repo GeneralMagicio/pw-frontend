@@ -1,29 +1,31 @@
-import { User } from "@/types/user/User";
-import { axiosInstance } from "./axiosInstance"
-import { SiweMessage } from "siwe";
+import { User } from '@/types/user/User'
+import { axiosInstance } from './axiosInstance'
+import { SiweMessage } from 'siwe'
 
 export const isLoggedIn = async () => {
   try {
-    const {data} = await axiosInstance.get<User>('/auth/isloggedin')
-    return data;
+    const { data } = await axiosInstance.get<User>('/auth/isloggedin')
+    return data
   } catch (err) {
-    return false;
+    return false
   }
 }
 
 const fetchNonce = async () => {
   try {
-    const {data} = await axiosInstance.get<string>('/auth/nonce')
-    return data;
+    const { data } = await axiosInstance.get<string>('/auth/nonce')
+    return data
   } catch (err) {
     console.error(err)
   }
 }
 
-
-export const login = async (chainId: number, address: string, signFunction: (args?: any) => Promise<`0x${string}`>) => {
+export const login = async (
+  chainId: number,
+  address: string,
+  signFunction: (args?: any) => Promise<`0x${string}`>
+) => {
   try {
-
     const nonce = await fetchNonce()
 
     const message = new SiweMessage({
@@ -38,12 +40,12 @@ export const login = async (chainId: number, address: string, signFunction: (arg
     const signature = await signFunction({
       message: message.prepareMessage(),
     })
-    
+
     // Verify signature
     const verifyRes = await axiosInstance.post('/auth/login', {
       ...{ message, signature },
     })
-
+    return verifyRes
   } catch (error) {
     console.error(error)
   }

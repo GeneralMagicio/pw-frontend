@@ -5,12 +5,17 @@ import { Seo } from '@/components/layout/Seo'
 import { Web3Provider } from '@/providers/Web3'
 import localFont from 'next/font/local'
 import cn from 'classnames'
+import { SessionProvider } from '@/context/session'
 
 const IBMFont = localFont({
   src: [
     {
       path: '../../public/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf',
       weight: '400',
+    },
+    {
+      path: '../../public/fonts/IBM_Plex_Mono/IBMPlexMono-Medium.ttf',
+      weight: '500',
     },
     {
       path: '../../public/fonts/IBM_Plex_Mono/IBMPlexMono-SemiBold.ttf',
@@ -48,9 +53,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Seo />
       <Web3Provider>
-        <MainLayout className={cn(IBMFont.variable, InterFont.variable)}>
-          <Component {...pageProps} />
-        </MainLayout>
+        <SessionProvider>
+          <MainLayout className={cn(IBMFont.variable, InterFont.variable)}>
+            <Component {...pageProps} />
+          </MainLayout>
+        </SessionProvider>
       </Web3Provider>
     </>
   )

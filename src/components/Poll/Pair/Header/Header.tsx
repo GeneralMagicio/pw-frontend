@@ -27,16 +27,17 @@ export const Header: React.FC<HeaderProps> = ({
         className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
         onClick={handleFinishVoting}>
         Finish voting
+        <Lock />
       </button>
       <div className="absolute inset-x-0 bottom-0 h-1 bg-white"></div>
       <div
-        className="absolute bottom-0 transition-all left-0 h-1 bg-red"
+        className="absolute bottom-0 left-0 h-1 bg-red transition-all"
         style={{
           width: `${progressPercentage}%`,
         }}></div>
-      {Boolean(total) && (
+      {Boolean(total && progressPercentage >= 3) && (
         <div
-          className="absolute transition-all top-[90%] min-w-max -translate-x-1/2 translate-y-full rounded-2xl bg-white px-3 py-1 text-xs"
+          className="absolute top-[90%] min-w-max -translate-x-1/2 translate-y-full rounded-2xl bg-white px-3 py-1 text-xs transition-all"
           style={{
             left: `${Math.min(progressPercentage, 96)}%`,
           }}>
