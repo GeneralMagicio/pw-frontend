@@ -1,4 +1,4 @@
-import { login, logout } from '@/utils/auth'
+import { isLoggedIn, login, logout } from '@/utils/auth'
 import { useRouter } from 'next/router'
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { useContext } from 'react'
@@ -34,6 +34,10 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       if (isConnected && previousIsConnected.current === false) {
         previousIsConnected.current = isConnected
         try {
+          const isLogged = await isLoggedIn()
+          if (isLogged) {
+            return setSession({ user: 'SUCCESS' })
+          }
           const user = await login(chain!.id, address!, signMessageAsync)
           setSession({ user: 'SUCCESS' })
         } catch {}

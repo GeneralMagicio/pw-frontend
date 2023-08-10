@@ -21,7 +21,7 @@ export default function Poll() {
 
   useEffect(() => {
     if (isConnected && router.query.cid)
-      fetchPairs(Number(router.query.cid) || 1).then(setPairs)
+      fetchPairs(String(router.query.cid)).then(setPairs)
   }, [isConnected, router.query])
 
   return (
@@ -54,7 +54,7 @@ export default function Poll() {
               id2: b.id,
               pickedId: picked || null,
             }).then(() => {
-              fetchPairs(Number(router.query.cid) || 1).then((data) => {
+              fetchPairs(String(router.query.cid)).then((data) => {
                 if (data)
                   setPairs({ ...data, pairs: [...pairs.pairs, ...data.pairs] })
               })

@@ -12,7 +12,7 @@ export default function RankingPage() {
 
   useEffect(() => {
     if (router.query.cid)
-      getRankings(Number(router.query.cid)).then(setRankings)
+      getRankings(String(router.query.cid)).then(setRankings)
   }, [router.query.cid, setRankings])
 
   return (
