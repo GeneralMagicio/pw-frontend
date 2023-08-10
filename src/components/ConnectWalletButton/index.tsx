@@ -2,9 +2,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import cn from 'classnames'
 import { useSwitchNetwork } from 'wagmi'
 
-export const ConnectWalletButton: React.FC<{ className?: string }> = ({
-  className = 'bg-red',
-}) => {
+export const ConnectWalletButton: React.FC<{
+  className?: string
+  alternativeText?: string
+}> = ({ className = 'bg-red', alternativeText }) => {
   const { chains, switchNetworkAsync } = useSwitchNetwork()
   return (
     <ConnectButton.Custom>
@@ -25,13 +26,19 @@ export const ConnectWalletButton: React.FC<{ className?: string }> = ({
         return (
           <button
             className="min-w-[120px] rounded-full border border-black bg-transparent px-4 py-3 text-black"
-            onClick={async () => {
-              if (chains[0]?.id !== chain?.id) {
-                await switchNetworkAsync?.(chains[0]?.id)
-              }
-              openAccountModal && openAccountModal()
-            }}>
-            <span className="font-bold">{account.displayName}</span>
+            onClick={
+              !alternativeText
+                ? async () => {
+                    if (chains[0]?.id !== chain?.id) {
+                      await switchNetworkAsync?.(chains[0]?.id)
+                    }
+                    openAccountModal && openAccountModal()
+                  }
+                : () => {}
+            }>
+            <span className="font-bold">
+              {alternativeText || account.displayName}
+            </span>
           </button>
         )
       }}
