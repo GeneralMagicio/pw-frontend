@@ -100,7 +100,7 @@ export const VoteCard: React.FC<
             })`,
           }}>
           <div className="flex h-full grow flex-col  gap-2">
-            <img className="h-[170px] w-full rounded-2xl border-0 object-cover"></img>
+            <img alt={item.name} className="h-[170px] w-full rounded-2xl border-0 object-cover" src={item.image}></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
             <p className="line-clamp-3 font-Inter">{item.description}</p>
             <div className="mb-3 flex grow flex-col justify-end">
