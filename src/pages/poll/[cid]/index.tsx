@@ -56,7 +56,7 @@ export default function Poll() {
             }).then(() => {
               fetchPairs(String(router.query.cid)).then((data) => {
                 if (data)
-                  setPairs({ ...data, pairs: [...pairs.pairs, ...data.pairs] })
+                  setPairs(data)
               })
             })
           }}
