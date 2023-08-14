@@ -56,8 +56,8 @@ export default function Poll() {
         collectionTitle={pairs?.collectionTitle || ""}
         handleFinishVoting={goToRanking}
         question={activeQuestion}
-        threshold={pairs?.threshold}
-        total={pairs?.totalPairs}
+        threshold={pairs?.threshold || 0}
+        total={pairs?.totalPairs || 0}
         voted={pairs?.votedPairs}
       />
 
