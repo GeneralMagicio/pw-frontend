@@ -32,6 +32,7 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
+        collectionTitle={pairs?.collectionTitle || activeCollection}
         handleFinishVoting={() => {
           router.push({
             pathname: `${router.pathname}/ranking`,
@@ -73,7 +74,7 @@ export default function Poll() {
         />
       </Modal>
 
-      <Footer collectionName={activeCollection} onBack={() => router.back()} />
+      <Footer collectionName={pairs?.collectionTitle || activeCollection} onBack={() => router.back()} />
     </>
   )
 }

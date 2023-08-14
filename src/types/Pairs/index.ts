@@ -6,6 +6,7 @@ export interface PairsType {
   votedPairs: number
   type: 'project' | 'collection'
   threshold: number
+  collectionTitle: string
 }
 
 export enum VOTES {

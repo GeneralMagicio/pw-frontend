@@ -13,6 +13,7 @@ interface HeaderProps {
   voted?: number
   canFinish?: boolean
   threshold?: number
+  collectionTitle: string
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   voted = 0,
   canFinish,
   threshold,
+  collectionTitle,
 }) => {
   const router = useRouter()
   const progressPercentage = total ? Math.max((voted / total) * 100, 4) : 4
@@ -67,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
             You should do{' '}
             <span className="font-bold">{voteCountsToUnklock}</span> pairwise
             vote to be able to finish voting on{' '}
-            <span className="font-bold">Collection X.</span>
+            <span className="font-bold">{`${collectionTitle}.`}</span>
             <div className="absolute inset-x-0 top-0 mx-auto h-0 w-0  -translate-y-full border-x-8 border-b-8 border-x-transparent border-b-white"></div>
           </div>
         )}
