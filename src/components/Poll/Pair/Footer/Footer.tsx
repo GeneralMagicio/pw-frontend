@@ -4,12 +4,12 @@ import cn from 'classnames'
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 
 interface FooterProps {
-  collectionName: string
+  text?: string
   onBack: () => void
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  collectionName = 'Collection X',
+  text = 'Evaluating Collection X',
   onBack,
 }) => {
   return (
@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({
         styles.Footer,
         'fixed justify-center rounded-tl-[33%] rounded-tr-[33%]   bottom-0 w-full flex text-lg text-black items-center px-48 h-[54px]'
       )}>
-      <span className="text-lg text-black">Voting on {collectionName}</span>
+      <span className="text-lg text-black"> {text}</span>
     </div>
   )
 }

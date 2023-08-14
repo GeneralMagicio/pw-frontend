@@ -1,14 +1,14 @@
 import { Shuffle } from '@/components/Icon/Shuffle'
 import { Tick } from '@/components/Icon/Tick'
 import { Rankings } from '@/components/Poll/Rankings'
-import { RankingsType } from '@/types/Ranking/indes'
+import { RankingResponse } from '@/types/Ranking/index'
 import { getRankings } from '@/utils/poll'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 export default function RankingPage() {
   const router = useRouter()
-  const [rankings, setRankings] = useState<RankingsType>([])
+  const [rankings, setRankings] = useState<RankingResponse>()
 
   useEffect(() => {
     if (router.query.cid)
@@ -34,7 +34,7 @@ export default function RankingPage() {
           </button>
         </div>
       </header>
-      <Rankings items={rankings} />
+      <Rankings collectionTitle={rankings?.collectionTitle || ''} items={rankings?.ranking || []} />
     </>
   )
 }

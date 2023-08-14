@@ -1,4 +1,4 @@
-export interface RankingType {
+export interface RankingItem {
   share: number
   project: {
     id: number
@@ -9,4 +9,7 @@ export interface RankingType {
     created_at: string
   }
 }
-export type RankingsType = RankingType[]
+
+export type RankingsType = RankingItem[]
+
+export type RankingResponse = {collectionTitle: string; ranking: RankingsType}

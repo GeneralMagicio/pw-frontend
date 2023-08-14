@@ -14,9 +14,8 @@ export default function Poll() {
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState(
-    'Which of these two projects created more value for Optimism since last March?'
+    'Since last March, which of these projects has had a greater positive impact on Optimism?'
   )
-  const [activeCollection, setActiveCollection] = useState('Collection X')
   const { isConnected } = useAccount()
 
   const goToRanking = () =>
@@ -35,6 +34,12 @@ export default function Poll() {
     })
 
   useEffect(() => {
+    if (pairs?.type === "collection") {
+      setActiveQuestion('Since last March, which of these collections has had a greater positive impact on Optimism?')
+    }
+  }, [pairs])
+
+  useEffect(() => {
     if (isConnected && router.query.cid) {
       fetchData(true).then(() => setOpen(true))
     }
@@ -48,7 +53,7 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
-        collectionTitle={pairs?.collectionTitle || activeCollection}
+        collectionTitle={pairs?.collectionTitle || ""}
         handleFinishVoting={goToRanking}
         question={activeQuestion}
         threshold={pairs?.threshold}
@@ -75,13 +80,13 @@ export default function Poll() {
         <Question
           onStart={() => setOpen(false)}
           question={activeQuestion}
-          title="Question"
         />
       </Modal>
 
       <Footer
-        collectionName={pairs?.collectionTitle || activeCollection}
         onBack={() => router.back()}
+        // The condition checks for top-level collections pairwises
+        text={pairs?.pairs[0][0].collection_id !== null ? `Evaluating ${pairs?.collectionTitle}` : ""}
       />
     </>
   )
