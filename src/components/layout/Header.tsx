@@ -11,13 +11,13 @@ import { ConnectWalletButton } from '../ConnectWalletButton'
 
 export function Header() {
   return (
-    <header className="z-10 flex h-24 items-center justify-between bg-gray-4 px-5">
+    <header className="z-10 flex h-[60px] items-center justify-between bg-gray-4 px-5">
       <Link href="/">
         <div className="ml-20">
           <Logo />
         </div>
       </Link>
-      <ConnectWalletButton />
+      <ConnectWalletButton className="h-[36px] bg-red" />
     </header>
   )
 }

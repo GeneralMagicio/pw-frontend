@@ -41,6 +41,7 @@ export default function Poll() {
         question={activeQuestion}
         total={pairs?.totalPairs}
         voted={pairs?.votedPairs}
+        threshold={pairs?.threshold}
       />
 
       {pairs?.pairs && (
@@ -54,9 +55,10 @@ export default function Poll() {
               id2: b.id,
               pickedId: picked || null,
             }).then(() => {
-              fetchPairs(String(router.query.cid)).then((data) => {
-                if (data)
-                  setPairs(data)
+              return fetchPairs(String(router.query.cid)).then((data) => {
+                const newPairs = [...pairs.pairs, ...data.pairs]
+                setPairs({ ...data, pairs: newPairs })
+                return newPairs
               })
             })
           }}

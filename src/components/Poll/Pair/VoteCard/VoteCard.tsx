@@ -7,6 +7,8 @@ import Image from 'next/image'
 import { PairType } from '@/types/Pairs/Pair'
 import { Layers } from '@/components/Icon/Layers'
 import { Browser } from '@/components/Icon/Browser'
+import { CardBorderLeft } from '@/components/Icon/CardBorderLeft'
+import { CardBorderRight } from '@/components/Icon/CardBorderRight'
 
 interface VoteCardProps {
   placement: 'left' | 'right'
@@ -23,18 +25,26 @@ export const VoteCard: React.FC<
   const isSkew = varient === 'skew'
   return (
     <div className={cn(styles.voteCardWrapper, 'flex flex-col')} {...props}>
-      <Image
-        alt={'border-left'}
-        className={`absolute h-[600px] ${
-          isRight ? '-left-28 -scale-x-100' : '-left-16'
-        }  -top-20 object-none`}
-        height={800}
-        src={
-          isRight
-            ? '/images/card-border-right.svg'
-            : '/images/card-border-left.svg'
-        }
-        width={isRight ? 83 : 16}></Image>
+      {isRight ? (
+        <CardBorderRight
+          width={83}
+          height={445}
+          className={cn('absolute', {
+            '-left-32 -scale-x-100': isRight,
+            '-top-0 bottom-0 object-none': isLeft,
+          })}
+        />
+      ) : (
+        <CardBorderLeft
+          width={18}
+          height={445}
+          className={cn('absolute -left-14 -top-0', {
+            '-left-32 -scale-x-100': isRight,
+            ' bottom-0 object-none': isLeft,
+          })}
+        />
+      )}
+
       <div
         className={cn(
           styles.voteCard,
@@ -43,45 +53,41 @@ export const VoteCard: React.FC<
         )}>
         {!selected && (
           <>
-            {Boolean(item.numOfChildren) && (
-              <>
-                <div
-                  className={cn(
-                    styles['voteCard__shadow'],
-                    'absolute inset-0 bottom-[-36px] opacity-50 ',
-                    {
-                      '-right-[36px]': isRight,
-                      '-left-[36px]': isLeft,
-                    },
-                    'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
-                  )}></div>
-                <div
-                  className={cn(
-                    styles['voteCard__shadow'],
-                    'absolute inset-0 bottom-[-27px] opacity-50 ',
-                    {
-                      '-right-[27px]': isRight,
-                      '-left-[27px]': isLeft,
-                    },
-                    'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
-                  )}></div>
-                <div
-                  className={cn(
-                    styles['voteCard__shadow'],
-                    'absolute inset-0 bottom-[-18px] opacity-70',
-                    { '-right-[18px]': isRight, '-left-[18px]': isLeft },
-                    'rounded-2xl bg-[#FFFFFF80] backdrop-blur-xl'
-                  )}></div>
-              </>
-            )}
             <div
               className={cn(
                 styles['voteCard__shadow'],
-                'absolute inset-0 bottom-[-9px] opacity-80 ',
+                'absolute inset-0 -bottom-8 opacity-50 ',
                 {
-                  '-right-[9px]': isRight,
+                  '-right-8': isRight,
+                  '-left-8': isLeft,
+                },
+                'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+              )}></div>
+            <div
+              className={cn(
+                styles['voteCard__shadow'],
+                'absolute inset-0 -bottom-6 opacity-50 ',
+                {
+                  '-right-6': isRight,
+                  '-left-6': isLeft,
+                },
+                'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+              )}></div>
+            <div
+              className={cn(
+                styles['voteCard__shadow'],
+                'absolute inset-0 -bottom-4 opacity-70',
+                { '-right-4': isRight, '-left-4': isLeft },
+                'rounded-2xl bg-[#FFFFFF80] backdrop-blur-xl'
+              )}></div>
+            <div
+              className={cn(
+                styles['voteCard__shadow'],
+                'absolute inset-0 -bottom-2 opacity-80 ',
+                {
+                  '-right-2': isRight,
 
-                  '-left-[9px]': isLeft,
+                  '-left-2': isLeft,
                 },
                 ' rounded-2xl bg-[#FFFFFF80] backdrop-blur-xl'
               )}></div>
@@ -125,23 +131,30 @@ export const VoteCard: React.FC<
           </p>
         </div>
       </div>
-      <button className="mt-16 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity">
+      <button className="mt-10 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity">
         <span>Quick view</span>
         <Expand />
       </button>
 
-      <Image
-        alt={'border-right'}
-        className={`absolute h-[600px] ${
-          isRight ? '-right-24 -scale-x-100' : '-right-32'
-        }  -top-20 object-none`}
-        height={484}
-        src={
-          isRight
-            ? '/images/card-border-left.svg'
-            : '/images/card-border-right.svg'
-        }
-        width={83}></Image>
+      {isRight ? (
+        <CardBorderLeft
+          width={18}
+          height={445}
+          className={cn('absolute', {
+            '-right-14 -scale-x-100': isRight,
+            '-top-0 bottom-0 object-none': isLeft,
+          })}
+        />
+      ) : (
+        <CardBorderRight
+          width={83}
+          height={445}
+          className={cn('absolute -top-0', {
+            '-right-32': isLeft,
+            ' bottom-0 object-none': isRight,
+          })}
+        />
+      )}
     </div>
   )
 }

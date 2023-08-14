@@ -12,7 +12,7 @@ export const Question: React.FC<QuestionProps> = ({
   question,
   onStart,
 }) => {
-  const [seconds, setSeconds] = useState(5)
+  const [seconds, setSeconds] = useState(3)
   const isStarted = seconds === 0
   useEffect(() => {
     if (isStarted) return

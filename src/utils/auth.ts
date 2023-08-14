@@ -47,7 +47,7 @@ export const login = async (
     })
     return verifyRes
   } catch (error) {
-    console.error(error)
+    console.error('ERROR', error)
   }
 }
 

@@ -14,10 +14,7 @@ export const ConnectWalletButton: React.FC<{
         if (!connected) {
           return (
             <button
-              className={cn(
-                className,
-                'min-w-[120px] rounded-full   px-4 py-3'
-              )}
+              className={cn(className, 'min-w-[120px] rounded-full  px-4 ')}
               onClick={openConnectModal}>
               <span className="font-bold text-white">Connect Wallet</span>
             </button>
@@ -25,7 +22,10 @@ export const ConnectWalletButton: React.FC<{
         }
         return (
           <button
-            className="min-w-[120px] rounded-full border border-black bg-transparent px-4 py-3 text-black"
+            className={cn(
+              'min-w-[120px] rounded-full border border-black bg-transparent px-4  text-black',
+              className
+            )}
             onClick={
               !alternativeText
                 ? async () => {

@@ -7,19 +7,19 @@ import { VOTES } from '@/types/Pairs'
 
 interface PairProps {
   onVote: (pair: PairType | null, voted: VOTES) => void
-  // hidden?: boolean
+  hidden?: boolean
   voted: VOTES
   pair: PairType[]
 }
 
-export const Pair: React.FC<PairProps> = ({ onVote, voted, pair }) => {
+export const Pair: React.FC<PairProps> = ({ onVote, voted, pair, hidden }) => {
   const [a, b] = pair
   const [hoverdItem, setHoverdItem] = useState<VOTES>(VOTES.NONE)
   return (
     <div
       className={cn(
-        // { 'opacity-0': hidden },
-        'relative transition-opacity items-center z-10 mt-16 flex w-full min-w-max  max-w-screen-2xl shrink-0 justify-between gap-5'
+        { 'opacity-0': hidden },
+        'relative transition-opacity items-center z-10 mt-10 flex w-full min-w-max  max-w-screen-2xl shrink-0 justify-between gap-5'
       )}>
       <VoteCard
         item={a}

@@ -20,17 +20,17 @@ export default function Home() {
         </p>
         <ConnectWalletButton
           alternativeText="Start voting"
-          className="bg-black"
+          className="h-12 bg-black"
         />
       </div>
-      <div className="m-auto mb-32 mt-[239px] flex h-[229px] w-[816px] flex-col items-center justify-center gap-10 p-6 font-IBM text-black  ">
+      <div className="m-auto mb-32 mt-[239px] flex h-[232px] w-[816px] flex-col items-center justify-center gap-10 p-6 font-IBM text-black  ">
         <h2 className="text-[32px] font-bold">Are you ready to start?</h2>
         <p className="text-[24px] font-medium">
           Let’s start by connecting your wallet
         </p>
         <ConnectWalletButton
           alternativeText="Start voting"
-          className="bg-black"
+          className="h-12 shrink-0 bg-black"
         />
       </div>
     </>
