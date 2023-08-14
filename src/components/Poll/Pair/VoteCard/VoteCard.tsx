@@ -15,11 +15,20 @@ interface VoteCardProps {
   varient?: 'skew' | 'normal' | 'fade'
   item: PairType
   selected?: boolean
+  onQuickView: () => void
 }
 
 export const VoteCard: React.FC<
   VoteCardProps & React.HTMLProps<HTMLDivElement>
-> = ({ item, placement = 'left', varient = 'normal', selected, ...props }) => {
+> = ({
+  item,
+  placement = 'left',
+  varient = 'normal',
+  selected,
+  onClick,
+  onQuickView,
+  ...props
+}) => {
   const isRight = placement === 'right'
   const isLeft = placement === 'left'
   const isSkew = varient === 'skew'
@@ -105,7 +114,7 @@ export const VoteCard: React.FC<
               !isSkew ? '0deg' : isRight ? '-33deg' : '33deg'
             })`,
           }}>
-          <div className="flex h-full grow flex-col  gap-2">
+          <div className="flex h-full grow flex-col  gap-2" onClick={onClick}>
             <img
               alt={item.name}
               className="h-[170px] w-full rounded-2xl border-0 object-cover"
@@ -134,7 +143,9 @@ export const VoteCard: React.FC<
           </p>
         </div>
       </div>
-      <button className="mt-10 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity">
+      <button
+        className="mt-10 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity"
+        onClick={onQuickView}>
         <span>Quick view</span>
         <Expand />
       </button>

@@ -1,9 +1,12 @@
-export const Grid = () => (
+import { SVGProps } from 'react'
+
+export const Grid: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg
     className="relative max-h-[1080px]"
     fill="none"
     viewBox="0 0 1069 733"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
     <g opacity="0.2">
       <rect
         height="647"

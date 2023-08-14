@@ -1,11 +1,14 @@
 .modalOverlay {
-    background: rgba(27, 30, 35, 0.30);
-    backdrop-filter: blur(3px);
+  background: rgba(27, 30, 35, 0.3);
+  backdrop-filter: blur(3px);
 }
 
 .modal {
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.80);
-    backdrop-filter: blur(6px);
+  padding: 40px;
+  border-radius: 20px;
+  background: white;
+  // backdrop-filter: blur(6px);
+  max-height: 704px;
+  overflow: hidden;
+  position: relative;
 }

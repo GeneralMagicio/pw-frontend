@@ -24,18 +24,20 @@ export default function Poll() {
       pathname: `${router.pathname}/ranking`,
       query: router.query,
     })
-  const fetchData = () =>
+  const fetchData = (rest?: boolean) =>
     fetchPairs(String(router.query.cid)).then((data) => {
       if (!data.pairs.length) {
         return Promise.reject(goToRanking())
       }
       const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
-      setPairs({ ...data, pairs: newPairs })
+      setPairs(rest ? data : { ...data, pairs: newPairs })
       return newPairs
     })
 
   useEffect(() => {
-    if (isConnected && router.query.cid) fetchData().then(() => setOpen(true))
+    if (isConnected && router.query.cid) {
+      fetchData(true).then(() => setOpen(true))
+    }
   }, [isConnected, router.query])
 
   return (

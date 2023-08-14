@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './Modal.module.scss'
+import ReactDOM from 'react-dom'
+import cn from 'classnames'
 
 interface ModalProps {
   isOpen: boolean
@@ -9,6 +11,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const modalRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -37,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       document.addEventListener('keydown', handleKeyDown)
       document.addEventListener('focus', handleFocus, true)
     }
-
+    setMounted(true)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('focus', handleFocus, true)
@@ -45,15 +48,17 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   }, [isOpen, onClose])
 
   if (!isOpen) return null
-
-  return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}>
-      <div className={styles.modal} ref={modalRef}>
-        {children}
-      </div>
-    </div>
-  )
+  return mounted
+    ? ReactDOM.createPortal(
+        <div
+          className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}>
+          <div className={cn(styles.modal, 'mx-24')} ref={modalRef}>
+            {children}
+          </div>
+        </div>,
+        window.document.body
+      )
+    : null
 }
 
 export default Modal

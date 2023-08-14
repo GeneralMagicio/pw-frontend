@@ -7,4 +7,5 @@ export interface PairType {
   collection_id: number
   created_at: string
   numOfChildren: number
+  childProjects?: Array<Array<PairType>>
 }
