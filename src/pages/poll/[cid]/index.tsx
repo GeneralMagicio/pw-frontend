@@ -12,16 +12,30 @@ import { PairsType } from '@/types/Pairs'
 export default function Poll() {
   const router = useRouter()
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState(
     'Which of these two projects created more value for Optimism since last March?'
   )
   const [activeCollection, setActiveCollection] = useState('Collection X')
   const { isConnected } = useAccount()
 
+  const goToRanking = () =>
+    router.push({
+      pathname: `${router.pathname}/ranking`,
+      query: router.query,
+    })
+  const fetchData = () =>
+    fetchPairs(String(router.query.cid)).then((data) => {
+      if (!data.pairs.length) {
+        return Promise.reject(goToRanking())
+      }
+      const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
+      setPairs({ ...data, pairs: newPairs })
+      return newPairs
+    })
+
   useEffect(() => {
-    if (isConnected && router.query.cid)
-      fetchPairs(String(router.query.cid)).then(setPairs)
+    if (isConnected && router.query.cid) fetchData().then(() => setOpen(true))
   }, [isConnected, router.query])
 
   return (
@@ -33,12 +47,7 @@ export default function Poll() {
             : false
         }
         collectionTitle={pairs?.collectionTitle || activeCollection}
-        handleFinishVoting={() => {
-          router.push({
-            pathname: `${router.pathname}/ranking`,
-            query: router.query,
-          })
-        }}
+        handleFinishVoting={goToRanking}
         question={activeQuestion}
         threshold={pairs?.threshold}
         total={pairs?.totalPairs}
@@ -55,13 +64,7 @@ export default function Poll() {
               id1: a.id,
               id2: b.id,
               pickedId: picked || null,
-            }).then(() => {
-              return fetchPairs(String(router.query.cid)).then((data) => {
-                const newPairs = [...pairs.pairs, ...data.pairs]
-                setPairs({ ...data, pairs: newPairs })
-                return newPairs
-              })
-            })
+            }).then(fetchData)
           }}
           pairs={pairs.pairs}
         />
@@ -74,7 +77,10 @@ export default function Poll() {
         />
       </Modal>
 
-      <Footer collectionName={pairs?.collectionTitle || activeCollection} onBack={() => router.back()} />
+      <Footer
+        collectionName={pairs?.collectionTitle || activeCollection}
+        onBack={() => router.back()}
+      />
     </>
   )
 }
