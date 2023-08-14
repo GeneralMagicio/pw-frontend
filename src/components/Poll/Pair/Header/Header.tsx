@@ -9,11 +9,11 @@ import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 interface HeaderProps {
   question: string
   handleFinishVoting: () => void
-  total?: number
+  total: number
+  threshold: number
+  collectionTitle: string
   voted?: number
   canFinish?: boolean
-  threshold?: number
-  collectionTitle: string
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -27,7 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const router = useRouter()
   const progressPercentage = total ? Math.max((voted / total) * 100, 4) : 4
-  const voteCountsToUnklock = total && threshold ? total * threshold - voted : 0
+  const minVotesToUnlock = Math.ceil(total * threshold)
+  const voteCountsToUnklock = minVotesToUnlock - voted
 
   return (
     <div
@@ -65,11 +66,11 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </span>
         {!canFinish && (
-          <div className="absolute -bottom-[230%] left-1/2 hidden  w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-base backdrop-blur-sm group-hover:block">
+          <div className="absolute -bottom-[230%] left-1/2 top-[48px] hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-[15px] leading-6 backdrop-blur-sm group-hover:block">
             To wrap up your{' '}
             <span className="font-bold">{`${collectionTitle} `}</span>
             voting, you need to make at least{' '}
-            <span className="font-bold">{voteCountsToUnklock}</span> Pairwise votes.
+            <span className="font-bold">{minVotesToUnlock}</span> Pairwise votes.
             <div className="absolute inset-x-0 top-0 mx-auto h-0 w-0  -translate-y-full border-x-8 border-b-8 border-x-transparent border-b-white"></div>
           </div>
         )}
