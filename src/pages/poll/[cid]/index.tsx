@@ -39,9 +39,9 @@ export default function Poll() {
           })
         }}
         question={activeQuestion}
+        threshold={pairs?.threshold}
         total={pairs?.totalPairs}
         voted={pairs?.votedPairs}
-        threshold={pairs?.threshold}
       />
 
       {pairs?.pairs && (

@@ -27,21 +27,21 @@ export const VoteCard: React.FC<
     <div className={cn(styles.voteCardWrapper, 'flex flex-col')} {...props}>
       {isRight ? (
         <CardBorderRight
-          width={83}
-          height={445}
           className={cn('absolute', {
             '-left-32 -scale-x-100': isRight,
             '-top-0 bottom-0 object-none': isLeft,
           })}
+          height={445}
+          width={83}
         />
       ) : (
         <CardBorderLeft
-          width={18}
-          height={445}
           className={cn('absolute -left-14 -top-0', {
             '-left-32 -scale-x-100': isRight,
             ' bottom-0 object-none': isLeft,
           })}
+          height={445}
+          width={18}
         />
       )}
 
@@ -106,7 +106,10 @@ export const VoteCard: React.FC<
             })`,
           }}>
           <div className="flex h-full grow flex-col  gap-2">
-            <img alt={item.name} className="h-[170px] w-full rounded-2xl border-0 object-cover" src={item.image}></img>
+            <img
+              alt={item.name}
+              className="h-[170px] w-full rounded-2xl border-0 object-cover"
+              src={item.image}></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
             <p className="line-clamp-3 font-Inter">{item.description}</p>
             <div className="mb-3 flex grow flex-col justify-end">
@@ -138,21 +141,21 @@ export const VoteCard: React.FC<
 
       {isRight ? (
         <CardBorderLeft
-          width={18}
-          height={445}
           className={cn('absolute', {
             '-right-14 -scale-x-100': isRight,
             '-top-0 bottom-0 object-none': isLeft,
           })}
+          height={445}
+          width={18}
         />
       ) : (
         <CardBorderRight
-          width={83}
-          height={445}
           className={cn('absolute -top-0', {
             '-right-32': isLeft,
             ' bottom-0 object-none': isRight,
           })}
+          height={445}
+          width={83}
         />
       )}
     </div>
