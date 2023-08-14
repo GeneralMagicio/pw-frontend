@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 
 interface QuestionProps {
-  title: string
   question: string
   onStart: () => void
 }
 
 export const Question: React.FC<QuestionProps> = ({
-  title,
   question,
   onStart,
 }) => {
@@ -21,7 +19,6 @@ export const Question: React.FC<QuestionProps> = ({
   }, [onStart, seconds, isStarted])
   return (
     <div className="flex max-w-lg flex-col gap-10 font-IBM text-black">
-      <h2 className="text-3xl font-bold">{title}</h2>
       <p className="text-center text-lg font-medium">{question}</p>
       <button
         className={`mx-auto flex h-[50px] min-w-fit items-center justify-center rounded-full border border-dark p-2 px-8 text-sm ${

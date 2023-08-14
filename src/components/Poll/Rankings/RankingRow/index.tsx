@@ -1,15 +1,15 @@
 import { Move } from '@/components/Icon/Move'
-import { RankingType } from '@/types/Ranking/indes'
+import { RankingItem } from '@/types/Ranking'
 
 interface RankingProps {
-  data: RankingType
+  data: RankingItem
 }
 export const RankingRow: React.FC<RankingProps> = ({ data }) => {
   return (
     <div className="flex cursor-pointer items-center gap-6 rounded-xl bg-gray-40 px-6 py-3 font-Inter text-black">
       <Move />
       <span className="grow">{data.project.name}</span>
-      <span className="flex w-36 items-center justify-center">
+      <span className="flex w-[27%] items-center justify-center">
         <span className="mr-1 text-[8px] text-red">%</span>
         <span className="">{(data.share * 100).toFixed(2)}</span>
       </span>
