@@ -18,6 +18,7 @@ module.exports = {
         'gray-50': 'var(--gray-50)',
         'gray-60': 'var(--gray-60)',
         'gray-90': 'var(--gray-90)',
+        'neutral-600-gray': 'var(--neutral-600-gray)',
         dark: 'var(--bd-color)',
         red: 'var(--red)',
         black: 'var(--text-black)',
