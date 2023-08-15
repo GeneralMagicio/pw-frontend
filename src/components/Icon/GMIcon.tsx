@@ -1,10 +1,13 @@
-export const GMIcon = () => (
+import { SVGProps } from 'react'
+
+export const GMIcon: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg
     fill="none"
     height="32"
     viewBox="0 0 32 32"
     width="32"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
     <path
       d="M0 0L28 0C30.2091 0 32 1.79086 32 4V28C32 30.2091 30.2091 32 28 32L4 32C1.79086 32 0 30.2091 0 28L0 0Z"
       fill="#1B1E23"
