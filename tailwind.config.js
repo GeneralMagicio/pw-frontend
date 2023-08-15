@@ -24,6 +24,7 @@ module.exports = {
         black: 'var(--text-black)',
         'black-3': 'var(--black-3)',
         'black-30': 'var(--black-30)',
+        screen: '#FFF',
       },
       fontFamily: {
         IBM: ['var(--font-IBM)'],

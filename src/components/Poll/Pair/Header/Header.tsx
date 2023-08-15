@@ -47,10 +47,9 @@ export const Header: React.FC<HeaderProps> = ({
       <p className="max-w-xl text-center">{question}</p>
       <button
         className={cn(
-          { 'opacity-70': !canFinish },
-          ' relative  flex items-center justify-center gap-2 group  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg group-hover:flex'
+          ' relative  cursor-pointer flex items-center justify-center gap-2 group  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg group-hover:flex'
         )}
-        // disabled={!canFinish}
+        disabled={!canFinish}
         onClick={handleFinishVoting}>
         Finish voting
         <span className="relative">
@@ -66,11 +65,12 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </span>
         {!canFinish && (
-          <div className="absolute -bottom-[230%] left-1/2 top-[48px] hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-[15px] leading-6 backdrop-blur-sm group-hover:block">
+          <div className="b-whi absolute -bottom-[230%] left-1/2 top-16 hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-[15px] leading-6 backdrop-blur-sm group-hover:block">
             To wrap up your{' '}
             <span className="font-bold">{`${collectionTitle} `}</span>
             voting, you need to make at least{' '}
-            <span className="font-bold">{minVotesToUnlock}</span> Pairwise votes.
+            <span className="font-bold">{minVotesToUnlock}</span> Pairwise
+            votes.
             <div className="absolute inset-x-0 top-0 mx-auto h-0 w-0  -translate-y-full border-x-8 border-b-8 border-x-transparent border-b-white"></div>
           </div>
         )}
