@@ -34,8 +34,10 @@ export default function Poll() {
     })
 
   useEffect(() => {
-    if (pairs?.type === "collection") {
-      setActiveQuestion('Since last March, which of these collections has had a greater positive impact on Optimism?')
+    if (pairs?.type === 'collection') {
+      setActiveQuestion(
+        'Since last March, which of these collections has had a greater positive impact on Optimism?'
+      )
     }
   }, [pairs])
 
@@ -53,7 +55,7 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
-        collectionTitle={pairs?.collectionTitle || ""}
+        collectionTitle={pairs?.collectionTitle || ''}
         handleFinishVoting={goToRanking}
         question={activeQuestion}
         threshold={pairs?.threshold || 0}
@@ -77,16 +79,17 @@ export default function Poll() {
         />
       )}
       <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <Question
-          onStart={() => setOpen(false)}
-          question={activeQuestion}
-        />
+        <Question onStart={() => setOpen(false)} question={activeQuestion} />
       </Modal>
 
       <Footer
         onBack={() => router.back()}
         // The condition checks for top-level collections pairwises
-        text={pairs?.pairs[0][0].collection_id !== null ? `Evaluating ${pairs?.collectionTitle}` : ""}
+        text={
+          pairs?.pairs[0][0].collection_id !== null && pairs?.collectionTitle
+            ? `Evaluating ${pairs?.collectionTitle}`
+            : ''
+        }
       />
     </>
   )
