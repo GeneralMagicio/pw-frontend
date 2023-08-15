@@ -10,6 +10,7 @@ import { Browser } from '@/components/Icon/Browser'
 import { CardBorderLeft } from '@/components/Icon/CardBorderLeft'
 import { CardBorderRight } from '@/components/Icon/CardBorderRight'
 
+console.log({ styles })
 interface VoteCardProps {
   placement: 'left' | 'right'
   varient?: 'skew' | 'normal' | 'fade'
@@ -120,7 +121,9 @@ export const VoteCard: React.FC<
               className="h-[170px] w-full rounded-2xl border-0 object-cover"
               src={item.image}></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
-            <p className="line-clamp-3 font-Inter">{item.description}</p>
+            <p className={cn(styles['line-clamp-4'], 'font-Inter')}>
+              {item.description}
+            </p>
             <div className="mb-3 flex grow flex-col justify-end">
               <div className="self-start rounded-lg border border-black-3 p-1">
                 <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
