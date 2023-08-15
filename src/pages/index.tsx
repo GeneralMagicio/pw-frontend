@@ -1,8 +1,15 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
+import { Discord } from '@/components/Icon/Discord'
+import { GMIcon } from '@/components/Icon/GMIcon'
+import { Github } from '@/components/Icon/Github'
 import { Grid } from '@/components/Icon/Grid'
 import { GridWhite } from '@/components/Icon/GridWhite'
+import { Linkedin } from '@/components/Icon/Linkedin'
+import { Medium } from '@/components/Icon/Medium'
+import { Star } from '@/components/Icon/Star'
+import { Twitter } from '@/components/Icon/Twitter'
 import { VectorHorizontal } from '@/components/Icon/VectorHorizontal'
 import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
@@ -28,6 +35,7 @@ export default function Home() {
           src="/images/center-universe.svg"
           width="1289"
         />
+        <Star className="absolute right-80    top-40" />
         <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
           <h2 className="text-[64px] font-bold text-red">
             Retroactive Public Goods Funding
@@ -40,15 +48,16 @@ export default function Home() {
         </div>
         <Image
           alt="Galaxy"
-          className="absolute -left-[150px] bottom-0 h-[584px] w-[686px]"
+          className="absolute -left-[150px] bottom-20 h-[584px] w-[686px]"
           height="584"
           src="/images/left-side-planet.svg"
           width="686"
         />
+        <Star className="absolute left-40 top-[85%]" height={41} width={41} />
       </div>
 
       <div className="relative m-auto -mt-44 mb-32  flex  w-[899px] flex-col items-center justify-center gap-8 p-6 text-center font-IBM text-black  ">
-        <GridWhite className="absolute -top-0" />
+        <GridWhite className="absolute -top-0 h-[790px] w-[1155px]" />
         <Image
           alt="Galaxy"
           className="relative"
@@ -56,7 +65,8 @@ export default function Home() {
           src="/images/happy-sun.svg"
           width="290"
         />
-        <h2 className="relative text-[44px] font-bold">
+        <Star className="absolute right-16    top-28" />
+        <h2 className="relative w-[899px] text-[44px] font-bold">
           {`Your decision is not just wanted, it's needed!`}
         </h2>
         <p className="relative text-center text-[24px]">
@@ -68,6 +78,7 @@ export default function Home() {
           Learn now
           <ArrowDown className="ml-2" />
         </button>
+        <Star className="absolute -bottom-20 -left-28" height={35} width={35} />
       </div>
       <div className="relative mx-auto mb-40 w-[871px]">
         <Image
@@ -125,7 +136,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto mb-60 flex w-[662px] flex-col items-center justify-center gap-10 text-center">
+      <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
+        <Star className="absolute -top-40    right-0" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
           Ready to Shape the Galaxy?
         </h2>
@@ -136,7 +148,24 @@ export default function Home() {
           alternativeText="Start voting"
           className="flex h-12 items-center bg-black"
         />
+        <Star
+          className="absolute -bottom-20    -left-20"
+          height={35}
+          width={35}
+        />
       </div>
+      <footer className="flex w-full justify-between px-20 py-8">
+        <div className="flex gap-6">
+          <Twitter />
+          <Linkedin />
+          <Github />
+          <Discord />
+          <Medium />
+        </div>
+        <div className="flex items-center gap-2 font-Inter text-lg text-black">
+          Magically crafted by <GMIcon />
+        </div>
+      </footer>
     </div>
   )
 }
