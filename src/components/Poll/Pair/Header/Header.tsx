@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
     <div
       className={cn(
         styles.Header,
-        'relative flex  z-50 text-lg font-semibold gap-4 justify-between text-black items-center px-14 h-[93px]'
+        'relative flex  z-50 text-lg font-semibold gap-4 justify-between text-black items-center px-20 h-[93px]'
       )}>
       <button
         className={cn(

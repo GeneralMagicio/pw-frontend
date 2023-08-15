@@ -1,6 +1,7 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
+import { CollectionsRight } from '@/components/Icon/CollectionsRight'
 import { Discord } from '@/components/Icon/Discord'
 import { GMIcon } from '@/components/Icon/GMIcon'
 import { Github } from '@/components/Icon/Github'
@@ -122,7 +123,7 @@ export default function Home() {
             votes are your voice, shaping the future of these projects. Every
             click is a step toward making a difference.
           </p>
-          {/* <CollectionsRight className="absolute -right-[350px] -mt-[6]" /> */}
+          <CollectionsRight className="absolute -right-[320px] -mt-[40%]" />
         </div>
         <VectorHorizontal4 className="ml-28 mr-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
