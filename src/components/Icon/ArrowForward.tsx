@@ -13,14 +13,14 @@ export const ArrowForward: React.FC<SVGProps<SVGSVGElement>> = ({
       xmlns="http://www.w3.org/2000/svg">
       <path
         d="M16.75 7L25.75 16L16.75 25"
-        stroke="white"
+        stroke="currentColor"
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"
       />
       <path
         d="M24.5 16L6.25 16"
-        stroke="white"
+        stroke="currentColor"
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"

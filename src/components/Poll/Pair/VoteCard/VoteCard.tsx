@@ -10,7 +10,6 @@ import { Browser } from '@/components/Icon/Browser'
 import { CardBorderLeft } from '@/components/Icon/CardBorderLeft'
 import { CardBorderRight } from '@/components/Icon/CardBorderRight'
 
-console.log({ styles })
 interface VoteCardProps {
   placement: 'left' | 'right'
   varient?: 'skew' | 'normal' | 'fade'

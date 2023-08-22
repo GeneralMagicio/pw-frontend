@@ -6,6 +6,9 @@ module.exports = {
       minHeight: {
         'screen-content': 'calc(100vh - 177.45px)',
       },
+      maxHeight: {
+        'screen-content': 'calc(100vh - 60px - 120px)',
+      },
       borderWidth: {
         6: '6px',
       },
@@ -32,6 +35,7 @@ module.exports = {
       },
       boxShadow: {
         card: '-8px 8px 0px 0px rgba(255, 255, 255, 0.20)',
+        card2: '0px 2px 15px 0px rgba(27, 30, 35, 0.10)',
       },
     },
   },

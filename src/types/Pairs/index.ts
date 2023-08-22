@@ -15,3 +15,9 @@ export enum VOTES {
   RIGHT,
   ABSTAIN,
 }
+
+export enum PollType {
+  NORMAL = 'normal',
+  EXPERTISE = 'expertise',
+  IMPACT = 'root',
+}

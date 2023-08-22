@@ -2,11 +2,10 @@ import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
 import { CollectionsRight } from '@/components/Icon/CollectionsRight'
+import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { Discord } from '@/components/Icon/Discord'
 import { GMIcon } from '@/components/Icon/GMIcon'
 import { Github } from '@/components/Icon/Github'
-import { Grid } from '@/components/Icon/Grid'
-import { GridWhite } from '@/components/Icon/GridWhite'
 import { Linkedin } from '@/components/Icon/Linkedin'
 import { Medium } from '@/components/Icon/Medium'
 import { Star } from '@/components/Icon/Star'
@@ -58,7 +57,7 @@ export default function Home() {
       </div>
 
       <div className="relative m-auto -mt-44 mb-32  flex  w-[899px] flex-col items-center justify-center gap-8 p-6 text-center font-IBM text-black  ">
-        <GridWhite className="absolute -top-0 h-[790px] w-[1155px]" />
+        <ColoredGrid className="absolute -top-0 h-[790px] w-[1155px] text-white" />
         <Image
           alt="Galaxy"
           className="relative"

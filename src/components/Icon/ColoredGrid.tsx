@@ -1,16 +1,18 @@
 import { SVGProps } from 'react'
 
-export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
+export const ColoredGrid: React.FC<SVGProps<SVGSVGElement>> = ({
+  ...props
+}) => (
   <svg
     fill="none"
     viewBox="0 0 1157 792"
     xmlns="http://www.w3.org/2000/svg"
     {...props}>
-    <g opacity="0.5">
+    <g>
       <rect
         height="699.787"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="1015.57"
         x="70.7139"
         y="45.8398"
@@ -18,7 +20,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="639.225"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="926.893"
         x="115.053"
         y="76.1206"
@@ -26,7 +28,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="580.826"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="842.539"
         x="157.23"
         y="105.32"
@@ -34,7 +36,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="522.427"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="756.023"
         x="200.489"
         y="134.52"
@@ -42,7 +44,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="464.028"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="671.669"
         x="242.666"
         y="163.719"
@@ -50,7 +52,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="405.629"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="587.315"
         x="284.843"
         y="192.918"
@@ -58,7 +60,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="351.556"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="509.449"
         x="323.775"
         y="219.955"
@@ -66,7 +68,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="306.135"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="444.562"
         x="356.219"
         y="242.666"
@@ -74,7 +76,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <rect
         height="265.039"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
         width="384"
         x="386.5"
         y="263.214"
@@ -82,7 +84,7 @@ export const GridWhite: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
       <path
         d="M794.525 545.613L1156 791.548M792.071 245.708L1156 1M359.406 245.708L1 1M359.406 543.16L1 791.548M576.659 545.613V791.548M576.659 245.708V1M359.406 401.487H1M795.753 401.487H1156M795.753 322.984L1156 225.469M359.406 322.984L1 225.469M359.406 475.083L1 576.278M468.646 545.613L336.085 791.548M682.83 545.613L823.37 791.548M795.753 475.083L1156 576.278M681.603 245.708L823.37 1M469.874 245.708L336.085 1"
         opacity="0.4"
-        stroke="white"
+        stroke="currentColor"
       />
     </g>
   </svg>
