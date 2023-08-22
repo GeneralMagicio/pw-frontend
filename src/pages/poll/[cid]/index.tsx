@@ -4,13 +4,19 @@ import { Question } from '@/components/Poll/Pair/Question'
 import { Pairs } from '@/components/Poll/Pairs'
 import { Header } from '@/components/Poll/Pair/Header'
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
-import { fetchPairs, voteColletions, voteProjects } from '@/utils/poll'
+import {
+  fetchPairs,
+  voteColletions,
+  voteExpertise,
+  voteProjects,
+} from '@/utils/poll'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { PairsType } from '@/types/Pairs'
+import { PairsType, PollType } from '@/types/Pairs'
 
 export default function Poll() {
   const router = useRouter()
+  const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState(
@@ -19,12 +25,15 @@ export default function Poll() {
   const { isConnected } = useAccount()
 
   const goToRanking = () =>
-    router.push({
-      pathname: `${router.pathname}/ranking`,
-      query: router.query,
-    })
-  const fetchData = (rest?: boolean) =>
-    fetchPairs(String(router.query.cid)).then((data) => {
+    cid === PollType.EXPERTISE || cid === PollType.IMPACT
+      ? router.replace('/start-journey')
+      : router.push({
+          pathname: `${router.pathname}/ranking`,
+          query: router.query,
+        })
+
+  const fetchData = (rest?: boolean) => {
+    return fetchPairs(String(cid)).then((data) => {
       if (!data.pairs.length) {
         return Promise.reject(goToRanking())
       }
@@ -32,6 +41,7 @@ export default function Poll() {
       setPairs(rest ? data : { ...data, pairs: newPairs })
       return newPairs
     })
+  }
 
   useEffect(() => {
     if (pairs?.type === 'collection') {
@@ -67,8 +77,11 @@ export default function Poll() {
         <Pairs
           onVote={(pair, picked) => {
             const [a, b] = pair
-            const voteRequest =
-              pairs?.type === 'collection' ? voteColletions : voteProjects
+            const voteRequestsMap = {
+              collection: voteColletions,
+              project: voteProjects,
+            }
+            const voteRequest = voteRequestsMap[pairs?.type] || voteExpertise
             return voteRequest({
               id1: a.id,
               id2: b.id,

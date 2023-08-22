@@ -7,9 +7,15 @@ interface ModalProps {
   isOpen: boolean
   onClose: () => void
   children: React.ReactElement
+  className?: string
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  className = 'bg-white',
+}) => {
   const modalRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
 
@@ -52,7 +58,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     ? ReactDOM.createPortal(
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}>
-          <div className={cn(styles.modal, 'mx-24')} ref={modalRef}>
+          <div
+            className={cn(
+              styles.modal,
+              className ? 'bg-white' : className,
+              'mx-24 backdrop-blur-sm  border-4 border-gray-30'
+            )}
+            ref={modalRef}>
             {children}
           </div>
         </div>,

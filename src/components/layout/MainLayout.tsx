@@ -13,7 +13,6 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children, className }: MainLayoutProps) {
-
   return (
     <>
       <div

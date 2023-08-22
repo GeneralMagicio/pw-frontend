@@ -8,4 +8,7 @@ export interface PairType {
   created_at: string
   numOfChildren: number
   childProjects?: Array<Array<PairType>>
+  parent_collection_id: number | null
+  locked: boolean
+  hasSubcollections: boolean
 }

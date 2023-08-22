@@ -1,11 +1,13 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import cn from 'classnames'
+import { useRouter } from 'next/router'
 import { useSwitchNetwork } from 'wagmi'
 
 export const ConnectWalletButton: React.FC<{
   className?: string
   alternativeText?: string
 }> = ({ className = 'bg-red', alternativeText }) => {
+  const router = useRouter()
   const { chains, switchNetworkAsync } = useSwitchNetwork()
   return (
     <ConnectButton.Custom>
@@ -34,7 +36,7 @@ export const ConnectWalletButton: React.FC<{
                     }
                     openAccountModal && openAccountModal()
                   }
-                : () => {}
+                : () => router.push('/galaxy')
             }>
             <span className="font-bold">
               {alternativeText || account.displayName}
