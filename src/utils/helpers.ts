@@ -8,7 +8,7 @@ export function generateNonOverlappingOrbitCoordinates(
   const centerX = viewportWidth / 2
   const centerY = viewportHeight / 2
 
-  const orbitRadius = viewportWidth / radiusDivider
+  const orbitRadius = Math.min(viewportWidth, viewportHeight) / radiusDivider
 
   const angleIncrement = (2 * Math.PI) / totalPoints
 

@@ -11,4 +11,5 @@ export interface PairType {
   parent_collection_id: number | null
   locked: boolean
   hasSubcollections: boolean
+  voted: boolean
 }

@@ -9,10 +9,10 @@ export async function fetchCollections(cid?: string) {
     })
     .then((res) => res.data)
 }
-export async function getFlowStatus(cid?: string) {
-  return axiosInstance
-    .get<FlowStatus>('/flow/status', {
-      params: { cid: cid === 'root' ? null : cid },
-    })
-    .then((res) => res.data)
+export async function getFlowStatus() {
+  return axiosInstance.get<FlowStatus>('/flow/status').then((res) => res.data)
+}
+
+export async function getFlowProgress() {
+  return axiosInstance.get<number>('/flow/progress').then((res) => res.data)
 }

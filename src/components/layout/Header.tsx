@@ -1,23 +1,23 @@
 import Link from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { SITE_NAME } from '@/utils/config'
-import { useEffect, useRef } from 'react'
-import cn from 'classnames'
-import { useAccount, useNetwork, useSignMessage, useSwitchNetwork } from 'wagmi'
-import { login, logout } from '@/utils/auth'
-import { Logo } from '../Icon/Logo'
-import { useRouter } from 'next/router'
-import { ConnectWalletButton } from '../ConnectWalletButton'
+import { Logo } from '@/components/Icon/Logo'
+import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 
 export function Header() {
   return (
-    <header className="z-10 flex h-[60px] items-center justify-between bg-gray-4 px-5">
+    <header className="z-10 flex h-[60px] items-center justify-between bg-gray-4 px-10">
       <Link href="/">
         <div className="ml-20">
           <Logo />
         </div>
       </Link>
-      <ConnectWalletButton className="h-[36px] bg-red" />
+      <div className="group relative ">
+        <ConnectWalletButton className="h-[36px] bg-red" />
+        <div className="absolute right-0 top-12 whitespace-nowrap rounded-2xl bg-white px-10 py-6  text-black opacity-0 transition-opacity group-hover:opacity-100">
+          <Link href="/profile">
+            <span className="cursor-pointer hover:underline">My account</span>
+          </Link>
+        </div>
+      </div>
     </header>
   )
 }

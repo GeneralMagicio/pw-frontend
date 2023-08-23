@@ -30,8 +30,8 @@ export default function AGalaxy() {
   useEffect(() => {
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, 4)
-          .concat(generateNonOverlappingOrbitCoordinates(10, 2))
+        generateNonOverlappingOrbitCoordinates(5, 2.2)
+          .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
       )
     }
@@ -74,12 +74,15 @@ export default function AGalaxy() {
                         className="absolute h-[100px] w-[100px] cursor-pointer"
                         key={x + y}
                         onClick={() =>
-                          !collection.locked &&
-                          router.push(
-                            `/${
-                              collection.hasSubcollections ? 'galaxy' : 'poll'
-                            }/${collection.id}`
-                          )
+                          !collection.locked && collection.voted
+                            ? router.push(`poll/${collection.id}/ranking`)
+                            : router.push(
+                                `/${
+                                  collection.hasSubcollections
+                                    ? 'galaxy'
+                                    : 'poll'
+                                }/${collection.id}`
+                              )
                         }
                         style={{
                           width: `${PLANET_SIZE}px`,
@@ -87,11 +90,7 @@ export default function AGalaxy() {
                           left: `${x - PLANET_SIZE / 2}px`,
                           top: `${y - PLANET_SIZE / 2}px`,
                         }}>
-                        <ProjectPlanet
-                          isRight={isRight}
-                          locked={collection.locked}
-                          name={collection.name}
-                        />
+                        <ProjectPlanet isRight={isRight} project={collection} />
                       </div>
                     )
                   })}

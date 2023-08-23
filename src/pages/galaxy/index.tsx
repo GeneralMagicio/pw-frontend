@@ -10,16 +10,18 @@ import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
 import { SadSun } from '@/components/Icon/SadSun'
-import { fetchCollections } from '@/utils/flow'
+import { fetchCollections, getFlowProgress } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 
 const PLANET_SIZE = 150
+const PROGRESS_BLOCKS = 13
 
 export default function Galaxy() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
+  const [progress, setProgress] = useState(0)
   const [collections, setCollections] = useState<PairType[]>([])
   const { flowStatus } = useSession()
 
@@ -33,14 +35,25 @@ export default function Galaxy() {
   }, [flowStatus])
 
   useEffect(() => {
+    getFlowProgress()
+      .then(setProgress)
+      .catch((err) => console.log(err))
     fetchCollections()
       .then((data) => setCollections(data.concat(data)))
       .catch((err) => console.log(err))
-    setCords(
-      generateNonOverlappingOrbitCoordinates(5, 4)
-        .concat(generateNonOverlappingOrbitCoordinates(10, 2))
-        .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
-    )
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCords(
+        generateNonOverlappingOrbitCoordinates(5, 2.2)
+          .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
+          .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
+      )
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return (
@@ -68,7 +81,7 @@ export default function Galaxy() {
                         className="absolute flex cursor-pointer items-center justify-center"
                         key={x + y}
                         onClick={() =>
-                          !collection.locked &&
+                          // !collection.locked &&
                           router.push(
                             `/${
                               collection.hasSubcollections ? 'galaxy' : 'poll'
@@ -114,16 +127,17 @@ export default function Galaxy() {
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <div className="flex items-center">
           <h4 className="font-IBM text-3xl font-bold">Governance Orbit</h4>
-          <span className="ml-5 font-medium">40% voted</span>
+          <span className="ml-5 font-medium">{progress}% voted</span>
           <div className="-mt-1 ml-4 flex items-center">
             <span className="text-3xl">[</span>
             <div className="flex items-center gap-2 p-2">
-              {Array(13)
+              {Array(PROGRESS_BLOCKS)
                 .fill(Infinity)
                 .map((_, idx) => (
                   <div
                     className={cn('h-3 w-[2px] bg-red', {
-                      'h-[6px] bg-black opacity-10': idx > 5,
+                      'h-[6px] bg-black opacity-10':
+                        idx > (progress * PROGRESS_BLOCKS) / 100,
                     })}
                     key={idx}
                   />
@@ -135,7 +149,7 @@ export default function Galaxy() {
         </div>
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
-          onClick={() => {}}>
+          onClick={() => router.push('/poll/root/ranking')}>
           Check votes
           <PodiumSharp />
         </button>

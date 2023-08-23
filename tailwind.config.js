@@ -36,6 +36,7 @@ module.exports = {
       boxShadow: {
         card: '-8px 8px 0px 0px rgba(255, 255, 255, 0.20)',
         card2: '0px 2px 15px 0px rgba(27, 30, 35, 0.10)',
+        card3: '0px 2px 12px 0px rgba(27, 30, 35, 0.06)',
       },
     },
   },

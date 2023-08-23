@@ -53,11 +53,17 @@ const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen, onClose])
 
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose()
+    }
+  }
   if (!isOpen) return null
   return mounted
     ? ReactDOM.createPortal(
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}>
+          className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}
+          onClick={handleOverlayClick}>
           <div
             className={cn(
               styles.modal,
