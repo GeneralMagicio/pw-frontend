@@ -1,3 +1,5 @@
+import { PairType } from '../Pairs/Pair'
+
 export interface RankingItem {
   share: number
   project: {
@@ -12,4 +14,8 @@ export interface RankingItem {
 
 export type RankingsType = RankingItem[]
 
-export type RankingResponse = {collectionTitle: string; ranking: RankingsType}
+export type RankingResponse = {
+  collectionTitle: string
+  ranking: RankingsType
+  nextCollection: PairType
+}

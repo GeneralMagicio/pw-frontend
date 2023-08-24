@@ -1,5 +1,7 @@
+import { FinishVoteModal } from '@/components/FinishVoteModal'
 import { Shuffle } from '@/components/Icon/Shuffle'
 import { Tick } from '@/components/Icon/Tick'
+import Modal from '@/components/Modal/Modal'
 import { Rankings } from '@/components/Poll/Rankings'
 import { RankingResponse } from '@/types/Ranking/index'
 import { getRankings } from '@/utils/poll'
@@ -9,6 +11,7 @@ import { useEffect, useState } from 'react'
 export default function RankingPage() {
   const router = useRouter()
   const [rankings, setRankings] = useState<RankingResponse>()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (router.query.cid)
@@ -28,13 +31,21 @@ export default function RankingPage() {
           </button>{' '}
           <button
             className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
-            onClick={() => {}}>
+            onClick={() => setOpen(true)}>
             Done
             <Tick />
           </button>
         </div>
       </header>
-      <Rankings collectionTitle={rankings?.collectionTitle || ''} items={rankings?.ranking || []} />
+      {rankings?.nextCollection && (
+        <Modal isOpen={open} onClose={() => setOpen(false)}>
+          <FinishVoteModal nextCollection={rankings?.nextCollection} />
+        </Modal>
+      )}
+      <Rankings
+        collectionTitle={rankings?.collectionTitle || ''}
+        items={rankings?.ranking || []}
+      />
     </>
   )
 }
