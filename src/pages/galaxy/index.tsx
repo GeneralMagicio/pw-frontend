@@ -39,7 +39,7 @@ export default function Galaxy() {
       .then(setProgress)
       .catch((err) => console.log(err))
     fetchCollections()
-      .then((data) => setCollections(data.concat(data)))
+      .then((data) => setCollections(data))
       .catch((err) => console.log(err))
   }, [])
 
@@ -79,7 +79,7 @@ export default function Galaxy() {
                     return (
                       <div
                         className="absolute flex cursor-pointer items-center justify-center"
-                        key={x + y}
+                        key={collection.id}
                         onClick={() =>
                           // !collection.locked &&
                           router.push(

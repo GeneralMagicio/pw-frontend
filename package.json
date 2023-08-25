@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "react-zoom-pan-pinch": "^3.1.0",
+    "recharts": "^2.8.0",
     "sass": "^1.64.2",
     "siwe": "^2.1.4",
     "typescript": "5.0.4",
