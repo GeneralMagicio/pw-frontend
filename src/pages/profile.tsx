@@ -1,5 +1,6 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ExpertiseChart } from '@/components/Profile/RadarChart'
+import { StrategicRanking } from '@/components/Profile/StrategicRanking'
 
 export default function Profile() {
   return (
@@ -9,12 +10,13 @@ export default function Profile() {
           <ConnectWalletButton className="h-12" />
         </header>
         <div className="flex w-full gap-10 font-Inter">
-          <div className="grow rounded-2xl p-6 shadow-card3">
-            <h2 className="mb-8 text-2xl font-bold">Expertise Preference</h2>
+          <div className="h-[375px] grow rounded-2xl p-6 shadow-card3">
+            <h2 className="mb-4 text-2xl font-bold">Expertise Preference</h2>
             <ExpertiseChart/>
           </div>
-          <div className="grow rounded-2xl p-6 shadow-card3">
-            <h2 className="text-2xl font-bold">Strategic Importance</h2>
+          <div className="h-[375px] grow rounded-2xl p-6 shadow-card3">
+            <h2 className="mb-4 text-2xl font-bold">Strategic Importance</h2>
+            <StrategicRanking/>
           </div>
         </div>
       </div>

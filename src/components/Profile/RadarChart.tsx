@@ -37,6 +37,7 @@ function renderPolarAngleAxis({ payload, x, y, cx, cy, ...rest } : {payload: {va
   return (
     <Text
       {...rest}
+      className="font-IBM"
       fill= "#000"
       fontSize= {12}
       fontWeight= {500}
