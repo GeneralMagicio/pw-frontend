@@ -18,10 +18,10 @@ const valueCalculator = (percentage: number) => {
 export const StrategicRanking: React.FC = () => {
   if (!data)
     return (
-      <div className="relative flex h-[300px] items-center justify-center">
+      <div className="relative flex h-full items-center justify-center">
         <img
           alt="expertise ranking"
-          className="absolute self-start h-[300px] blur-[4px]"
+          className="absolute self-start h-full blur-[4px]"
           src="/images/expertise-ranking-sample.png"
         />
         <div className="z-10">
