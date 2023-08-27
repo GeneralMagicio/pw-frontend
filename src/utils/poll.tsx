@@ -74,3 +74,9 @@ export async function getRankings(cid?: string) {
     })
     .then((res) => res.data)
 }
+
+export async function getExpertiseRankings() {
+  return axiosInstance
+    .get<RankingResponse>(`/flow/expertise/ranking`)
+    .then((res) => res.data)
+}
