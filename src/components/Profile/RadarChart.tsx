@@ -1,65 +1,13 @@
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, Radar, Text, ResponsiveContainer } from "recharts"
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Text, ResponsiveContainer } from "recharts"
 import { NothingYetBox } from "./NothingYetBox";
+import React from "react";
 
-// const data = [
-//   {
-//     "subject": "Development",
-//     "A": 120,
-//     "fullMark": 150
-//   },
-//   {
-//     "subject": "Infrastructure",
-//     "A": 98,
-//     "fullMark": 150
-//   },
-//   {
-//     "subject": "Legal",
-//     "A": 86,
-//     "fullMark": 150
-//   },
-//   {
-//     "subject": "Marketing",
-//     "A": 99,
-//     "fullMark": 150
-//   },
-//   {
-//     "subject": "Social",
-//     "A": 135,
-//     "fullMark": 150
-//   },
-//   {
-//     "subject": "Education",
-//     "A": 85,
-//     "fullMark": 150
-//   },
-// ]
-const data = [
-  {
-    "subject": "Development",
-  },
-  {
-    "subject": "Infrastructure",
-  },
-  {
-    "subject": "Legal",
-  },
-  {
-    "subject": "Marketing",
-  },
-  {
-    "subject": "Social",
-  },
-  {
-    "subject": "Education",
-  },
-]
-
-function renderPolarAngleAxis({ payload, x, y, cx, cy, noData, ...rest } : {payload: {value: string}, noData: boolean, x: number, y: number, cx: number, cy: number}) {
+function renderPolarAngleAxis({ payload, x, y, cx, cy, settled, ...rest } : {payload: {value: string}, settled: boolean, x: number, y: number, cx: number, cy: number}) {
   return (
     <Text
       {...rest}
       className="font-IBM"
-      fill= {noData ? "#aaa" : "#000"}
+      fill= {settled ? "#000" : "#aaa"}
       fontSize= {12}
       fontWeight= {500}
       verticalAnchor="middle"
@@ -72,17 +20,18 @@ function renderPolarAngleAxis({ payload, x, y, cx, cy, noData, ...rest } : {payl
 }
 
 
-export const ExpertiseChart = () => {
-  const noData = true
+export const ExpertiseChart : React.FC<{data: {name: string, share: number}[], settled: boolean}> = ({data, settled}) => {
+  const maxData = data.sort((a,b) => b.share - a.share)[0].share
+  const notSettledData = data.map(({name}) => ({name}))
 
   return (
     <div className="relative h-full">
-      <div className="absolute z-10 flex h-full w-full items-center justify-center">
+      {!settled ? <div className="absolute z-10 flex h-full w-full items-center justify-center">
         <NothingYetBox/>
-      </div>
-      <ResponsiveContainer height="100%" width="100%">
+      </div> : null}
+      <ResponsiveContainer className={"mt-[-18px]"} height="100%" width="100%">
 
-        <RadarChart data={data} outerRadius={100}>
+        <RadarChart data={settled ? data : notSettledData} outerRadius={100}>
           <defs>
           <linearGradient id="colorUv" x1="1" x2="0" y1="1" y2="0">
             <stop offset="25%" stopColor="#ffc3c8" stopOpacity={0.5} />
@@ -90,10 +39,9 @@ export const ExpertiseChart = () => {
           </linearGradient>
         </defs>
           <PolarGrid gridType="circle" stroke="#eee"/>
-          <PolarAngleAxis  dataKey="subject" tick={props => renderPolarAngleAxis({...props, noData})} />
-          <PolarRadiusAxis axisLine={false} domain={[0, 150]} tick={false} />
-          <Radar dataKey="A" fill="url(#colorUv)" fillOpacity={0.6} name="Mike" stroke="#f82c37" />
-          {/* <Legend /> */}
+          <PolarAngleAxis  dataKey="name" tick={props => renderPolarAngleAxis({...props, settled})} />
+          <PolarRadiusAxis axisLine={false} domain={[0, maxData * 1.2]} tick={false} />
+          <Radar dataKey="share" fill="url(#colorUv)" fillOpacity={0.6} name="Mike" stroke="#f82c37" />
         </RadarChart>
       </ResponsiveContainer>
     </div>
