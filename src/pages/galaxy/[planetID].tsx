@@ -12,6 +12,7 @@ import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { PlanetSub } from '@/components/Icon/PlanetSub'
+import { fetchPairs } from '@/utils/poll'
 
 
 const PLANET_SIZE = 150
@@ -27,6 +28,19 @@ export default function AGalaxy() {
       fetchCollections(String(router.query.planetID))
         .then(setCollections)
         .catch((err) => console.log(err))
+  }, [router.query.planetID])
+
+  useEffect(() => {
+    const func = async () => {
+      if (router.query.planetID) {
+        const pair = await fetchPairs(String(router.query.planetID))
+        if (Math.floor((pair.votedPairs / pair.totalPairs)) < pair.threshold) {
+          router.push('/poll/2')
+        } 
+      }
+    }
+
+    func()
   }, [router.query.planetID])
 
   useEffect(() => {
