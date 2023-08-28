@@ -11,6 +11,8 @@ import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
+import { PlanetSub } from '@/components/Icon/PlanetSub'
+
 
 const PLANET_SIZE = 150
 
@@ -30,7 +32,7 @@ export default function AGalaxy() {
   useEffect(() => {
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, 2.2)
+        generateNonOverlappingOrbitCoordinates(5, 2.5)
           .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
       )
@@ -51,7 +53,7 @@ export default function AGalaxy() {
         <ArrowBackward className="text-black" />
         <span>Go Back</span>
       </button>
-      <TransformWrapper centerOnInit centerZoomedOut initialScale={2.5}>
+      <TransformWrapper centerOnInit centerZoomedOut initialScale={4}>
         <TransformComponent>
           <div
             className=" flex w-screen items-center justify-center overflow-hidden"
@@ -94,6 +96,7 @@ export default function AGalaxy() {
                       </div>
                     )
                   })}
+                <PlanetSub/>
               </div>
             </div>
           </div>
