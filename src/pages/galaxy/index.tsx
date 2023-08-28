@@ -78,10 +78,10 @@ export default function Galaxy() {
 
                     return (
                       <div
-                        className="absolute flex cursor-pointer items-center justify-center"
+                        className={`absolute flex ${collection.locked ? "cursor-default" : "cursor-pointer"} items-center justify-center`}
                         key={collection.id}
                         onClick={() =>
-                          // !collection.locked &&
+                          !collection.locked &&
                           router.push(
                             `/${
                               collection.hasSubcollections ? 'galaxy' : 'poll'

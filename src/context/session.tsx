@@ -69,10 +69,10 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
           }
         } catch {}
       } else if (!isConnected && previousIsConnected.current === true) {
-        await logout()
-        setSession({ ...session, user: '' })
-        previousIsConnected.current = false
-        if (router.pathname !== '/') router.push('/')
+          await logout()
+          setSession({ ...session, user: '' })
+          previousIsConnected.current = false
+          if (router.pathname !== '/') router.push('/')
       }
     }
 
