@@ -4,7 +4,7 @@ export interface PairsType {
   pairs: Array<Array<PairType>>
   totalPairs: number
   votedPairs: number
-  type: 'project' | 'collection'
+  type: 'project' | 'collection' | 'expertise'
   threshold: number
   collectionTitle: string
 }

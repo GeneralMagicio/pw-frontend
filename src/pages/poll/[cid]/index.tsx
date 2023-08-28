@@ -19,9 +19,7 @@ export default function Poll() {
   const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
-  const [activeQuestion, setActiveQuestion] = useState(
-    'Since last March, which of these projects has had a greater positive impact on Optimism?'
-  )
+  const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
 
   const goToRanking = () =>
@@ -48,7 +46,11 @@ export default function Poll() {
       setActiveQuestion(
         'Since last March, which of these collections has had a greater positive impact on Optimism?'
       )
-    }
+    } else if (pairs?.type === "expertise") {
+      setActiveQuestion(
+        'What area do you feel most confident discussing?'
+      )
+    } else if (pairs?.type === 'project') setActiveQuestion('Since last March, which of these projects has had a greater positive impact on Optimism?')
   }, [pairs])
 
   useEffect(() => {
@@ -80,8 +82,9 @@ export default function Poll() {
             const voteRequestsMap = {
               collection: voteColletions,
               project: voteProjects,
+              expertise: voteExpertise,
             }
-            const voteRequest = voteRequestsMap[pairs?.type] || voteExpertise
+            const voteRequest = voteRequestsMap[pairs?.type]
             return voteRequest({
               id1: a.id,
               id2: b.id,
