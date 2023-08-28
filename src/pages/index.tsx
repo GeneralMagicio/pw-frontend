@@ -74,10 +74,12 @@ export default function Home() {
           for distribution in the third round of RetroPGF, your vote will shape
           the direction of our collective future.`}
         </p>
-        <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
-          Learn now
-          <ArrowDown className="ml-2" />
-        </button>
+        <a href='https://community.optimism.io/docs/governance/retropgf-3/' rel="noreferrer" target='_blank'>
+          <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
+            Learn now
+            <ArrowDown className="ml-2" />
+          </button>
+        </a>
         <Star className="absolute -bottom-20 -left-28" height={35} width={35} />
       </div>
       <div className="relative mx-auto mb-40 w-[871px]">
