@@ -90,8 +90,8 @@ export default function AGalaxy() {
                         className="absolute h-[100px] w-[100px] cursor-pointer"
                         key={x + y}
                         onClick={() =>
-                          !collection.locked && collection.voted
-                            ? router.push(`poll/${collection.id}/ranking`)
+                          collection.voted
+                            ? router.replace(`/poll/${collection.id}/ranking`)
                             : router.push(
                                 `/${
                                   collection.hasSubcollections
