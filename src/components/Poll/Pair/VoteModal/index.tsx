@@ -54,10 +54,10 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
           {item.childProjects?.length && (
             <div className="mb-10 mt-6 font-Inter">
               <h5 className="border-b border-b-gray-10 pb-2 text-lg">
-                {item.childProjects[0].length} projects
+                {item.childProjects.length} projects
               </h5>
               <div className="mt-4 flex w-full flex-wrap gap-7">
-                {item.childProjects[0].map((child) => (
+                {item.childProjects.map((child) => (
                   <div className="flex w-1/4 gap-4" key={child.id}>
                     <img
                       alt={item.name}
