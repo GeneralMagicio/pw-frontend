@@ -56,6 +56,15 @@ export default function Galaxy() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const handlePlanetClick = (collection: PairType) => () => {
+    if (collection.locked) return null;
+    if (collection.voted && !collection.hasSubcollections) return router.push(`/poll/${collection.id}/ranking`)
+    if (collection.hasSubcollections) {
+      return router.push(`/galaxy/${collection.id}`)
+    }
+    return router.push(`/poll/${collection.id}`)
+  }
+
   return (
     <div className="overflow-hidden">
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
@@ -80,14 +89,7 @@ export default function Galaxy() {
                       <div
                         className={`absolute flex ${collection.locked ? "cursor-default" : "cursor-pointer"} items-center justify-center`}
                         key={collection.id}
-                        onClick={() =>
-                          !collection.locked &&
-                          router.push(
-                            `/${
-                              collection.hasSubcollections ? 'galaxy' : 'poll'
-                            }/${collection.id}`
-                          )
-                        }
+                        onClick={handlePlanetClick(collection)}
                         style={{
                           width: `${PLANET_SIZE}px`,
                           height: `${PLANET_SIZE}px`,
