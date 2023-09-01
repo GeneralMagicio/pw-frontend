@@ -34,7 +34,7 @@ const StepOne:React.FC<{onClick: () => void}> = ({onClick}) => {
   )
 }
 
-const StepTwo = () => {
+const StepTwo:React.FC<{onClick: () => void}> = ({onClick}) => {
   return (
     <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
       <h3 className="text-3xl font-bold">Question</h3>
@@ -46,9 +46,7 @@ const StepTwo = () => {
       <div className="mt-4 flex items-center justify-center">
         <button
           className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-          onClick={() => {
-            router.push('/start-journey')
-          }}>
+          onClick={onClick}>
           {"let's start"} <ArrowForward className="ml-1" />
         </button>
       </div>
@@ -56,7 +54,7 @@ const StepTwo = () => {
   )
 }
 
-export const StrategicModal: React.FC<Props> = ({ isOpen, onClose }) => {
+export const ImpactModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [step, setStep] = useState<number>(1)
 
   const goToStepTwo = () => setStep(2)
@@ -69,7 +67,7 @@ export const StrategicModal: React.FC<Props> = ({ isOpen, onClose }) => {
         <div className="mb-8">
           <DotStepper activeStep={step} changeStep={changeStep} steps={2} />
         </div>
-        {step === 1 ? <StepOne onClick={goToStepTwo}/> : <StepTwo/>}
+        {step === 1 ? <StepOne onClick={goToStepTwo}/> : <StepTwo onClick={onClose}/>}
       </>
     </Modal>
   )
