@@ -4,7 +4,7 @@ import { FlowStatus } from '@/types/Flow'
 import { isLoggedIn, login, logout } from '@/utils/auth'
 import { getFlowStatus } from '@/utils/flow'
 import { useRouter } from 'next/router'
-import React, { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 import { useContext } from 'react'
 import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 
@@ -45,6 +45,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const { isConnected } = useAccount()
   const previousIsConnected = useRef<boolean>(false)
+  const previousAddress = useRef<string>()
 
   const { address } = useAccount()
   const { chain } = useNetwork()
@@ -79,12 +80,35 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     main()
   }, [isConnected, address, chain, signMessageAsync, router])
 
+  const handleLogin = useCallback(async () => {
+    await login(chain!.id, address!, signMessageAsync)
+    const status = await getFlowStatus()
+    setSession({ ...session, user: 'SUCCESS', flowStatus: status })
+    setIsLoginModalOpen(false)
+  }, [address, chain, session, signMessageAsync])
+
+  // Login when the user changes their address with the extension (Without disconnecting first)
+  useEffect(() => {
+    const main = async () => {
+      if (previousAddress.current !== undefined && address !== previousAddress.current) {
+        await handleLogin()
+        router.reload()
+      }
+    }
+    main()
+
+    return () => {
+      previousAddress.current = address
+    }
+  }, [address, handleLogin, router])
+
   // redirect logic
   useEffect(() => {
     if (!isConnected && !session.user && router.pathname !== '/')
       router.push('/')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, session])
+
 
   return (
     <SessionContext.Provider value={session}>
@@ -95,12 +119,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
         onClose={toggleLoginModal}>
         <AuthenticateWalletModal
           handleClose={toggleLoginModal}
-          handleLogin={async () => {
-            const user = await login(chain!.id, address!, signMessageAsync)
-            const status = await getFlowStatus()
-            setSession({ ...session, user: 'SUCCESS', flowStatus: status })
-            setIsLoginModalOpen(false)
-          }}
+          handleLogin={handleLogin}
         />
       </Modal>
     </SessionContext.Provider>
