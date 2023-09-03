@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const HelpModal: React.FC<Props> = ({isOpen, onClose}) => {
+export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
 
   const [step, setStep] = useState<0 | 1>(0)
 

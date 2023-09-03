@@ -17,7 +17,7 @@ export const DotStepper: React.FC<Props> = ({
           // eslint-disable-next-line tailwindcss/no-custom-classname
           <div
             className={`h-4 w-4 cursor-pointer rounded-full ${
-              step + 1 === activeStep ? `bg-[#000]` : `bg-[#ddd]`
+              step + 1 <= activeStep ? `bg-[#000]` : `bg-[#ddd]`
             }`}
             key={step}
             onClick={() => changeStep(step + 1)}
