@@ -13,6 +13,7 @@ import { SadSun } from '@/components/Icon/SadSun'
 import { fetchCollections, getFlowProgress } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
+import { HelpModal } from '@/components/Galaxy/HelpModal'
 
 const PLANET_SIZE = 150
 const PROGRESS_BLOCKS = 13
@@ -110,22 +111,7 @@ export default function Galaxy() {
         </TransformComponent>
       </TransformWrapper>
 
-      <Modal className="mt-80" isOpen={open} onClose={() => setOpen(false)}>
-        <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
-          <p className="text-lg font-bold">Starting the journey!</p>
-          <p className="text-xl">
-            Just two simple question to create more personalized voting
-            experience for you.
-          </p>
-          <button
-            className="mx-auto mt-4 flex h-[50px] min-w-fit items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-            onClick={() => {
-              router.push('/start-journey')
-            }}>
-            {"Let's start"} <ArrowForward className="ml-1" />
-          </button>
-        </div>
-      </Modal>
+      <HelpModal isOpen={open} onClose={() => setOpen(false)}/>
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <div className="flex items-center">
           <h4 className="font-IBM text-3xl font-bold">Governance Orbit</h4>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './Modal.module.scss'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 
@@ -62,19 +61,19 @@ const Modal: React.FC<ModalProps> = ({
   return mounted
     ? ReactDOM.createPortal(
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center ${styles.modalOverlay}`}
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-800/30 backdrop-blur-sm`}
           onClick={handleOverlayClick}>
           <div
             className={cn(
-              styles.modal,
-              className ? 'bg-white' : className,
-              'mx-24 backdrop-blur-sm  border-4 border-gray-30'
+              'p-6 rounded-3xl max-h-[704px] overflow-hidden max-w-[1024px]',
+              !className ? 'bg-white' : className,
+              'mx-24 backdrop-blur-sm border-4 border-gray-30'
             )}
             ref={modalRef}>
             {children}
           </div>
         </div>,
-        window.document.body
+        window.document.getElementById('font-container')!
       )
     : null
 }

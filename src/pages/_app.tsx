@@ -51,14 +51,16 @@ const InterFont = localFont({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+    <div className={cn(IBMFont.variable, InterFont.variable)} id='font-container'>
       <Seo />
       <Web3Provider>
         <SessionProvider>
-          <MainLayout className={cn(IBMFont.variable, InterFont.variable)}>
+          <MainLayout className=''>
             <Component {...pageProps} />
           </MainLayout>
         </SessionProvider>
       </Web3Provider>
+    </div>
     </>
   )
 }

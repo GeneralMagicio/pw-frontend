@@ -13,44 +13,60 @@ import {
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { PairsType, PollType } from '@/types/Pairs'
+import { ImpactModal } from '@/components/Journey/ImpactModal'
 
 export default function Poll() {
   const router = useRouter()
   const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
+  const [showImpactModal, setShowImpactModal] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
 
-  const goToRanking = () =>
-    cid === PollType.EXPERTISE || cid === PollType.IMPACT
-      ? router.replace('/start-journey')
-      : router.push({
+  const goToRanking = () => {
+    switch (cid) {
+      case PollType.EXPERTISE:
+        router.push('/poll/expertise/ranking')
+        return
+      case PollType.IMPACT:
+        router.push('/poll/root/ranking')
+        return
+      default:
+        router.push({
           pathname: `${router.pathname}/ranking`,
           query: router.query,
         })
-
-  const fetchData = (rest?: boolean) => {
-    return fetchPairs(String(cid)).then((data) => {
-      if (!data.pairs.length) {
-        return Promise.reject(goToRanking())
-      }
-      const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
-      setPairs(rest ? data : { ...data, pairs: newPairs })
-      return newPairs
-    })
+    }
   }
+
+  const fetchData = async (rest?: boolean) => {
+    const data = await fetchPairs(String(cid))
+    if (!data.pairs.length) {
+      return Promise.reject(goToRanking())
+    }
+    const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
+    setPairs(rest ? data : { ...data, pairs: newPairs })
+    return newPairs
+  }
+
+  useEffect(() => {
+    if (router.query.cid === 'root') {
+      setShowImpactModal(true)
+    }
+  }, [router.query.cid])
 
   useEffect(() => {
     if (pairs?.type === 'collection') {
       setActiveQuestion(
         'Since last March, which of these collections has had a greater positive impact on Optimism?'
       )
-    } else if (pairs?.type === "expertise") {
+    } else if (pairs?.type === 'expertise') {
+      setActiveQuestion('What area do you feel most confident discussing?')
+    } else if (pairs?.type === 'project')
       setActiveQuestion(
-        'What area do you feel most confident discussing?'
+        'Since last March, which of these projects has had a greater positive impact on Optimism?'
       )
-    } else if (pairs?.type === 'project') setActiveQuestion('Since last March, which of these projects has had a greater positive impact on Optimism?')
   }, [pairs])
 
   useEffect(() => {
@@ -94,16 +110,20 @@ export default function Poll() {
           pairs={pairs.pairs}
         />
       )}
-      <Modal isOpen={open} onClose={() => setOpen(false)}>
-        <Question onStart={() => setOpen(false)} question={activeQuestion} />
-      </Modal>
+      {showImpactModal ? (
+        <ImpactModal isOpen={showImpactModal} onClose={() => {setShowImpactModal(false); setOpen(false)}} />
+      ) : (
+        <Modal isOpen={open} onClose={() => setOpen(false)}>
+          <Question onStart={() => setOpen(false)} question={activeQuestion} />
+        </Modal>
+      )}
 
       <Footer
         onBack={() => router.back()}
         // The condition checks for top-level collections pairwises
         text={
           pairs?.pairs[0][0].collection_id !== null && pairs?.collectionTitle
-            ? `Evaluating ${pairs?.collectionTitle}`
+            ? `Evaluating ${pairs.collectionTitle}`
             : ''
         }
       />
