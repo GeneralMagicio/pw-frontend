@@ -38,7 +38,7 @@ const StepTwo:React.FC<{onClick: () => void}> = ({onClick}) => {
   return (
     <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
       <h3 className="text-3xl font-bold">Question</h3>
-      <div className="flex flex-col gap-6 text-lg leading-8">
+      <div className="flex flex-col gap-6 text-lg font-bold leading-8">
         <p>
           Which area do you think bring more value to the Optimism DAO?
         </p>
