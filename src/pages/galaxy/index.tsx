@@ -1,7 +1,7 @@
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
 import Modal from '@/components/Modal/Modal'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
@@ -13,7 +13,8 @@ import { SadSun } from '@/components/Icon/SadSun'
 import { fetchCollections, getFlowProgress } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
-import { HelpModal } from '@/components/Galaxy/HelpModal'
+import { HelpModal } from '@/components/Journey/HelpModal'
+import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
 
 const PLANET_SIZE = 150
 const PROGRESS_BLOCKS = 13
@@ -24,6 +25,7 @@ export default function Galaxy() {
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [progress, setProgress] = useState(0)
   const [collections, setCollections] = useState<PairType[]>([])
+  const [showHelpModal, setShowHelpModal] = useState(false)
   const { flowStatus } = useSession()
 
   useEffect(() => {
@@ -66,8 +68,21 @@ export default function Galaxy() {
     return router.push(`/poll/${collection.id}`)
   }
 
+  // This is workaround until the backend returns a better checkpoint response
+  const onePlanetUnlocked = useCallback(() => {
+    return collections.filter((collection) => !collection.locked).length === 1
+  }, [collections])
+
+  useEffect(() => {
+    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked()
+    setShowHelpModal(bool)
+
+  }, [flowStatus, onePlanetUnlocked])
+
+
   return (
     <div className="overflow-hidden">
+      {showHelpModal && <HelpModal isOpen={showHelpModal} onClose={() => setShowHelpModal(false)}/>}
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
@@ -111,7 +126,7 @@ export default function Galaxy() {
         </TransformComponent>
       </TransformWrapper>
 
-      <HelpModal isOpen={open} onClose={() => setOpen(false)}/>
+      <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)}/>
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <div className="flex items-center">
           <h4 className="font-IBM text-3xl font-bold">Governance Orbit</h4>
