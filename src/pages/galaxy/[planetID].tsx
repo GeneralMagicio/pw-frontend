@@ -13,7 +13,7 @@ import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { PlanetSub } from '@/components/Icon/PlanetSub'
 import { fetchPairs } from '@/utils/poll'
-
+import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 
 const PLANET_SIZE = 150
 
@@ -22,6 +22,7 @@ export default function AGalaxy() {
   const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
+  const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
 
   useEffect(() => {
     if (router.query.planetID)
@@ -34,9 +35,9 @@ export default function AGalaxy() {
     const func = async () => {
       if (router.query.planetID) {
         const pair = await fetchPairs(String(router.query.planetID))
-        if (Math.floor((pair.votedPairs / pair.totalPairs)) < pair.threshold) {
+        if (Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold) {
           router.push('/poll/2')
-        } 
+        }
       }
     }
 
@@ -56,6 +57,15 @@ export default function AGalaxy() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  useEffect(() => {
+    const allCollectionsUnlockedUnstarted = collections.every(
+      (collection) => !collection.locked && !collection.started
+    )
+
+    if (collections.length > 0 && allCollectionsUnlockedUnstarted) setShowNewSectionsModal(true)
+    else setShowNewSectionsModal(false)
+  }, [collections])
+
   return (
     <div className="relative overflow-hidden">
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
@@ -67,6 +77,15 @@ export default function AGalaxy() {
         <ArrowBackward className="text-black" />
         <span>Go Back</span>
       </button>
+      {showNewSectionsModal && (
+        <NewSectionsModal
+          isOpen={true}
+          onClose={() => {
+            setShowNewSectionsModal(false)
+          }}
+        />
+      )}
+
       <TransformWrapper centerOnInit centerZoomedOut initialScale={4}>
         <TransformComponent>
           <div
@@ -90,7 +109,7 @@ export default function AGalaxy() {
                         className="absolute h-[100px] w-[100px] cursor-pointer"
                         key={x + y}
                         onClick={() =>
-                          collection.voted
+                          collection.finished
                             ? router.replace(`/poll/${collection.id}/ranking`)
                             : router.push(
                                 `/${
@@ -110,7 +129,7 @@ export default function AGalaxy() {
                       </div>
                     )
                   })}
-                <PlanetSub/>
+                <PlanetSub />
               </div>
             </div>
           </div>
