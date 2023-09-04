@@ -18,10 +18,10 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
   isRight,
   project,
 }) => {
-  const { name, locked, voted } = project
+  const { name, locked, finished } = project
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
 
-  const btnClassName = voted ? 'bg-white text-black' : 'text-white bg-black'
+  const btnClassName = finished ? 'bg-white text-black' : 'text-white bg-black'
   return (
     <>
       <PlanetShape id={shapeID} locked={locked} />
@@ -40,21 +40,21 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
               <Unlocked className="text-black" />
             )}
           </h4>
-          {(voted || locked) && (
+          {(finished || locked) && (
             <span className="font-IBM text-sm font-medium text-black">
-              {voted ? '[Voted]' : '[Not voted]'}
+              {finished ? '[Voted]' : '[Not finished]'}
             </span>
           )}
-          {(!locked || voted) && (
+          {(!locked || finished) && (
             <button
               className={cn(
                 btnClassName,
                 'flex items-center gap-2  whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
               )}>
               <span className="font-medium">
-                {voted ? 'Check result' : 'Start voting'}
+                {finished ? 'Check result' : 'Start voting'}
               </span>
-              {voted ? <PodiumSharp /> : <ArrowForward />}
+              {finished ? <PodiumSharp /> : <ArrowForward />}
             </button>
           )}
         </div>

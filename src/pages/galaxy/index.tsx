@@ -1,7 +1,7 @@
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
 import Modal from '@/components/Modal/Modal'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
@@ -15,6 +15,10 @@ import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
 import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
+import { HelpModalStepOne } from '@/components/Journey/HelpModal/HelpModalSteps'
+import { ImpactModal } from '@/components/Journey/ImpactModal'
+import { WellDoneModal2 } from '@/components/Journey/WellDoneModal2'
+import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 
 const PLANET_SIZE = 150
 const PROGRESS_BLOCKS = 13
@@ -26,6 +30,7 @@ export default function Galaxy() {
   const [progress, setProgress] = useState(0)
   const [collections, setCollections] = useState<PairType[]>([])
   const [showHelpModal, setShowHelpModal] = useState(false)
+  const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   const { flowStatus } = useSession()
 
   useEffect(() => {
@@ -61,28 +66,38 @@ export default function Galaxy() {
 
   const handlePlanetClick = (collection: PairType) => () => {
     if (collection.locked) return null;
-    if (collection.voted && !collection.hasSubcollections) return router.push(`/poll/${collection.id}/ranking`)
+    if (collection.finished && !collection.hasSubcollections) return router.push(`/poll/${collection.id}/ranking`)
     if (collection.hasSubcollections) {
       return router.push(`/galaxy/${collection.id}`)
     }
     return router.push(`/poll/${collection.id}`)
   }
-
-  // This is workaround until the backend returns a better checkpoint response
-  const onePlanetUnlocked = useCallback(() => {
-    return collections.filter((collection) => !collection.locked).length === 1
-  }, [collections])
+  
+  const checkShowHelpModalCondition = useCallback(() => {
+    // This is a workaround until the backend returns a better checkpoint response
+    const onePlanetUnlocked = collections.filter((collection) => !collection.locked).length === 1
+    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked
+    return bool
+  }, [collections, flowStatus])
 
   useEffect(() => {
-    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked()
-    setShowHelpModal(bool)
+    setShowHelpModal(checkShowHelpModalCondition())
+  }, [checkShowHelpModalCondition])
 
-  }, [flowStatus, onePlanetUnlocked])
+  useEffect(() => {
+    const hasUnlockedUnstartedCollection = collections
+      .some((collection) => !collection.locked && !collection.started)
+
+    if (flowStatus.checkpoint.type !== 'initial' &&
+        hasUnlockedUnstartedCollection && !checkShowHelpModalCondition()) setShowNewSectionsModal(true)
+    else setShowNewSectionsModal(false)
+  }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
 
   return (
     <div className="overflow-hidden">
-      {showHelpModal && <HelpModal isOpen={showHelpModal} onClose={() => setShowHelpModal(false)}/>}
+      {showNewSectionsModal && <NewSectionsModal isOpen={true} onClose={() => {setShowNewSectionsModal(false)}}/>}
+      {showHelpModal && <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)}/>}
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
