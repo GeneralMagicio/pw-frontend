@@ -138,9 +138,9 @@ export default function AGalaxy() {
                     )
                   })}
                 <GalaxyCenterPlanet
+                  finished={!status.finished}
                   name={status.title}
-                  onClick={() => router.push(`/poll/${router.query.planetID}`)}
-                  showVotingButton={!status.finished}
+                  onClick={() => status.finished ? router.push(`/poll/${router.query.planetID}/ranking`) : router.push(`/poll/${router.query.planetID}`)}
                 />
               </div>
             </div>
