@@ -5,9 +5,8 @@ export const SadSun: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
   return (
     <svg
       fill="none"
-      height="225"
       viewBox="0 0 240 225"
-      width="240"
+      width="360"
       xmlns="http://www.w3.org/2000/svg"
       {...props}>
       <path

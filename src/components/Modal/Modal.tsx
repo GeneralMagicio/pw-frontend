@@ -7,12 +7,14 @@ interface ModalProps {
   onClose: () => void
   children: React.ReactElement
   className?: string
+  backdrop?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
+  backdrop = true,
   className = 'bg-white',
 }) => {
   const modalRef = useRef<HTMLDivElement>(null)
@@ -61,7 +63,7 @@ const Modal: React.FC<ModalProps> = ({
   return mounted
     ? ReactDOM.createPortal(
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-800/30 backdrop-blur-sm`}
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-800/30 ${backdrop && 'backdrop-blur-sm'}`}
           onClick={handleOverlayClick}>
           <div
             className={cn(
