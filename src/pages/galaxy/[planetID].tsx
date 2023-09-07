@@ -14,6 +14,7 @@ import { PairType } from '@/types/Pairs/Pair'
 import { PlanetSub } from '@/components/Icon/PlanetSub'
 import { fetchPairs } from '@/utils/poll'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
+import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
 
 const PLANET_SIZE = 150
 
@@ -22,6 +23,10 @@ export default function AGalaxy() {
   const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
+  const [status, setStatus] = useState<{ finished: boolean; title: string }>({
+    finished: true,
+    title: '',
+  })
   const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
 
   useEffect(() => {
@@ -35,9 +40,11 @@ export default function AGalaxy() {
     const func = async () => {
       if (router.query.planetID) {
         const pair = await fetchPairs(String(router.query.planetID))
-        if (Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold) {
-          router.push('/poll/2')
-        }
+        setStatus({
+          finished:
+            !(Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold),
+          title: pair.collectionTitle,
+        })
       }
     }
 
@@ -62,7 +69,8 @@ export default function AGalaxy() {
       (collection) => !collection.locked && !collection.started
     )
 
-    if (collections.length > 0 && allCollectionsUnlockedUnstarted) setShowNewSectionsModal(true)
+    if (collections.length > 0 && allCollectionsUnlockedUnstarted)
+      setShowNewSectionsModal(true)
     else setShowNewSectionsModal(false)
   }, [collections])
 
@@ -129,26 +137,16 @@ export default function AGalaxy() {
                       </div>
                     )
                   })}
-                <PlanetSub />
+                <GalaxyCenterPlanet
+                  name={status.title}
+                  onClick={() => router.push(`/poll/${router.query.planetID}`)}
+                  showVotingButton={!status.finished}
+                />
               </div>
             </div>
           </div>
         </TransformComponent>
       </TransformWrapper>
-      <Modal className="mt-80" isOpen={open} onClose={() => setOpen(false)}>
-        <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
-          <p className="text-lg font-bold">Starting the journey!</p>
-          <p className="text-xl">
-            Just two simple question to create more personalized voting
-            experience for you.
-          </p>
-          <button
-            className="mx-auto mt-4 flex h-[50px] min-w-fit items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-            onClick={() => {}}>
-            {"Let's start"} <ArrowForward className="ml-1" />
-          </button>
-        </div>
-      </Modal>
     </div>
   )
 }
