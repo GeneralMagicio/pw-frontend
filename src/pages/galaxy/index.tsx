@@ -19,6 +19,7 @@ import { HelpModalStepOne } from '@/components/Journey/HelpModal/HelpModalSteps'
 import { ImpactModal } from '@/components/Journey/ImpactModal'
 import { WellDoneModal2 } from '@/components/Journey/WellDoneModal2'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
+import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
 
 const PLANET_SIZE = 150
 const PROGRESS_BLOCKS = 13
@@ -31,6 +32,7 @@ export default function Galaxy() {
   const [collections, setCollections] = useState<PairType[]>([])
   const [showHelpModal, setShowHelpModal] = useState(false)
   const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+  const [showCustomizeModal, setShowCustomizeModal] = useState(true)
   const { flowStatus } = useSession()
 
   useEffect(() => {
@@ -41,6 +43,10 @@ export default function Galaxy() {
       setOpen(true)
     }
   }, [flowStatus])
+
+  useEffect(() => {
+    setTimeout(() => setShowCustomizeModal(false), 6.5 * 1000)
+  }, [])
 
   useEffect(() => {
     getFlowProgress()
@@ -75,8 +81,8 @@ export default function Galaxy() {
   
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlocked = collections.filter((collection) => !collection.locked).length === 1
-    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked
+    const onePlanetUnlockedUnstarted = collections.filter((collection) => !collection.locked && !collection.started).length === 1
+    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlockedUnstarted
     return bool
   }, [collections, flowStatus])
 
@@ -93,6 +99,10 @@ export default function Galaxy() {
     else setShowNewSectionsModal(false)
   }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
+  if (checkShowHelpModalCondition() && (showCustomizeModal || collections.length === 0))
+    return <CustomizeExperienceModal isOpen={true} onClose={() => {}}/>
+
+  if (collections.length === 0 || flowStatus.checkpoint.type === "initial") return;
 
   return (
     <div className="overflow-hidden">

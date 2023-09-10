@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 
 export default function RankingPage() {
   const [rankings, setRankings] = useState<RankingResponse>()
+  const [open, setOpen] = useState(false)
   const { updateFlowStatus } = useSession()
   
   useEffect(() => {
@@ -26,8 +27,8 @@ export default function RankingPage() {
   
   return (
     <>
-      <RankingHeader onDone={() => {}} onEdit={() => {}} />
-      <WellDoneModal2 isOpen={true} onClose={() => {}} />
+      <RankingHeader onDone={() => {setOpen(true)}} onEdit={() => {}} />
+      <WellDoneModal2 isOpen={open} onClose={() => {setOpen(false)}} />
       <Rankings
         collectionTitle={rankings?.collectionTitle || ''}
         items={rankings?.ranking || []}
