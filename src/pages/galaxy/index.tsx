@@ -128,6 +128,8 @@ export default function Galaxy() {
                           top: `${y - PLANET_SIZE / 2}px`,
                         }}>
                         <CollectionPlanet
+                          finished={collection.finished}
+                          hasSubcollections={collection.hasSubcollections}
                           locked={collection.locked}
                           name={collection.name}
                         />
