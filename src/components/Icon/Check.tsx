@@ -1,6 +1,10 @@
 import { SVGProps } from 'react'
 
-export const Check: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
+interface Props extends SVGProps<SVGSVGElement> {
+  color?: string;
+}
+
+export const Check: React.FC<Props> = ({ color, ...props }) => {
   return (
     <svg
       fill="none"
@@ -11,7 +15,7 @@ export const Check: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
       {...props}>
       <path
         d="M16.5 2L6 14L1.5 9.5"
-        stroke="#1B1E23"
+        stroke={color || "#1B1E23"}
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"
