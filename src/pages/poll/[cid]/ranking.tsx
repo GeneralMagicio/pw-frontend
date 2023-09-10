@@ -19,12 +19,10 @@ export default function RankingPage() {
 
   return (
     <>
-      <RankingHeader onDone={() => setOpen(true)} onEdit={() => {}}/>
-      {rankings?.nextCollection && (
-        <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <FinishVoteModal nextCollection={rankings?.nextCollection} />
-        </Modal>
-      )}
+      <RankingHeader onDone={() => setOpen(true)} onEdit={() => {}} />
+      <Modal className="mb-96 bg-white" isOpen={open} onClose={() => setOpen(false)}>
+        <FinishVoteModal />
+      </Modal>
       <Rankings
         collectionTitle={rankings?.collectionTitle || ''}
         items={rankings?.ranking || []}
