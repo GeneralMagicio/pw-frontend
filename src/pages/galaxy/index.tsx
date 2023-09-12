@@ -175,7 +175,7 @@ export default function Galaxy() {
         </div>
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
-          onClick={() => router.push('/poll/root/ranking')}>
+          onClick={() => router.push('/ranking')}>
           Check votes
           <PodiumSharp />
         </button>
