@@ -76,8 +76,9 @@ export default function Galaxy() {
   
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlockedUnstarted = collections.filter((collection) => !collection.locked && !collection.started).length === 1
-    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlockedUnstarted
+    const onePlanetUnlocked = collections.filter((collection) => !collection.locked).length === 1
+    const onePlanetUnstarted = collections.filter((collection) => !collection.started).length === 1
+    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked && onePlanetUnstarted
     return bool
   }, [collections, flowStatus])
 
