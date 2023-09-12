@@ -19,3 +19,15 @@ export type RankingResponse = {
   ranking: RankingsType
   nextCollection: PairType
 }
+
+export type Ranking = {
+  name: string
+  id: number
+  share: number
+}
+
+export type OverallRankingType = {
+  collectionTitle: string
+  votingPower: number
+  ranking: OverallRankingType[] | Ranking[]
+}
