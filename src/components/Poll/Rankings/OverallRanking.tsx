@@ -1,7 +1,5 @@
-import { Move } from '@/components/Icon/Move'
 import { OverallRankingType, Ranking } from '@/types/Ranking/index'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
-import { useCollapse } from 'react-collapsed'
 
 interface RankingsProps {
   data: OverallRankingType[]
@@ -57,23 +55,14 @@ const Rows: React.FC<{
 }
 
 export const OverallRanking: React.FC<RankingsProps> = ({ data }) => (
-  <div className="container relative mx-auto mt-8 flex min-w-[1200px] gap-10 px-16">
-    <div className="mb-32 flex grow flex-col items-end gap-2">
-      <div className="flex w-full items-center gap-6 border-b border-b-gray-10  px-6 py-3 font-IBM text-black">
-        <span className="ml-32 grow text-xs font-bold">Project</span>
-        <span className=" w-[250px] text-xs font-bold">{`Budget Allocation`}</span>
-        <span className="w-36  text-xs font-bold">OP Received</span>
-      </div>
-      {data.map((ranking) => (
-        <Rows data={ranking} key={ranking.collectionTitle} level={0} />
-      ))}
+  <div className="container relative mx-auto mt-8 mb-32 flex min-w-[1200px] grow flex-col items-end gap-1 px-16">
+    <div className="flex w-full items-center gap-6 rounded-md border-b border-b-gray-10 bg-white/[.2] px-6  py-4 font-Inter text-black">
+      <span className="ml-10 grow text-sm">Project</span>
+      <span className=" w-40 text-sm">{`Budget Allocation`}</span>
+      <span className="w-[215px]  text-sm">OP Received</span>
     </div>
-    <div
-      className="rounded-xl bg-gray-60 p-4 shadow-card backdrop-blur-lg "
-      hidden>
-      <h4 className="font-IBM font-medium text-black">
-        OP allocation for [Project name]
-      </h4>
-    </div>
+    {data.map((ranking) => (
+      <Rows data={ranking} key={ranking.collectionTitle} level={0} />
+    ))}
   </div>
 )
