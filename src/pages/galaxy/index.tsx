@@ -1,7 +1,5 @@
-import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
-import Modal from '@/components/Modal/Modal'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
@@ -15,9 +13,6 @@ import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
 import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
-import { HelpModalStepOne } from '@/components/Journey/HelpModal/HelpModalSteps'
-import { ImpactModal } from '@/components/Journey/ImpactModal'
-import { WellDoneModal2 } from '@/components/Journey/WellDoneModal2'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
 
@@ -81,8 +76,9 @@ export default function Galaxy() {
   
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlockedUnstarted = collections.filter((collection) => !collection.locked && !collection.started).length === 1
-    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlockedUnstarted
+    const onePlanetUnlocked = collections.filter((collection) => !collection.locked).length === 1
+    const onePlanetUnstarted = collections.filter((collection) => !collection.started).length === 1
+    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked && onePlanetUnstarted
     return bool
   }, [collections, flowStatus])
 

@@ -14,7 +14,7 @@ export const RankingRow: React.FC<RankingProps> = ({ data }) => {
         <span className="">{(data.share * 100).toFixed(2)}</span>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">{(data.share * 40e6).toFixed(2)}</span>
+        <span className="">{(data.share * 3e6).toFixed(2)}</span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
     </div>

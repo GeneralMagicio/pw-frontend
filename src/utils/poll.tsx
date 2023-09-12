@@ -1,7 +1,7 @@
 import { User } from '@/types/user/User'
 import { axiosInstance } from './axiosInstance'
 import { PairsType, PollType } from '@/types/Pairs'
-import { RankingResponse } from '@/types/Ranking/index'
+import { OverallRankingType, RankingResponse } from '@/types/Ranking/index'
 
 export async function fetchPairs(cid?: string) {
   const url =
@@ -73,6 +73,13 @@ export async function getRankings(cid?: string) {
       params: { cid: cid === 'root' ? null : cid },
     })
     .then((res) => res.data)
+}
+
+export async function getOverallRanking() {
+  const {data} = await axiosInstance.get<OverallRankingType[]>(
+    `/flow/ranking/overall`
+  )
+  return data
 }
 
 export async function getExpertiseRankings() {
