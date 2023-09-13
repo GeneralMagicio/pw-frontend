@@ -10,6 +10,8 @@
     "dev:ssl": "next dev | npx local-ssl-proxy --source 3001 --target 3000"
   },
   "dependencies": {
+    "@chakra-ui/progress": "^2.2.0",
+    "@ethereum-attestation-service/eas-sdk": "^1.2.0-beta.0",
     "@rainbow-me/rainbowkit": "^1.0.0",
     "@spruceid/siwe-parser": "^2.0.2",
     "@types/node": "18.14.0",
