@@ -5,7 +5,7 @@ interface RankingsProps {
   data: OverallRankingType[]
 }
 
-const hasSubcollections = (
+export const hasSubcollections = (
   input: OverallRankingType[] | Ranking[]
 ): input is OverallRankingType[] => {
   if ('votingPower' in input[0]) return true
