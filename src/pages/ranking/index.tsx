@@ -21,11 +21,6 @@ export default function RankingPage() {
   const [rankings, setRankings] = useState<OverallRankingType[]>()
   const [isOpen, setOpen] = useState(false)
 
-  const { switchNetworkAsync } = useSwitchNetwork()
-  const chainId = useChainId();
-
-
-
   useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
@@ -33,18 +28,6 @@ export default function RankingPage() {
     }
     main()
   }, [setRankings])
-
-  // useEffect(() => {
-  //   const main = async () => {
-  //     console.log("chain id", chainId)
-  //     console.log("is defined", switchNetworkAsync)
-  //     if (chainId !== 420 && switchNetworkAsync) {
-  //       await switchNetworkAsync(420)
-  //     }
-  //   }
-
-  //   main()
-  // }, [chainId, switchNetworkAsync])
 
   return (
     <>

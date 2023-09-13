@@ -1,7 +1,7 @@
 import Modal from '@/components/Modal/Modal'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useEffect, useState } from 'react'
-import { useChainId, useAccount, useConnect, useSwitchNetwork } from 'wagmi'
+import { useState } from 'react'
+import { useChainId, useAccount, useConnect } from 'wagmi'
 import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
 import { CircularProgress } from '@chakra-ui/progress'
 import {
@@ -41,13 +41,16 @@ export const AttestationModal: React.FC<Props> = ({
 
   const handleSignClick = async () => {
     setLoading(true)
-    await attest()
+    try {
+      await attest()
+    } catch(e) {
+      console.error(e)
+    }
     setLoading(false)
-    setSteps(3)
   }
 
   const attest = async () => {
-    const items: AttestItem[] = ranking.slice(5).map(({ name, share }) => ({
+    const items: AttestItem[] = ranking.map(({ name, share }) => ({
       name,
       share: Math.floor(share * 10000),
     }))
@@ -77,7 +80,6 @@ export const AttestationModal: React.FC<Props> = ({
     schemaRegistry.connect(signer as any)
 
     const schema = await schemaRegistry.getSchema({ uid: SCHEMA_UID })
-    console.log('schema', schema.schema)
     const schemaEncoder = new SchemaEncoder(schema.schema)
 
     try {
@@ -99,12 +101,13 @@ export const AttestationModal: React.FC<Props> = ({
       ])
 
       const newAttestationUID = await tx.wait()
-      setUrl(`https://optimism.easscan.org/address/${address}`)
+      setUrl(`${easConfig.explorer}/address/${address}`)
+      setSteps(3)
     } catch (e) {
       console.error('error on sending tx:', e)
-      setUrl(
-        `https://optimism-goerli-bedrock.easscan.org/address/0xF23eA0b5F14afcbe532A1df273F7B233EBe41C78`
-      )
+      // setUrl(
+      //   `https://optimism-goerli-bedrock.easscan.org/address/0xF23eA0b5F14afcbe532A1df273F7B233EBe41C78`
+      // )
     }
   }
 
@@ -155,9 +158,10 @@ export const AttestationModal: React.FC<Props> = ({
             <a
               className="ml-8 flex w-32 justify-center rounded-lg bg-gray-600 py-3 text-white"
               href={url}
+              onClick={() => setSteps(4)}
               rel="noreferrer"
               target="_blank">
-              <button className="" onClick={() => setSteps(4)}>
+              <button>
                 View
               </button>
             </a>
