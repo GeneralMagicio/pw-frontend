@@ -49,11 +49,11 @@ export default function RankingPage() {
   return (
     <>
       <OverallRankingHeader onDone={() => {setOpen(true)}} onEdit={() => {}} />
-      <AttestationModal
+      {isOpen && <AttestationModal
         isOpen={isOpen}
         onClose={() => setOpen(false)}
         ranking={rankings ? flattenRankingData(rankings) : []}
-      />
+      />}
       <OverallRanking data={rankings || []} />
     </>
   )

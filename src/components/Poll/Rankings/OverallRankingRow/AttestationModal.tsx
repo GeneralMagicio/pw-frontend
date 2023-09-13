@@ -1,6 +1,6 @@
 import Modal from '@/components/Modal/Modal'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useChainId, useAccount, useConnect, useSwitchNetwork } from 'wagmi'
 import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
 import { CircularProgress } from '@chakra-ui/progress'
@@ -11,6 +11,7 @@ import {
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
 import { Ranking } from '@/types/Ranking'
+import { Close } from '@/components/Icon/Close'
 
 interface Props {
   isOpen: boolean
@@ -38,8 +39,6 @@ export const AttestationModal: React.FC<Props> = ({
 
   const signer = useSigner()
 
-  // const { switchNetworkAsync } = useSwitchNetwork()
-
   const handleSignClick = async () => {
     setLoading(true)
     await attest()
@@ -62,8 +61,6 @@ export const AttestationModal: React.FC<Props> = ({
       }
     }
 
-    // console.log("chain id:", chainId)
-
     const easConfig = EASNetworks[chainId]
     if (!easConfig) {
       console.log('no eas config')
@@ -83,12 +80,6 @@ export const AttestationModal: React.FC<Props> = ({
     console.log('schema', schema.schema)
     const schemaEncoder = new SchemaEncoder(schema.schema)
 
-    // const item = items[0]
-    // console.log("test encode:", schemaEncoder.encodeData([
-    //   { name: 'name', type: 'string', value: item.name },
-    //   { name: 'percent', type: 'uint16', value: item.share },
-    // ]));
-
     try {
       const tx = await eas.multiAttest([
         {
@@ -98,7 +89,6 @@ export const AttestationModal: React.FC<Props> = ({
               { name: 'name', type: 'string', value: item.name },
               { name: 'percent', type: 'uint16', value: item.share },
             ])
-            // console.log('encoded data:', encodedData)
             return {
               recipient: '0x0000000000000000000000000000000000000000',
               revocable: false, // Be aware that if your schema is not revocable, this MUST be false
@@ -120,8 +110,13 @@ export const AttestationModal: React.FC<Props> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="relative flex min-h-[350px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM">
-        <LinearProgress progress={progress} />
+      <div className="relative flex min-h-[400px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM">
+        <header className="absolute top-0 mb-2 flex w-full justify-end">
+          <Close className="cursor-pointer" onClick={onClose} />
+        </header>
+        <div className='mt-4'>
+          <LinearProgress progress={progress} />
+        </div>
         {step > 0 && (
           <div className="flex w-[80%] items-center">
             <p className="w-16"> 1- </p>
@@ -158,7 +153,7 @@ export const AttestationModal: React.FC<Props> = ({
             <p className="w-16"> 3- </p>
             <p className="w-[75%]"> Check out your attestations:</p>
             <a
-              className="ml-8 w-32 flex justify-center rounded-lg bg-gray-600 py-3 text-white"
+              className="ml-8 flex w-32 justify-center rounded-lg bg-gray-600 py-3 text-white"
               href={url}
               rel="noreferrer"
               target="_blank">
