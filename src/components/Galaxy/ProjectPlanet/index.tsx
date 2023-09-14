@@ -52,7 +52,7 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
                 'flex items-center gap-2  whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
               )}>
               <span className="font-medium">
-                {finished ? 'Check result' : 'Start voting'}
+                {finished ? 'Review' : 'Begin'}
               </span>
               {finished ? <PodiumSharp /> : <ArrowForward />}
             </button>

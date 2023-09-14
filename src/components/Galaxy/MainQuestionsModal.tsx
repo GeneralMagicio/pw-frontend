@@ -20,28 +20,30 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
         {step === 0 ? <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
           <p className="text-lg font-bold">Starting the journey!</p>
           <p className="text-xl">
-            Just two simple question to create more personalized voting
-            experience for you.
+          Answer two brief queries to fuel your personalized voting adventure. Ready to launch?
           </p>
           <div className='mt-4 flex items-center justify-between'>
-            <p className='cursor-pointer text-sm font-medium' onClick={() => setStep(1)}> Why should I do this? </p>
+            <p className='cursor-pointer text-sm font-medium' onClick={() => setStep(1)}> Show me the mechanics! </p>
             <button
               className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
               onClick={() => {
                 router.push('/poll/expertise')
               }}>
-              {"Let's start"} <ArrowForward className="ml-1" />
+              {"Go!"} <ArrowForward className="ml-1" />
             </button>
           </div>
         </div> : (
           <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
-          <p className="flex items-center gap-4 text-lg font-bold"> <ArrowBackward className="cursor-pointer" onClick={() => setStep(0)}/> Why should I do this?</p>
+          <p className="flex items-center gap-4 text-lg font-bold"> <ArrowBackward className="cursor-pointer" onClick={() => setStep(0)}/> How it works</p>
           <p className="text-xl">
-            We believe in tailoring your experience to match your expertise and preferences.
+          First, we&apos;ll gauge your expertise and preferences for budget allocation in various areas like Core Development,
+           Governance, UX, and more. Once you&apos;ve set your allocations and signaled your expertise,
+           you&apos;ll begin curating projects in your areas of strength, ensuring your contributions have the most impact.
           </p>
           <p className="text-xl">
-            By answering these two questions, you will help us understand your strengths and strategic inclinations.
-            This way, we can present you with content and voting options that resonate with your background, making your contribution more impactful and relevant.
+           For any areas you choose not to vote in, rest assured:
+           the budget you&apos;ve allocated will be distributed based on the average choices of other citizens who voted in that specific domain.
+           Dive in and make a difference!
           </p>
           <div className='mt-4 flex items-center justify-center'>
             <button
@@ -49,7 +51,7 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
               onClick={() => {
                 router.push('/poll/expertise')
               }}>
-              {"Let's start"} <ArrowForward className="ml-1" />
+              {"Go!"} <ArrowForward className="ml-1" />
             </button>
           </div>
         </div>

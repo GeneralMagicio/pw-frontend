@@ -11,7 +11,7 @@ interface Props {
 const Voted = () => {
   return (
     <p className="flex w-fit items-center rounded-3xl bg-gray-100 p-1 px-2 text-[#22B7A0]">
-      <span className="mr-2">Voted</span>
+      <span className="mr-2">Complete</span>
       <Check className="scale-75" color="#22B7A0" />
     </p>
   )
@@ -20,7 +20,7 @@ const Voted = () => {
 const NotVoted = () => {
   return (
     <p className="flex w-fit items-center rounded-3xl bg-gray-100 p-1 px-2 text-[#1C64F2]">
-      <span className="mr-2">Not voted</span>
+      <span className="mr-2">Awaiting direction</span>
       <PauseSharp className="scale-75" />
     </p>
   )
