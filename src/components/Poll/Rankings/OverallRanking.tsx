@@ -1,4 +1,4 @@
-import { OverallRankingType, Ranking } from '@/types/Ranking/index'
+import { OverallRankingType, Rank } from '@/types/Ranking/index'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
 
 interface RankingsProps {
@@ -6,7 +6,7 @@ interface RankingsProps {
 }
 
 export const hasSubcollections = (
-  input: OverallRankingType[] | Ranking[]
+  input: OverallRankingType[] | Rank[]
 ): input is OverallRankingType[] => {
   if ('votingPower' in input[0]) return true
   return false
