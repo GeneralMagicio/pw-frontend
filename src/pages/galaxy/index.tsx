@@ -66,19 +66,26 @@ export default function Galaxy() {
   }, [])
 
   const handlePlanetClick = (collection: PairType) => () => {
-    if (collection.locked) return null;
-    if (collection.finished && !collection.hasSubcollections) return router.push(`/poll/${collection.id}/ranking`)
+    if (collection.locked) return null
+    if (collection.finished && !collection.hasSubcollections)
+      return router.push(`/poll/${collection.id}/ranking`)
     if (collection.hasSubcollections) {
       return router.push(`/galaxy/${collection.id}`)
     }
     return router.push(`/poll/${collection.id}`)
   }
-  
+
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlocked = collections.filter((collection) => !collection.locked).length === 1
-    const onePlanetUnstarted = collections.filter((collection) => !collection.started).length === 1
-    const bool = flowStatus.expertise && flowStatus.impact && onePlanetUnlocked && onePlanetUnstarted
+    const onePlanetUnlocked =
+      collections.filter((collection) => !collection.locked).length === 1
+    const onePlanetUnstarted =
+      collections.filter((collection) => !collection.started).length === 1
+    const bool =
+      flowStatus.expertise &&
+      flowStatus.impact &&
+      onePlanetUnlocked &&
+      onePlanetUnstarted
     return bool
   }, [collections, flowStatus])
 
@@ -87,23 +94,41 @@ export default function Galaxy() {
   }, [checkShowHelpModalCondition])
 
   useEffect(() => {
-    const hasUnlockedUnstartedCollection = collections
-      .some((collection) => !collection.locked && !collection.started)
+    const hasUnlockedUnstartedCollection = collections.some(
+      (collection) => !collection.locked && !collection.started
+    )
 
-    if (flowStatus.checkpoint.type !== 'initial' &&
-        hasUnlockedUnstartedCollection && !checkShowHelpModalCondition()) setShowNewSectionsModal(true)
+    if (
+      flowStatus.checkpoint.type !== 'initial' &&
+      hasUnlockedUnstartedCollection &&
+      !checkShowHelpModalCondition()
+    )
+      setShowNewSectionsModal(true)
     else setShowNewSectionsModal(false)
   }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
-  if (checkShowHelpModalCondition() && (showCustomizeModal || collections.length === 0))
-    return <CustomizeExperienceModal isOpen={true} onClose={() => {}}/>
+  if (
+    checkShowHelpModalCondition() &&
+    (showCustomizeModal || collections.length === 0)
+  )
+    return <CustomizeExperienceModal isOpen={true} onClose={() => {}} />
 
-  if (collections.length === 0 || flowStatus.checkpoint.type === "initial") return;
+  if (collections.length === 0 || flowStatus.checkpoint.type === 'initial')
+    return
 
   return (
     <div className="overflow-hidden">
-      {showNewSectionsModal && <NewSectionsModal isOpen={true} onClose={() => {setShowNewSectionsModal(false)}}/>}
-      {showHelpModal && <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)}/>}
+      {showNewSectionsModal && (
+        <NewSectionsModal
+          isOpen={true}
+          onClose={() => {
+            setShowNewSectionsModal(false)
+          }}
+        />
+      )}
+      {showHelpModal && (
+        <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
+      )}
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
@@ -124,7 +149,11 @@ export default function Galaxy() {
 
                     return (
                       <div
-                        className={`absolute flex ${collection.locked ? "cursor-default" : "cursor-pointer"} items-center justify-center`}
+                        className={`absolute flex ${
+                          collection.locked
+                            ? 'cursor-default'
+                            : 'cursor-pointer'
+                        } items-center justify-center`}
                         key={collection.id}
                         onClick={handlePlanetClick(collection)}
                         style={{
@@ -149,30 +178,8 @@ export default function Galaxy() {
         </TransformComponent>
       </TransformWrapper>
 
-      <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)}/>
-      <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
-        <div className="flex items-center">
-          <h4 className="font-IBM text-3xl font-bold">Governance Orbit</h4>
-          <span className="ml-5 font-medium">{progress}% voted</span>
-          <div className="-mt-1 ml-4 flex items-center">
-            <span className="text-3xl">[</span>
-            <div className="flex items-center gap-2 p-2">
-              {Array(PROGRESS_BLOCKS)
-                .fill(Infinity)
-                .map((_, idx) => (
-                  <div
-                    className={cn('h-3 w-[2px] bg-red', {
-                      'h-[6px] bg-black opacity-10':
-                        idx > (progress * PROGRESS_BLOCKS) / 100,
-                    })}
-                    key={idx}
-                  />
-                ))}
-            </div>
-
-            <span className="text-3xl">]</span>
-          </div>
-        </div>
+      <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} />
+      <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-center rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => router.push('/ranking')}>
