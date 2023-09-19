@@ -15,6 +15,7 @@ import { HelpModal } from '@/components/Journey/HelpModal'
 import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
+import { SHOW_HELP_STORAGE_KEY } from '@/utils/contants'
 
 const PLANET_SIZE = 150
 const PROGRESS_BLOCKS = 13
@@ -90,7 +91,11 @@ export default function Galaxy() {
   }, [collections, flowStatus])
 
   useEffect(() => {
-    setShowHelpModal(checkShowHelpModalCondition())
+    const shopHelpStorageValue = localStorage.getItem(SHOW_HELP_STORAGE_KEY)
+    if (!shopHelpStorageValue) {
+      setShowHelpModal(true)
+      localStorage.setItem(SHOW_HELP_STORAGE_KEY, 'shown')
+    }
   }, [checkShowHelpModalCondition])
 
   useEffect(() => {
@@ -105,7 +110,7 @@ export default function Galaxy() {
     )
       setShowNewSectionsModal(true)
     else setShowNewSectionsModal(false)
-  }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
+  }, [collections, checkShowHelpModalCondition, flowStatus])
 
   if (
     checkShowHelpModalCondition() &&
@@ -129,6 +134,7 @@ export default function Galaxy() {
       {showHelpModal && (
         <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
       )}
+
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
@@ -179,7 +185,14 @@ export default function Galaxy() {
       </TransformWrapper>
 
       <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} />
-      <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-center rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
+      <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
+        <button
+          className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+          onClick={() => setShowHelpModal(true)}>
+          Get Help
+          <PodiumSharp />
+        </button>
+        <h4 className="font-IBM text-2xl font-bold">Welcome to RertroPGF</h4>
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => router.push('/ranking')}>
