@@ -63,3 +63,8 @@ export function generateShapeID(str: string) {
   const randomNumber = (Math.abs(hash) % 20) + 1 // Getting a number between 1 and 20
   return randomNumber
 }
+
+export const toFixedNumber = (num: number, digits: number) => {
+  const pow = Math.pow(10, digits);
+  return Math.round(num * pow) / pow;
+};
