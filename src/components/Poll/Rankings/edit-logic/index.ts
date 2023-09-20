@@ -102,7 +102,7 @@ export const addLockedProperty = (ranking: OverallRankingType[]) : EditingOveral
 
 export const validateRanking = (ranking: EditingOverallRankingType[]) => {
   for (let i = 0; i < ranking.length; i++) {
-    if (toFixedNumber(ranking[i].votingPower, 1) < 0) return false
+    if (toFixedNumber(ranking[i].votingPower * 100, 1) < 0) return false
     else if (!isEditingRank(ranking[i].ranking[0])) {
       const val = validateRanking(ranking[i].ranking as EditingOverallRankingType[])
       if (val === false) return false
@@ -118,7 +118,6 @@ export const validateRanking = (ranking: EditingOverallRankingType[]) => {
   }
   
   const percentageSum = flattenedRanking.reduce((acc, curr) => acc += curr.share, 0)
-  
   
   if (percentageSum > 100) {
     return false

@@ -18,7 +18,6 @@ export const EditTextField: FC<Props> = ({
   onLockClick
 }) => {
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log('event:', e)
     const newValue = e.currentTarget.value
     onChange(+newValue / 100)
   }

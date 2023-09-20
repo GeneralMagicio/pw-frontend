@@ -21,8 +21,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-xl bg-white/[.5] px-6 py-3 font-Inter text-black`}>
-      <Move />
+      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
       <span className="grow">{data.name}</span>
       <span className="flex w-52 items-center justify-center">
         <div className="flex h-[24px] items-center">
@@ -68,8 +67,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   return (
     <div className="flex w-full cursor-pointer flex-col items-end font-Inter text-black">
       <div
-        className={`mb-2 flex w-full items-center gap-6 rounded-xl bg-white/[.8] px-6 py-3`}>
-        <Move />
+        className={`mb-2 flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
         <span className="grow">{data.name}</span>
         <span className="flex w-52 items-center justify-center">
           <div className="flex h-[24px] items-center">
