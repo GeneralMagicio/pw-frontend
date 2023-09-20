@@ -1,13 +1,14 @@
 import { FC } from 'react'
 import { PadlockLocked } from '@/components/Icon/Padlock-Locked'
 import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
+import cn from 'classnames'
 
 interface Props {
   value: number
   locked: boolean
   focus: boolean
   onChange: (value: number) => void
-  onLockClick: () => void;
+  onLockClick: () => void
 }
 
 export const EditTextField: FC<Props> = ({
@@ -15,7 +16,7 @@ export const EditTextField: FC<Props> = ({
   locked,
   focus,
   onChange,
-  onLockClick
+  onLockClick,
 }) => {
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const newValue = e.currentTarget.value
@@ -23,8 +24,12 @@ export const EditTextField: FC<Props> = ({
   }
 
   return (
-    <div className="flex w-40 items-center gap-2 rounded-lg border-2 border-gray-300 px-4 py-[2px]">
-      <div className='border-r-2 border-gray-300 pr-1' onClick={onLockClick}>
+    <div
+      className={cn(
+        'flex w-40 items-center gap-2 rounded-lg border-2 border-gray-300 px-4 py-[2px]',
+        { 'bg-[#1B1E23]/[.1]': locked }
+      )}>
+      <div className="border-r border-[#1B1E23]/[.2] pr-1" onClick={onLockClick}>
         {locked ? (
           <PadlockLocked height={25} width={25} />
         ) : (
@@ -33,7 +38,7 @@ export const EditTextField: FC<Props> = ({
       </div>
       <span className="mr-1 text-sm text-red">%</span>
       <input
-        className="bg-inherit outline-0"
+        className="w-16 bg-transparent outline-0"
         id="edit-input"
         onChange={handleChange}
         step={'0.001'}
