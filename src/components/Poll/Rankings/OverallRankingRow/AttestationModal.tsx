@@ -10,16 +10,16 @@ import {
   SchemaEncoder,
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
-import { Ranking } from '@/types/Ranking'
 import { Close } from '@/components/Icon/Close'
+import { Rank } from '@/types/Ranking'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: Ranking[]
+  ranking: Rank[]
 }
 
-type AttestItem = Pick<Ranking, 'name' | 'share'>
+type AttestItem = Pick<Rank, 'name' | 'share'>
 
 export const AttestationModal: React.FC<Props> = ({
   isOpen,
