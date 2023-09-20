@@ -82,6 +82,13 @@ export async function getOverallRanking() {
   return data
 }
 
+export async function getLastTimestamp() {
+  const {data} = await axiosInstance.get<number>(
+    `/flow/ts`
+  )
+  return data
+}
+
 export async function getExpertiseRankings() {
   return axiosInstance
     .get<RankingResponse>(`/flow/expertise/ranking`)

@@ -26,7 +26,7 @@ export const EditTextField: FC<Props> = ({
   return (
     <div
       className={cn(
-        'flex w-40 items-center gap-2 rounded-lg border-2 border-gray-300 px-4 py-[2px]',
+        'flex w-40 items-center gap-2 rounded-lg border border-gray-300 px-4 py-[2px]',
         { 'bg-[#1B1E23]/[.1]': locked }
       )}>
       <div className="border-r border-[#1B1E23]/[.2] pr-1" onClick={onLockClick}>

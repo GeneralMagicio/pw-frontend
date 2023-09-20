@@ -4,59 +4,12 @@ import {
   Rank,
 } from '@/types/Ranking/index'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
-import { useState } from 'react'
-import { changeCollectionPercentage } from './edit-logic/collection-editing'
-import { changePercentage, isEditingRank, validateRanking } from './edit-logic'
-import cloneDeep from 'lodash.clonedeep'
 
 interface RankingsProps {
-  initialData: EditingOverallRankingType[]
+  data: EditingOverallRankingType[]
   editMode: boolean;
-}
-
-const changeProjectLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (isEditingRank(item.ranking[0])) {
-      const index = item.ranking.findIndex((el) => el.id === id)
-      if (index !== -1) {
-        item.ranking[index].locked = !item.ranking[index].locked
-        return data
-      }
-    } else {
-      item.ranking = changeProjectLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
-}
-
-const changeCollectionLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (item.id === id) {
-      item.locked = !item.locked
-      return data
-    } else if (!isEditingRank(item.ranking[0])) {
-      item.ranking = changeCollectionLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
+  edit: Props['onEditChange'];
+  changeLockStatus: Props['onLockClick'];
 }
 
 export const hasSubcollections = (
@@ -123,28 +76,7 @@ const Rows: React.FC<Props> = ({ data, onEditChange, onLockClick, editMode }): a
   )
 }
 
-export const OverallRanking: React.FC<RankingsProps> = ({ initialData, editMode }) => {
-  const [data, setData] = useState(initialData)
-
-  const edit =
-    (type: 'project' | 'collection', id: number) => (newValue: number) => {
-      if (type === 'collection') {
-        const newRanking = changeCollectionPercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setData(newRanking)
-      } else if (type === 'project') {
-        const newRanking = changePercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setData(newRanking)
-      }
-    }
-
-  const changeLockStatus = (id: number, type: 'project' | 'collection') => () => {
-    console.log("id:", id, "type:", type)
-    if (type === "project") {
-      console.log(changeProjectLockStatus(data, id))
-      setData(changeProjectLockStatus(data, id))
-    }
-    else if (type === "collection") setData(changeCollectionLockStatus(data, id))
-  }
+export const OverallRanking: React.FC<RankingsProps> = ({ data, editMode, edit, changeLockStatus }) => {
 
   return (
     <div className="container relative mx-auto mt-8 mb-32 flex min-w-[1200px] grow flex-col items-end gap-1 px-16">

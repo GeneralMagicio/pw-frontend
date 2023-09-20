@@ -54,6 +54,7 @@ export const login = async (
 export const logout = async () => {
   try {
     await axiosInstance.post('/auth/logout')
+    localStorage.removeItem('editedRanking')
   } catch (err) {
     console.error(err)
   }
