@@ -30,9 +30,6 @@ const multiplyCoeff = (input: EditingOverallRankingType, delta: number) => {
   const collection = cloneDeep(input)
   collection.votingPower = collection.votingPower + delta
 
-  console.log("input:", input)
-  console.log("delta:", delta)
-
   if (isEditingRank(input)) return collection;
 
   if (isEditingRank(collection.ranking[0])) {

@@ -6,7 +6,7 @@ import {
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
 import { useState } from 'react'
 import { changeCollectionPercentage } from './edit-logic/collection-editing'
-import { changePercentage, isEditingRank } from './edit-logic'
+import { changePercentage, isEditingRank, validateRanking } from './edit-logic'
 import cloneDeep from 'lodash.clonedeep'
 
 interface RankingsProps {
@@ -130,10 +130,10 @@ export const OverallRanking: React.FC<RankingsProps> = ({ initialData, editMode 
     (type: 'project' | 'collection', id: number) => (newValue: number) => {
       if (type === 'collection') {
         const newRanking = changeCollectionPercentage(data, id, newValue)
-        setData(newRanking)
+        if (validateRanking(newRanking)) setData(newRanking)
       } else if (type === 'project') {
         const newRanking = changePercentage(data, id, newValue)
-        setData(newRanking)
+        if (validateRanking(newRanking)) setData(newRanking)
       }
     }
 

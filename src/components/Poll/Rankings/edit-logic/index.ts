@@ -1,9 +1,11 @@
+import { flattenRankingData } from '@/pages/ranking'
 import {
   EditingOverallRankingType,
   EditingRank,
   OverallRankingType,
   Rank,
 } from '@/types/Ranking'
+import { toFixedNumber } from '@/utils/helpers'
 import cloneDeep from 'lodash.clonedeep'
 
 export const changePercentageInList = (
@@ -96,4 +98,31 @@ export const addLockedProperty = (ranking: OverallRankingType[]) : EditingOveral
   }
 
   return cloneDeep(ranking) as EditingOverallRankingType[]
+}
+
+export const validateRanking = (ranking: EditingOverallRankingType[]) => {
+  for (let i = 0; i < ranking.length; i++) {
+    if (toFixedNumber(ranking[i].votingPower, 1) < 0) return false
+    else if (!isEditingRank(ranking[i].ranking[0])) {
+      const val = validateRanking(ranking[i].ranking as EditingOverallRankingType[])
+      if (val === false) return false
+    }
+  }
+
+  const flattenedRanking = flattenRankingData(ranking);
+
+  const negativeValue = flattenedRanking.some((el) => toFixedNumber(el.share, 1) < 0)
+
+  if (negativeValue) {
+    return false
+  }
+  
+  const percentageSum = flattenedRanking.reduce((acc, curr) => acc += curr.share, 0)
+  
+  
+  if (percentageSum > 100) {
+    return false
+  } 
+
+  return true;
 }
