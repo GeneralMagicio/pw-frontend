@@ -9,7 +9,7 @@ import { EditingOverallRankingType, OverallRankingType, Rank } from '@/types/Ran
 import { getOverallRanking } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 
-const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
+export const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
   return ranking.reduce((acc, item) => {
     if (hasSubcollections(item.ranking)) {
       return [...acc, ...flattenRankingData(item.ranking)]
