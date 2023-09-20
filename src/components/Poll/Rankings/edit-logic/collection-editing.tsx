@@ -36,6 +36,7 @@ const multiplyCoeff = (input: EditingOverallRankingType, delta: number) => {
   if (isEditingRank(input)) return collection;
 
   if (isEditingRank(collection.ranking[0])) {
+    // @ts-ignore
     const unlockedItems = collection.ranking.filter((el) => !el.locked).length
     for (let i = 0; i < collection.ranking.length; i++) {
       const item = collection.ranking[i] as EditingRank
@@ -44,8 +45,9 @@ const multiplyCoeff = (input: EditingOverallRankingType, delta: number) => {
   } else {
     for (let i = 0; i < collection.ranking.length; i++) {
       const item = collection.ranking[i] as EditingOverallRankingType
+      // @ts-ignore
       const unlockedCollections = collection.ranking.filter(
-        (el) => !el.locked
+        (el: EditingOverallRankingType | EditingRank) => !el.locked
       ).length
       if (!item.locked)
         collection.ranking[i] = multiplyCoeff(item, delta / unlockedCollections)
