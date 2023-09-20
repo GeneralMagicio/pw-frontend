@@ -44,14 +44,14 @@ export const OverallRankingHeader: React.FC<Props> = ({
           <button
             className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
             onClick={onUpdate}>
-            Update votes
+            Update ranks
             <Tick color="black" />
           </button>
         ) : (
           <button
             className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
             onClick={onEdit}>
-            Edit votes
+            Edit ranks
             <Shuffle />
           </button>
         )}
