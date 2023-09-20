@@ -1,9 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
-import debounce from 'lodash.debounce'
-import { useDebounce } from 'use-debounce'
-import { Planet } from '@/components/Icon/Planet'
-import { Lock } from '@/components/Icon/Lock'
-import { Discord } from '@/components/Icon/Discord'
+import { FC } from 'react'
 import { PadlockLocked } from '@/components/Icon/Padlock-Locked'
 import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
 
@@ -12,6 +7,7 @@ interface Props {
   locked: boolean
   focus: boolean
   onChange: (value: number) => void
+  onLockClick: () => void;
 }
 
 export const EditTextField: FC<Props> = ({
@@ -19,6 +15,7 @@ export const EditTextField: FC<Props> = ({
   locked,
   focus,
   onChange,
+  onLockClick
 }) => {
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     console.log('event:', e)
@@ -27,12 +24,12 @@ export const EditTextField: FC<Props> = ({
   }
 
   return (
-    <div className="flex w-40 items-center gap-3 rounded-2xl border-2 border-gray-300 px-4 py-1">
-      <div className='border-r-2 border-gray-300 pr-2'>
+    <div className="flex w-40 items-center gap-2 rounded-lg border-2 border-gray-300 px-4 py-[2px]">
+      <div className='border-r-2 border-gray-300 pr-1' onClick={onLockClick}>
         {locked ? (
           <PadlockLocked height={25} width={25} />
         ) : (
-          <PadlockUnlocked height={25} width={25} />
+          <PadlockUnlocked fill="blue" height={25} width={25} />
         )}
       </div>
       <span className="mr-1 text-sm text-red">%</span>

@@ -19,6 +19,7 @@ const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
 
 export default function RankingPage() {
   const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
+  const [editMode, setEditMode] = useState(false)
   const [isOpen, setOpen] = useState(false)
 
   useEffect(() => {
@@ -31,13 +32,13 @@ export default function RankingPage() {
 
   return (
     <>
-      <OverallRankingHeader onDone={() => {setOpen(true)}} onEdit={() => {}} />
+      <OverallRankingHeader onDone={() => {setOpen(true)}} onEdit={() => {setEditMode(!editMode)}} />
       {isOpen && <AttestationModal
         isOpen={isOpen}
         onClose={() => setOpen(false)}
         ranking={rankings ? flattenRankingData(rankings) : []}
       />}
-      {rankings && <OverallRanking initialData={rankings} />}
+      {rankings && <OverallRanking editMode={editMode} initialData={rankings} />}
     </>
   )
 }

@@ -7,20 +7,40 @@ import { EditTextField } from '../EditTextField'
 import { toFixedNumber } from '@/utils/helpers'
 
 interface RankingProps {
-  data: { id: number | string; name: string; share: number }
-  onEditChange: (value: number) => void;
+  data: { id: number | string; name: string; share: number; locked: boolean }
+  onEditChange: (value: number) => void
+  onLockClick: () => void
+  editMode: boolean
 }
 
-export const OverallRankingRow: React.FC<RankingProps> = ({ data, onEditChange }) => {
+export const OverallRankingRow: React.FC<RankingProps> = ({
+  data,
+  onEditChange,
+  onLockClick,
+  editMode,
+}) => {
   return (
     <div
       className={`mb-2 flex cursor-pointer items-center gap-6  rounded-xl bg-white/[.5] px-6 py-3 font-Inter text-black`}>
       <Move />
       <span className="grow">{data.name}</span>
       <span className="flex w-52 items-center justify-center">
-        {/* <span className="mr-1 text-[8px] text-red">%</span>
-        <span className="">{(data.share * 100).toFixed(2)}</span> */}
-        <EditTextField focus={false} locked={false} onChange={onEditChange} value={toFixedNumber((data.share * 100), 3)}/>
+        <div className="flex h-[24px] items-center">
+          {!editMode ? (
+            <>
+              <span className="mr-1 text-[8px] text-red">%</span>
+              <span className="">{(data.share * 100).toFixed(2)}</span>
+            </>
+          ) : (
+            <EditTextField
+              focus={false}
+              locked={data.locked}
+              onChange={onEditChange}
+              onLockClick={onLockClick}
+              value={toFixedNumber(data.share * 100, 3)}
+            />
+          )}
+        </div>
       </span>
       <span className="flex w-36 items-center">
         <span className="">{(data.share * 3e6).toFixed(2)}</span>
@@ -38,7 +58,9 @@ interface HeaderProps extends RankingProps {
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
   data,
   children,
-  onEditChange
+  onEditChange,
+  onLockClick,
+  editMode,
 }) => {
   const [isExpanded, setExpanded] = useState(false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
@@ -50,9 +72,22 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         <Move />
         <span className="grow">{data.name}</span>
         <span className="flex w-52 items-center justify-center">
-          {/* <span className="mr-1 text-[8px] text-red">%</span>
-          <span className="">{(data.share * 100).toFixed(2)}</span> */}
-          <EditTextField focus={false} locked={false} onChange={onEditChange} value={toFixedNumber((data.share * 100), 3)}/>
+          <div className="flex h-[24px] items-center">
+            {!editMode ? (
+              <>
+                <span className="mr-1 text-[8px] text-red">%</span>
+                <span className="">{(data.share * 100).toFixed(2)}</span>
+              </>
+            ) : (
+              <EditTextField
+                focus={false}
+                locked={data.locked}
+                onChange={onEditChange}
+                onLockClick={onLockClick}
+                value={toFixedNumber(data.share * 100, 3)}
+              />
+            )}
+          </div>
         </span>
         <span className="flex w-36 items-center">
           <span className="">{(data.share * 3e6).toFixed(2)}</span>
@@ -66,9 +101,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           {isExpanded ? <CaretUp /> : <CaretDown />}
         </span>
       </div>
-      <section
-        className={`flex w-[97%] flex-col`}
-        {...getCollapseProps()}>
+      <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>
         {children}
       </section>
     </div>
