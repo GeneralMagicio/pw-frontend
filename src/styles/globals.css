@@ -12,3 +12,12 @@
   margin: 0;
   display: none;
 }
+
+#invalid-value-overall-ranking {
+  border: 1px #ff0000 solid;
+  
+  animation: blink 1s;
+  animation-iteration-count: 2;
+}
+
+@keyframes blink { 50% { border-color:#fff ; }  }

@@ -8,6 +8,8 @@ import {
   addLockedProperty,
   changePercentage,
   isEditingRank,
+  resetErrorProperty,
+  setErrorProperty,
   validateRanking,
 } from '@/components/Poll/Rankings/edit-logic'
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
@@ -76,16 +78,18 @@ const changeCollectionLockStatus = (
 
 export default function RankingPage() {
   const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
-  const [tempRankings, setTempRankings] = useState<EditingOverallRankingType[]>()
+  const [tempRankings, setTempRankings] =
+    useState<EditingOverallRankingType[]>()
   const [editMode, setEditMode] = useState(false)
   const [isOpen, setOpen] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleBack = () => {
     if (editMode) {
       setEditMode(false)
+      setError(false)
       setTempRankings(rankings)
-    }
-    else router.back()
+    } else router.back()
   }
 
   const handleUpdateVotes = () => {
@@ -103,10 +107,28 @@ export default function RankingPage() {
     (newValue: number) => {
       if (type === 'collection') {
         const newRanking = changeCollectionPercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setTempRankings(newRanking)
+        if (validateRanking(newRanking)) {
+          setError(false)
+          console.log("This is input data:", data)
+          console.log("This is being set:", resetErrorProperty(newRanking))
+          // setTempRankings(newRanking)
+          setTempRankings(resetErrorProperty(newRanking))
+        } else {
+          setError(true)
+          console.log("This will be set:", setErrorProperty(data, 'collection', id, true))
+          setTempRankings(setErrorProperty(data, 'collection', id, true))
+        }
       } else if (type === 'project') {
         const newRanking = changePercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setTempRankings(newRanking)
+        if (validateRanking(newRanking)) {
+          setError(false)
+          // setTempRankings(newRanking)
+          setTempRankings(resetErrorProperty(newRanking))
+        } else {
+          setError(true)
+          // console.log("id:", id)
+          setTempRankings(setErrorProperty(data, 'project', id, true))
+        }
       }
     }
 
@@ -133,7 +155,9 @@ export default function RankingPage() {
 
       if (savedRanking && savedRanking.ts > timestamp) {
         setRankings(
-          addLockedProperty(savedRanking.data.sort((a, b) => b.votingPower - a.votingPower))
+          addLockedProperty(
+            savedRanking.data.sort((a, b) => b.votingPower - a.votingPower)
+          )
         )
       } else {
         setRankings(
@@ -152,6 +176,7 @@ export default function RankingPage() {
     <>
       <OverallRankingHeader
         editMode={editMode}
+        error={error}
         onBack={handleBack}
         onDone={() => {
           setOpen(true)

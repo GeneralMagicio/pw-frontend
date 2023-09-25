@@ -35,6 +35,7 @@ export type OverallRankingType = {
 
 export interface EditingRank extends Rank {
   locked: boolean
+  error: boolean
 }
 export interface EditingOverallRankingType extends OverallRankingType {
   id: number
@@ -42,4 +43,5 @@ export interface EditingOverallRankingType extends OverallRankingType {
   votingPower: number
   ranking: EditingOverallRankingType[] | EditingRank[]
   locked: boolean
+  error: boolean
 }

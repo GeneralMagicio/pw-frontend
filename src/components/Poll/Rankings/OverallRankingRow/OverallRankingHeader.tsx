@@ -1,6 +1,7 @@
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { Close } from '@/components/Icon/Close'
 import { Shuffle } from '@/components/Icon/Shuffle'
+import { Star } from '@/components/Icon/Star'
 import { Tick } from '@/components/Icon/Tick'
 import router from 'next/router'
 
@@ -10,6 +11,7 @@ interface Props {
   onBack: () => void
   editMode: boolean
   onUpdate: () => void
+  error: boolean
 }
 
 export const OverallRankingHeader: React.FC<Props> = ({
@@ -17,7 +19,8 @@ export const OverallRankingHeader: React.FC<Props> = ({
   onEdit,
   editMode,
   onBack,
-  onUpdate
+  onUpdate,
+  error,
 }) => {
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
@@ -40,18 +43,25 @@ export const OverallRankingHeader: React.FC<Props> = ({
         {editMode ? 'Editing votes' : 'Check All Votes'}
       </h4>
       <div className="flex items-center gap-2">
-        {editMode ? (
+        {error ? (
           <button
-            className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+            className="flex h-14 w-56  items-center justify-center gap-2 whitespace-nowrap rounded-xl border-2 border-[#ff0000] bg-gray-50 text-xl"
+            id="invalid-value-overall-ranking"
+            onClick={() => {}}>
+            Invalid value!
+          </button>
+        ) : editMode ? (
+          <button
+            className="flex h-14 w-56  items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 text-lg"
             onClick={onUpdate}>
-            Update ranks
+            Update votes
             <Tick color="black" />
           </button>
         ) : (
           <button
-            className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+            className="flex h-14 w-56  items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 text-lg"
             onClick={onEdit}>
-            Edit ranks
+            Edit votes
             <Shuffle />
           </button>
         )}
@@ -63,4 +73,4 @@ export const OverallRankingHeader: React.FC<Props> = ({
       </div>
     </header>
   )
-}
+} 
