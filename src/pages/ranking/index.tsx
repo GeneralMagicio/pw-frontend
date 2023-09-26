@@ -109,24 +109,18 @@ export default function RankingPage() {
         const newRanking = changeCollectionPercentage(data, id, newValue)
         if (validateRanking(newRanking)) {
           setError(false)
-          console.log("This is input data:", data)
-          console.log("This is being set:", resetErrorProperty(newRanking))
-          // setTempRankings(newRanking)
           setTempRankings(resetErrorProperty(newRanking))
         } else {
           setError(true)
-          console.log("This will be set:", setErrorProperty(data, 'collection', id, true))
           setTempRankings(setErrorProperty(data, 'collection', id, true))
         }
       } else if (type === 'project') {
         const newRanking = changePercentage(data, id, newValue)
         if (validateRanking(newRanking)) {
           setError(false)
-          // setTempRankings(newRanking)
           setTempRankings(resetErrorProperty(newRanking))
         } else {
           setError(true)
-          // console.log("id:", id)
           setTempRankings(setErrorProperty(data, 'project', id, true))
         }
       }
