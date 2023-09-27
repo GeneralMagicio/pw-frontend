@@ -4,18 +4,16 @@ import {
 } from '@/components/Poll/Rankings/OverallRanking'
 import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import {
-  addLockedProperty,
-  changePercentage,
-  isEditingRank,
-  validateRanking,
-} from '@/components/Poll/Rankings/edit-logic'
+import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
+
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
+import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
   Rank,
 } from '@/types/Ranking/index'
+import { axiosInstance } from '@/utils/axiosInstance'
 import { getLastTimestamp, getOverallRanking } from '@/utils/poll'
 import cloneDeep from 'lodash.clonedeep'
 import router from 'next/router'
@@ -76,25 +74,28 @@ const changeCollectionLockStatus = (
 
 export default function RankingPage() {
   const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
-  const [tempRankings, setTempRankings] = useState<EditingOverallRankingType[]>()
+  const [tempRankings, setTempRankings] =
+    useState<EditingOverallRankingType[]>()
   const [editMode, setEditMode] = useState(false)
   const [isOpen, setOpen] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleBack = () => {
     if (editMode) {
       setEditMode(false)
+      setError(false)
       setTempRankings(rankings)
-    }
-    else router.back()
+    } else router.back()
   }
 
-  const handleUpdateVotes = () => {
-    localStorage.setItem(
-      'editedRanking',
-      JSON.stringify({ data: tempRankings, ts: Date.now() })
-    )
+  const handleUpdateVotes = async () => {
+    if (!rankings) return
     setEditMode(false)
     setRankings(tempRankings)
+    await axiosInstance.post('/flow/ranking', {
+      collectionId: null,
+      ranking: JSON.stringify(tempRankings)
+    })
   }
 
   const edit =
@@ -103,10 +104,22 @@ export default function RankingPage() {
     (newValue: number) => {
       if (type === 'collection') {
         const newRanking = changeCollectionPercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setTempRankings(newRanking)
+        if (validateRanking(newRanking)) {
+          setError(false)
+          setTempRankings(resetErrorProperty(newRanking))
+        } else {
+          setError(true)
+          setTempRankings(setErrorProperty(data, 'collection', id, true))
+        }
       } else if (type === 'project') {
         const newRanking = changePercentage(data, id, newValue)
-        if (validateRanking(newRanking)) setTempRankings(newRanking)
+        if (validateRanking(newRanking)) {
+          setError(false)
+          setTempRankings(resetErrorProperty(newRanking))
+        } else {
+          setError(true)
+          setTempRankings(setErrorProperty(data, 'project', id, true))
+        }
       }
     }
 
@@ -122,24 +135,10 @@ export default function RankingPage() {
 
   useEffect(() => {
     const main = async () => {
-      const [timestamp, data] = await Promise.all([
-        getLastTimestamp(),
-        getOverallRanking(),
-      ])
-
-      const temp = localStorage.getItem('editedRanking')
-      const savedRanking: { data: EditingOverallRankingType[]; ts: number } =
-        temp ? JSON.parse(temp) : undefined
-
-      if (savedRanking && savedRanking.ts > timestamp) {
-        setRankings(
-          addLockedProperty(savedRanking.data.sort((a, b) => b.votingPower - a.votingPower))
-        )
-      } else {
-        setRankings(
-          addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
-        )
-      }
+      const data = await getOverallRanking()
+      setRankings(
+        addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
+      )
     }
     main()
   }, [setRankings])
@@ -152,6 +151,7 @@ export default function RankingPage() {
     <>
       <OverallRankingHeader
         editMode={editMode}
+        error={error}
         onBack={handleBack}
         onDone={() => {
           setOpen(true)
