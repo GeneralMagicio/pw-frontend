@@ -38,7 +38,8 @@ const Rows: React.FC<Props> = ({ data, onEditChange, onLockClick, editMode }): a
           id: data.id,
           name: data.collectionTitle,
           share: data.votingPower,
-          locked: data.locked
+          locked: data.locked,
+          error: data.error
         }}
         editMode={editMode}
         onEditChange={onEditChange('collection', data.id)}
@@ -57,14 +58,15 @@ const Rows: React.FC<Props> = ({ data, onEditChange, onLockClick, editMode }): a
           id: data.id,
           name: data.collectionTitle,
           share: data.votingPower,
-          locked: data.locked
+          locked: data.locked,
+          error: data.error
         }}
         editMode={editMode}
         onEditChange={onEditChange('collection', data.id)}
         onLockClick={onLockClick(data.id, "collection")}>
-        {data.ranking.map(({ name, id, share, locked }) => (
+        {data.ranking.map(({ name, id, share, locked, error }) => (
           <OverallRankingRow
-            data={{ name, share, id, locked }}
+            data={{ name, share, id, locked, error }}
             editMode={editMode}
             key={id}
             onEditChange={onEditChange('project', id)}

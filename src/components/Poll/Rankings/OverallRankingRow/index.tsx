@@ -7,7 +7,7 @@ import { EditTextField } from '../EditTextField'
 import { toFixedNumber } from '@/utils/helpers'
 
 interface RankingProps {
-  data: { id: number | string; name: string; share: number; locked: boolean }
+  data: { id: number | string; name: string; share: number; locked: boolean, error: boolean }
   onEditChange: (value: number) => void
   onLockClick: () => void
   editMode: boolean
@@ -32,6 +32,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
             </>
           ) : (
             <EditTextField
+              error={data.error}
               focus={false}
               locked={data.locked}
               onChange={onEditChange}
@@ -78,6 +79,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               </>
             ) : (
               <EditTextField
+                error={data.error}
                 focus={false}
                 locked={data.locked}
                 onChange={onEditChange}
