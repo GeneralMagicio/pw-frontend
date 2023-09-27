@@ -4,15 +4,10 @@ import {
 } from '@/components/Poll/Rankings/OverallRanking'
 import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import {
-  addLockedProperty,
-  changePercentage,
-  isEditingRank,
-  resetErrorProperty,
-  setErrorProperty,
-  validateRanking,
-} from '@/components/Poll/Rankings/edit-logic'
+import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
+
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
+import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,

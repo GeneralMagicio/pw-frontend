@@ -38,9 +38,6 @@ export interface EditingRank extends Rank {
   error: boolean
 }
 export interface EditingOverallRankingType extends OverallRankingType {
-  id: number
-  collectionTitle: string
-  votingPower: number
   ranking: EditingOverallRankingType[] | EditingRank[]
   locked: boolean
   error: boolean
