@@ -13,6 +13,7 @@ import {
   OverallRankingType,
   Rank,
 } from '@/types/Ranking/index'
+import { axiosInstance } from '@/utils/axiosInstance'
 import { getLastTimestamp, getOverallRanking } from '@/utils/poll'
 import cloneDeep from 'lodash.clonedeep'
 import router from 'next/router'
@@ -87,13 +88,14 @@ export default function RankingPage() {
     } else router.back()
   }
 
-  const handleUpdateVotes = () => {
-    localStorage.setItem(
-      'editedRanking',
-      JSON.stringify({ data: tempRankings, ts: Date.now() })
-    )
+  const handleUpdateVotes = async () => {
+    if (!rankings) return
     setEditMode(false)
     setRankings(tempRankings)
+    await axiosInstance.post('/flow/ranking', {
+      collectionId: null,
+      ranking: JSON.stringify(tempRankings)
+    })
   }
 
   const edit =
@@ -133,26 +135,10 @@ export default function RankingPage() {
 
   useEffect(() => {
     const main = async () => {
-      const [timestamp, data] = await Promise.all([
-        getLastTimestamp(),
-        getOverallRanking(),
-      ])
-
-      const temp = localStorage.getItem('editedRanking')
-      const savedRanking: { data: EditingOverallRankingType[]; ts: number } =
-        temp ? JSON.parse(temp) : undefined
-
-      if (savedRanking && savedRanking.ts > timestamp) {
-        setRankings(
-          addLockedProperty(
-            savedRanking.data.sort((a, b) => b.votingPower - a.votingPower)
-          )
-        )
-      } else {
-        setRankings(
-          addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
-        )
-      }
+      const data = await getOverallRanking()
+      setRankings(
+        addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
+      )
     }
     main()
   }, [setRankings])

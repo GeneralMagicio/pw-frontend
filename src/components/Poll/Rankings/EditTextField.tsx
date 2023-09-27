@@ -29,11 +29,6 @@ export const EditTextField: FC<Props> = ({
     inputRef.current!.value = value
   }, [value])
 
-
-  useEffect(() => {
-    console.log("error changed", error)
-  }, [error])
-
   const handleChange = useCallback(debounce((e: React.FormEvent<HTMLInputElement>) => {
     const newValue = inputRef.current!.value
     onChange(+newValue / 100)
