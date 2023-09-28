@@ -15,9 +15,8 @@ export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
       <p className="self-start text-2xl font-bold"> Unlock, Engage, Impact </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          {`We're setting the stage with two unlocked collections just for you.
-          Your expertise and strategic impact steer this selection, making your
-          voting experience laser-focused from the start.`}
+          {`We've curated two exclusive collections for you to unlock, tailored to your expertise and OP allocation.
+          This personalized approach ensures a more targeted and effective voting experience right from the beginning.`}
         </p>
         <img
           alt="start voting"
@@ -43,8 +42,8 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
       <p className="self-start text-2xl font-bold"> Vote, Unlock, Repeat </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          {`Engage with your unlocked collections and wield the power to unlock even more.
-            Each vote is a spell that reveals new horizons, tailored to your expertise and strategic flair.`}
+          {`By engaging with your initial collections, you have the ability to unlock additional ones.
+           Each ranked planet opens up new possibilities, allowing you to explore further areas tailored to your expertise.`}
         </p>
         <img
           alt="ethers"
@@ -77,9 +76,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
       <p className="self-start text-2xl font-bold"> Discover your impact </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          Ready to see your impact? Sail to the &quot;Check Votes&quot; realm. <br/> There,
-          you&apos;ll unveil the tapestry of your influence, revealing how your
-          expertise and strategy shape the content you explore.
+        Navigate to the &apos;Check Votes&apos; section now! View all the allocations you have made to each area and get ready to attest your allocations!
         </p>
         <img
           alt="ethers"
@@ -96,7 +93,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
         <button
           className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
           onClick={onNext}>
-          {'Ok, got it'} <ArrowForward className="ml-1" />
+          {`Understood, Let's Go!`} <ArrowForward className="ml-1" />
         </button>
       </div>
     </div>

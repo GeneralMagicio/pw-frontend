@@ -11,14 +11,14 @@ export const FinishVoteModal: React.FC = () => {
         </header>
 
         <p className="text-center text-xl font-bold">
-          Now more collections have been unlocked for voting!
+          There are new areas that have been unlocked for ranking!
         </p>
         <button
           className={
             'flex h-12 w-fit items-center self-center rounded-full bg-black px-4 py-2  text-white'
           }
           onClick={() => router.push('/galaxy')}>
-          {`Let's see them`} <ArrowForward className="ml-2" />
+          {`Let's explore them.`} <ArrowForward className="ml-2" />
         </button>
       </div>
     </>

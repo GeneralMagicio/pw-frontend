@@ -42,7 +42,7 @@ export default function Home() {
           </h2>
           <p className="text-2xl ">Impact = Profit</p>
           <ConnectWalletButton
-            alternativeText="Start voting"
+            alternativeText="Start"
             className="flex h-12 items-center bg-black"
           />
         </div>
@@ -149,7 +149,7 @@ export default function Home() {
           Kickstart Your Journey: Connect Your Wallet Now
         </p>
         <ConnectWalletButton
-          alternativeText="Start voting"
+          alternativeText="Start"
           className="flex h-12 items-center bg-black"
         />
         <Star
