@@ -1,5 +1,6 @@
 import { flattenRankingData } from "@/pages/ranking"
 import { OverallRankingType, EditingOverallRankingType, EditingRank, Rank } from "@/types/Ranking"
+import { toFixedNumber } from "@/utils/helpers"
 import cloneDeep from "lodash.clonedeep"
 
 export function addLockedProperty<T extends OverallRankingType[]> (ranking: T) : EditingOverallRankingType[] {
@@ -110,7 +111,7 @@ export const validateRanking = (ranking: EditingOverallRankingType[]) => {
 
   const flattenedRanking = flattenRankingData(ranking);
 
-  const negativeValue = flattenedRanking.some((el) => el.share < 0)
+  const negativeValue = flattenedRanking.some((el) => toFixedNumber(el.share, 8) < 0)
 
   if (negativeValue) {
     console.log("neg value error")

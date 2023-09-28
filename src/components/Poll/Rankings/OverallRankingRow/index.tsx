@@ -43,7 +43,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         </div>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">{(data.share * 3e6).toFixed(2)}</span>
+        <span className="">{(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}</span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
       <span className="w-12"></span>
