@@ -7,7 +7,7 @@ import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingR
 import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
 
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty } from '@/components/Poll/Rankings/edit-logic/utils'
+import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
@@ -25,51 +25,6 @@ export const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
       return [...acc, ...flattenRankingData(item.ranking)]
     } else return [...acc, ...item.ranking]
   }, [] as Rank[])
-}
-
-const changeProjectLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (isEditingRank(item.ranking[0])) {
-      const index = item.ranking.findIndex((el) => el.id === id)
-      if (index !== -1) {
-        item.ranking[index].locked = !item.ranking[index].locked
-        return data
-      }
-    } else {
-      item.ranking = changeProjectLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
-}
-
-const changeCollectionLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (item.id === id) {
-      item.locked = !item.locked
-      return data
-    } else if (!isEditingRank(item.ranking[0])) {
-      item.ranking = changeCollectionLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
 }
 
 export default function RankingPage() {
@@ -152,10 +107,10 @@ export default function RankingPage() {
       <OverallRankingHeader
         editMode={editMode}
         error={error}
-        onBack={handleBack}
-        onDone={() => {
+        onAttest={() => {
           setOpen(true)
         }}
+        onBack={handleBack}
         onEdit={() => {
           setEditMode(!editMode)
         }}

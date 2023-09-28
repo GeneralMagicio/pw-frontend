@@ -41,4 +41,5 @@ export interface EditingOverallRankingType extends OverallRankingType {
   ranking: EditingOverallRankingType[] | EditingRank[]
   locked: boolean
   error: boolean
+  expanded?: boolean
 }
