@@ -13,7 +13,8 @@ export const WellDoneModal2: React.FC<Props> = ({ isOpen, onClose }) => {
       <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
         <h3 className="text-3xl font-bold">Well done</h3>
         <p className="text-xl font-bold leading-10">
-          Strategic Input Added! now let’s start the journey!
+          Your OP allocation has been successfully added. Now, let’s dive into
+          ranking the projects in those designated areas
         </p>
         <div className="mt-4 flex items-center justify-center">
           <button

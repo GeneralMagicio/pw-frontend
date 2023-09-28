@@ -40,7 +40,7 @@ export default function Home() {
           <h2 className="text-[64px] font-bold text-red">
             Retroactive Public Goods Funding
           </h2>
-          <p className="text-2xl ">Changing the way impact is rewarded</p>
+          <p className="text-2xl ">Impact = Profit</p>
           <ConnectWalletButton
             alternativeText="Start voting"
             className="flex h-12 items-center bg-black"
@@ -67,16 +67,18 @@ export default function Home() {
         />
         <Star className="absolute right-16    top-28" />
         <h2 className="relative w-[899px] text-[44px] font-bold">
-          {`Your decision is not just wanted, it's needed!`}
+          {`Our collective wisdom is what drives RetroPGF!`}
         </h2>
         <p className="relative text-center text-[24px]">
-          {`Join the Optimism Collective's mission! With 30 million OP tokens up
-          for distribution in the third round of RetroPGF, your vote will shape
-          the direction of our collective future.`}
+          {`Join the Optimism Collective's mission!
+          With 30 million OP tokens to be distributed in the third round of RetroPGF, your ranking will shape the direction of our collective future.`}
         </p>
-        <a href='https://community.optimism.io/docs/governance/retropgf-3/' rel="noreferrer" target='_blank'>
+        <a
+          href="https://community.optimism.io/docs/governance/retropgf-3/"
+          rel="noreferrer"
+          target="_blank">
           <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
-            Learn now
+            Learn more
             <ArrowDown className="ml-2" />
           </button>
         </a>
