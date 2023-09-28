@@ -50,6 +50,7 @@ export const EditTextField: FC<Props> = ({
       <span className="mr-1 text-sm text-red">%</span>
       <input
         className="w-16 bg-transparent outline-0"
+        disabled={locked}
         id="edit-input"
         onChange={handleChange}
         ref={inputRef}

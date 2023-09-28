@@ -22,7 +22,7 @@ export const WellDoneModal: React.FC<Props> = ({ isOpen, onClose }) => {
             onClick={() => {
               router.push('/poll/root')
             }}>
-            {'Dive into Strategy'} <ArrowForward className="ml-1" />
+            {'OP allocation'} <ArrowForward className="ml-1" />
           </button>
         </div>
       </div>

@@ -59,13 +59,13 @@ export default function Poll() {
   useEffect(() => {
     if (pairs?.type === 'collection') {
       setActiveQuestion(
-        'Since last March, which of these collections has had a greater positive impact on Optimism?'
+        'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
       )
     } else if (pairs?.type === 'expertise') {
       setActiveQuestion('What area do you feel most confident discussing?')
     } else if (pairs?.type === 'project')
       setActiveQuestion(
-        'Since last March, which of these projects has had a greater positive impact on Optimism?'
+        'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
       )
   }, [pairs])
 
