@@ -53,6 +53,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 
 interface HeaderProps extends RankingProps {
   children: React.ReactNode
+  expanded?: boolean,
 }
 
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
@@ -61,8 +62,9 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   onEditChange,
   onLockClick,
   editMode,
+  expanded = false,
 }) => {
-  const [isExpanded, setExpanded] = useState(false)
+  const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
   return (

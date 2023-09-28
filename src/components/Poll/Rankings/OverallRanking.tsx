@@ -42,6 +42,7 @@ const Rows: React.FC<Props> = ({ data, onEditChange, onLockClick, editMode }): a
           error: data.error
         }}
         editMode={editMode}
+        expanded={data.expanded || false}
         onEditChange={onEditChange('collection', data.id)}
         onLockClick={onLockClick(data.id, "collection")}>
         {data.ranking.map((item) => (
@@ -62,6 +63,7 @@ const Rows: React.FC<Props> = ({ data, onEditChange, onLockClick, editMode }): a
           error: data.error
         }}
         editMode={editMode}
+        expanded={data.expanded || false}
         onEditChange={onEditChange('collection', data.id)}
         onLockClick={onLockClick(data.id, "collection")}>
         {data.ranking.map(({ name, id, share, locked, error }) => (

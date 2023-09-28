@@ -1,32 +1,127 @@
+import { getRankings } from '@/utils/poll'
+import { useEffect, useState } from 'react'
+import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
+import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
+import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
+import {
+  validateRanking,
+  resetErrorProperty,
+  setErrorProperty,
+  addLockedProperty,
+  changeProjectLockStatus,
+} from '@/components/Poll/Rankings/edit-logic/utils'
+import { EditingOverallRankingType } from '@/types/Ranking/index'
+import router from 'next/router'
 import { FinishVoteModal } from '@/components/FinishVoteModal'
 import Modal from '@/components/Modal/Modal'
-import { Rankings } from '@/components/Poll/Rankings'
-import { RankingHeader } from '@/components/Ranking/RankingHeader'
-import { RankingResponse } from '@/types/Ranking/index'
-import { getRankings } from '@/utils/poll'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
 export default function RankingPage() {
-  const router = useRouter()
-  const [rankings, setRankings] = useState<RankingResponse>()
+  const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
+  const [tempRankings, setTempRankings] =
+    useState<EditingOverallRankingType[]>()
+  const [editMode, setEditMode] = useState(false)
   const [open, setOpen] = useState(false)
+  const [error, setError] = useState(false)
+
+  const handleBack = () => {
+    if (editMode) {
+      setEditMode(false)
+      setError(false)
+      setTempRankings(rankings)
+    } else router.back()
+  }
+
+  const handleUpdateVotes = async () => {
+    if (!rankings) return
+    setEditMode(false)
+    setRankings(tempRankings)
+    //   collectionId: rankings[0].id,
+    //   ranking: JSON.stringify(tempRankings),
+    // })
+  }
+
+  const edit =
+    (data: EditingOverallRankingType[]) =>
+    (type: 'project' | 'collection', id: number) =>
+    (newValue: number) => {
+      if (type === 'project') {
+        const newRanking = changePercentage(data, id, newValue)
+        if (validateRanking(newRanking)) {
+          setError(false)
+          setTempRankings(resetErrorProperty(newRanking))
+        } else {
+          setError(true)
+          setTempRankings(setErrorProperty(data, 'project', id, true))
+        }
+      }
+    }
+
+  const changeLockStatus =
+    (data: EditingOverallRankingType[]) =>
+    (id: number, type: 'project' | 'collection') =>
+    () => {
+      if (type === 'project') {
+        setTempRankings(changeProjectLockStatus(data, id))
+      }
+    }
 
   useEffect(() => {
-    if (router.query.cid)
-      getRankings(String(router.query.cid)).then(setRankings)
-  }, [router.query.cid, setRankings])
+    const main = async () => {
+      if (router.query.cid) {
+        const data = await getRankings(String(router.query.cid))
+        setRankings(
+          addLockedProperty([
+            {
+              collectionTitle: data.collectionTitle,
+              id: 50,
+              votingPower: 1,
+              expanded: true,
+              locked: true,
+              ranking: data.ranking.map((item) => ({
+                id: item.project.id,
+                share: item.share,
+                name: item.project.name,
+              })),
+            },
+          ])
+        )
+      }
+    }
+    main()
+  }, [setRankings])
+
+  useEffect(() => {
+    setTempRankings(rankings)
+  }, [rankings])
 
   return (
     <>
-      <RankingHeader onDone={() => setOpen(true)} onEdit={() => {}} />
-      <Modal className="mb-96 bg-white" isOpen={open} onClose={() => setOpen(false)}>
+      <OverallRankingHeader
+        editMode={editMode}
+        error={error}
+        onAttest={() => {
+          setOpen(true)
+        }}
+        onBack={handleBack}
+        onEdit={() => {
+          setEditMode(!editMode)
+        }}
+        onUpdate={handleUpdateVotes}
+      />
+      <Modal
+        className="mb-96 bg-white"
+        isOpen={open}
+        onClose={() => setOpen(false)}>
         <FinishVoteModal />
       </Modal>
-      <Rankings
-        collectionTitle={rankings?.collectionTitle || ''}
-        items={rankings?.ranking || []}
-      />
+      {rankings && tempRankings && (
+        <OverallRanking
+          changeLockStatus={changeLockStatus(tempRankings)}
+          data={tempRankings}
+          edit={edit(tempRankings)}
+          editMode={editMode}
+        />
+      )}
     </>
   )
 }

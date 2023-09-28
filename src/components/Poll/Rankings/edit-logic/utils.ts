@@ -2,24 +2,24 @@ import { flattenRankingData } from "@/pages/ranking"
 import { OverallRankingType, EditingOverallRankingType, EditingRank, Rank } from "@/types/Ranking"
 import cloneDeep from "lodash.clonedeep"
 
-export const addLockedProperty = (ranking: OverallRankingType[]) : EditingOverallRankingType[] => {
+export function addLockedProperty<T extends OverallRankingType[]> (ranking: T) : EditingOverallRankingType[] {
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore
-    ranking[i].locked = false
+    ranking[i].locked = ranking[i].locked ?? false
     // @ts-ignore
-    ranking[i].error = false
+    ranking[i].error = ranking[i].error ?? false
     if (isRank(ranking[i].ranking[0])) {
       for (let j = 0; j < ranking[i].ranking.length; j++) {
         // @ts-ignore
-        ranking[i].ranking[j].locked = false
+        ranking[i].ranking[j].locked = ranking[i].ranking[j].locked ?? false
         // @ts-ignore
-        ranking[i].ranking[j].error = false
+        ranking[i].ranking[j].error = ranking[i].ranking[j].error ?? false
       }
     }
     else addLockedProperty(ranking[i].ranking as OverallRankingType[])
   }
 
-  return cloneDeep(ranking) as EditingOverallRankingType[]
+  return cloneDeep(ranking) as unknown as EditingOverallRankingType[]
 }
 
 export const resetErrorProperty = (ranking: OverallRankingType[]) : EditingOverallRankingType[] => {
@@ -54,6 +54,51 @@ export const setErrorProperty = (ranking: EditingOverallRankingType[], type: "pr
   return cloneDeep(ranking) as EditingOverallRankingType[]
 }
 
+export const changeProjectLockStatus = (
+  input: EditingOverallRankingType[],
+  id: number
+): EditingOverallRankingType[] => {
+  const data = cloneDeep(input)
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]
+    if (isEditingRank(item.ranking[0])) {
+      const index = item.ranking.findIndex((el) => el.id === id)
+      if (index !== -1) {
+        item.ranking[index].locked = !item.ranking[index].locked
+        return data
+      }
+    } else {
+      item.ranking = changeProjectLockStatus(
+        item.ranking as EditingOverallRankingType[],
+        id
+      )
+    }
+  }
+
+  return data
+}
+
+export const changeCollectionLockStatus = (
+  input: EditingOverallRankingType[],
+  id: number
+): EditingOverallRankingType[] => {
+  const data = cloneDeep(input)
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]
+    if (item.id === id) {
+      item.locked = !item.locked
+      return data
+    } else if (!isEditingRank(item.ranking[0])) {
+      item.ranking = changeCollectionLockStatus(
+        item.ranking as EditingOverallRankingType[],
+        id
+      )
+    }
+  }
+
+  return data
+}
+
 export const validateRanking = (ranking: EditingOverallRankingType[]) => {
   for (let i = 0; i < ranking.length; i++) {
     if (ranking[i].votingPower < 0) return false
@@ -74,7 +119,7 @@ export const validateRanking = (ranking: EditingOverallRankingType[]) => {
   
   const percentageSum = flattenedRanking.reduce((acc, curr) => acc = acc + curr.share, 0)
   
-  if (percentageSum > 1.02) {
+  if (percentageSum > 1.01) {
     console.log("over 100 error", percentageSum)
     return false
   } 
