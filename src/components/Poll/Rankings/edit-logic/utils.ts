@@ -132,7 +132,7 @@ export const validateRanking = (ranking: EditingOverallRankingType[]) => {
 
   const flattenedRanking = flattenRankingData(ranking);
 
-  const negativeValue = flattenedRanking.some((el) => toFixedNumber(el.share, 8) < 0)
+  const negativeValue = flattenedRanking.some((el) => toFixedNumber(el.share, 4) < 0)
 
   if (negativeValue) {
     console.log("neg value error")
