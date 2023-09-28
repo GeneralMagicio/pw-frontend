@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { PadlockLocked } from '@/components/Icon/Padlock-Locked'
 import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
 import debounce from 'lodash.debounce'
@@ -22,6 +22,7 @@ export const EditTextField: FC<Props> = ({
   error,
 }) => {
 
+  const [isFocused, setFocus] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export const EditTextField: FC<Props> = ({
       className={cn(
         `flex w-40 items-center gap-2 rounded-lg border ${error ? "border-[#ff0000]" : "border-gray-300"} px-4 py-[2px]`,
         { 'bg-[#1B1E23]/[.1]': locked },
+        { 'border-gray-500': isFocused && !error },
       )}>
       <div className="border-r border-[#1B1E23]/[.2] pr-1" onClick={onLockClick}>
         {locked ? (
@@ -52,7 +54,9 @@ export const EditTextField: FC<Props> = ({
         className="w-16 bg-transparent outline-0"
         disabled={locked}
         id="edit-input"
+        onBlur={() => setFocus(false)}
         onChange={handleChange}
+        onFocus={() => setFocus(true)}
         ref={inputRef}
         step={'0.001'}
         type="number"
