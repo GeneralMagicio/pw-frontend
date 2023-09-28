@@ -32,7 +32,12 @@ export const EditTextField: FC<Props> = ({
 
   const handleChange = useCallback(debounce((e: React.FormEvent<HTMLInputElement>) => {
     const newValue = inputRef.current!.value
-    onChange(+newValue / 100)
+    if (newValue) onChange(+newValue / 100)
+    else {
+      onChange(0)
+      // @ts-ignore
+      inputRef.current!.value = 0
+    }
   }, 1000), [onChange])
 
   return (
@@ -42,7 +47,7 @@ export const EditTextField: FC<Props> = ({
         { 'bg-[#1B1E23]/[.1]': locked },
         { 'border-gray-500': isFocused && !error },
       )}>
-      <div className="border-r border-[#1B1E23]/[.2] pr-1" onClick={onLockClick}>
+      <div className="border-r border-[#1B1E23]/[.2] pr-1" onClick={() => {if (!error) onLockClick()}}>
         {locked ? (
           <PadlockLocked height={25} width={25} />
         ) : (
