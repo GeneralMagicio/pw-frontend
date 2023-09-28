@@ -3,6 +3,27 @@ import { OverallRankingType, EditingOverallRankingType, EditingRank, Rank } from
 import { toFixedNumber } from "@/utils/helpers"
 import cloneDeep from "lodash.clonedeep"
 
+export function removeAddedProperties(input: EditingOverallRankingType[]) : OverallRankingType[] {
+  const ranking : OverallRankingType[] = cloneDeep(input)
+  for (let i = 0; i < ranking.length; i++) {
+    // @ts-ignore
+    delete ranking[i].locked
+    // @ts-ignore
+    delete ranking[i].error
+    if (isRank(ranking[i].ranking[0])) {
+      for (let j = 0; j < ranking[i].ranking.length; j++) {
+        // @ts-ignore
+        delete ranking[i].ranking[j].locked
+        // @ts-ignore
+        delete ranking[i].ranking[j].error
+      }
+    }
+    else ranking[i].ranking = removeAddedProperties(ranking[i].ranking as EditingOverallRankingType[])
+  }
+
+  return ranking
+}
+
 export function addLockedProperty<T extends OverallRankingType[]> (ranking: T) : EditingOverallRankingType[] {
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore

@@ -7,15 +7,14 @@ import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingR
 import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
 
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus } from '@/components/Poll/Rankings/edit-logic/utils'
+import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
   Rank,
 } from '@/types/Ranking/index'
 import { axiosInstance } from '@/utils/axiosInstance'
-import { getLastTimestamp, getOverallRanking } from '@/utils/poll'
-import cloneDeep from 'lodash.clonedeep'
+import { getOverallRanking } from '@/utils/poll'
 import router from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -44,12 +43,12 @@ export default function RankingPage() {
   }
 
   const handleUpdateVotes = async () => {
-    if (!rankings) return
+    if (!rankings || !tempRankings) return
     setEditMode(false)
-    setRankings(tempRankings)
+    setRankings(addLockedProperty(removeAddedProperties(tempRankings)))
     await axiosInstance.post('/flow/ranking', {
       collectionId: null,
-      ranking: JSON.stringify(tempRankings)
+      ranking: JSON.stringify(removeAddedProperties(tempRankings))
     })
   }
 
