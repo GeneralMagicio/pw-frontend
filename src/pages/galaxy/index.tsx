@@ -68,9 +68,9 @@ export default function Galaxy() {
 
   const handlePlanetClick = (collection: PairType) => () => {
     if (collection.locked) return null
-    if (collection.finished && !collection.hasSubcollections)
+    if (collection.finished && !collection.hasSubcollections && !collection.hasSuperProjects)
       return router.push(`/poll/${collection.id}/ranking`)
-    if (collection.hasSubcollections) {
+    if (collection.hasSubcollections || collection.hasSuperProjects) {
       return router.push(`/galaxy/${collection.id}`)
     }
     return router.push(`/poll/${collection.id}`)
@@ -171,6 +171,7 @@ export default function Galaxy() {
                         <CollectionPlanet
                           finished={collection.finished}
                           hasSubcollections={collection.hasSubcollections}
+                          hasSuperProjects={collection.hasSuperProjects}
                           locked={collection.locked}
                           name={collection.name}
                         />

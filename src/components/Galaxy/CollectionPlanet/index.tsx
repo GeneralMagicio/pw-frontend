@@ -11,6 +11,7 @@ interface CollectionPlanetProps {
   locked: boolean
   finished: boolean
   hasSubcollections: boolean
+  hasSuperProjects: boolean
 }
 
 export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
@@ -18,6 +19,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
   locked,
   finished,
   hasSubcollections,
+  hasSuperProjects,
 }) => {
   const [hover, setHover] = useState(false)
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
@@ -47,7 +49,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
           onMouseLeave={() => setHover(false)}>
           <PlanetStatus
             finished={finished}
-            hasSubcollections={hasSubcollections}
+            hasSubcollections={hasSubcollections || hasSuperProjects}
             title={name || ''}
           />
         </div>

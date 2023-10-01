@@ -6,18 +6,22 @@ import { Header } from '@/components/Poll/Pair/Header'
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
 import {
   fetchPairs,
+  fetchSubProjectPairs,
   voteColletions,
   voteExpertise,
   voteProjects,
+  voteSubProjects,
 } from '@/utils/poll'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { PairsType, PollType } from '@/types/Pairs'
 import { ImpactModal } from '@/components/Journey/ImpactModal'
+import { PairType } from '@/types/Pairs/Pair'
 
 export default function Poll() {
   const router = useRouter()
   const cid = router.query.cid
+  const type = router.query.type
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [showImpactModal, setShowImpactModal] = useState(false)
@@ -40,14 +44,20 @@ export default function Poll() {
     }
   }
 
-  const fetchData = async (rest?: boolean) => {
-    const data = await fetchPairs(String(cid))
-    if (!data.pairs.length) {
-      return Promise.reject(goToRanking())
+  const fetchData = async () => {
+    if (type === "super") {
+      const data = await fetchSubProjectPairs(String(cid))
+      if (!data.pairs.length) {
+        return Promise.reject(goToRanking())
+      }
+      setPairs(data)
+    } else {
+      const data = await fetchPairs(String(cid))
+      if (!data.pairs.length) {
+        return Promise.reject(goToRanking())
+      }
+      setPairs(data)
     }
-    const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
-    setPairs(rest ? data : { ...data, pairs: newPairs })
-    return newPairs
   }
 
   useEffect(() => {
@@ -67,13 +77,37 @@ export default function Poll() {
       setActiveQuestion(
         'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
       )
+    else if (pairs?.type === 'sub project')
+      setActiveQuestion(
+        'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+      )
   }, [pairs])
 
   useEffect(() => {
     if (isConnected && router.query.cid) {
-      fetchData(true).then(() => setOpen(true))
+      fetchData().then(() => setOpen(true))
     }
   }, [isConnected, router.query])
+
+  const onVote = async (pair: PairType[], picked?: number | undefined) => {
+    if (!pairs) return 
+
+    const [a, b] = pair
+    const voteRequestsMap = {
+      collection: voteColletions,
+      project: voteProjects,
+      expertise: voteExpertise,
+      ['sub project']: voteSubProjects,
+    }
+    const voteRequest = voteRequestsMap[pairs?.type]
+    await voteRequest({
+      id1: a.id,
+      id2: b.id,
+      pickedId: picked || null,
+    })
+
+    await fetchData()
+  }
 
   return (
     <>
@@ -93,20 +127,8 @@ export default function Poll() {
 
       {pairs?.pairs && (
         <Pairs
-          onVote={(pair, picked) => {
-            const [a, b] = pair
-            const voteRequestsMap = {
-              collection: voteColletions,
-              project: voteProjects,
-              expertise: voteExpertise,
-            }
-            const voteRequest = voteRequestsMap[pairs?.type]
-            return voteRequest({
-              id1: a.id,
-              id2: b.id,
-              pickedId: picked || null,
-            }).then(fetchData)
-          }}
+          activeIndex={pairs.votedPairs + 1}
+          onVote={onVote}
           pairs={pairs.pairs}
         />
       )}

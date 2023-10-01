@@ -9,7 +9,7 @@ import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { useRouter } from 'next/router'
 import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
-import { fetchCollections } from '@/utils/flow'
+import { fetchCollections, fetchSuperProjects } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { PlanetSub } from '@/components/Icon/PlanetSub'
 import { fetchPairs } from '@/utils/poll'
@@ -30,10 +30,26 @@ export default function AGalaxy() {
   const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
 
   useEffect(() => {
-    if (router.query.planetID)
-      fetchCollections(String(router.query.planetID))
-        .then(setCollections)
-        .catch((err) => console.log(err))
+    const main = async () => {
+      if (router.query.planetID) {
+        const [collections, superProjects] = await Promise.all([
+          fetchCollections(String(router.query.planetID)),
+          fetchSuperProjects(String(router.query.planetID)),
+        ])
+
+        // @ts-ignore
+        setCollections([
+          ...collections.map((item) => ({ ...item, type: 'collection' })),
+          ...superProjects.map((item) => ({ ...item, type: 'super project' })),
+        ])
+        // setCollections([
+        //   ...collections.map((item) => ({...item, type: "project"})),
+        //  ...superProjects.map((item) => ({...item, type: "super project"}))
+        // ])
+      }
+    }
+
+    main()
   }, [router.query.planetID])
 
   useEffect(() => {
@@ -41,8 +57,9 @@ export default function AGalaxy() {
       if (router.query.planetID) {
         const pair = await fetchPairs(String(router.query.planetID))
         setStatus({
-          finished:
-            !(Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold),
+          finished: !(
+            Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold
+          ),
           title: pair.collectionTitle,
         })
       }
@@ -73,6 +90,21 @@ export default function AGalaxy() {
       setShowNewSectionsModal(true)
     else setShowNewSectionsModal(false)
   }, [collections])
+
+  const handleClick = (collection: PairType) => () => {
+    if (collection.type === 'collection')
+      return collection.finished
+          ? router.replace(`/poll/${collection.id}/ranking`)
+          : router.push(
+              `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${
+                collection.id
+              }`
+            )
+    else if (collection.type === 'super project')
+      return collection.finished
+          ? router.replace(`/poll/${collection.id}/ranking?type=super`)
+          : router.push(`/poll/${collection.id}?type=super`)
+  }
 
   return (
     <div className="relative overflow-hidden">
@@ -116,17 +148,7 @@ export default function AGalaxy() {
                       <div
                         className="absolute h-[100px] w-[100px] cursor-pointer"
                         key={x + y}
-                        onClick={() =>
-                          collection.finished
-                            ? router.replace(`/poll/${collection.id}/ranking`)
-                            : router.push(
-                                `/${
-                                  collection.hasSubcollections
-                                    ? 'galaxy'
-                                    : 'poll'
-                                }/${collection.id}`
-                              )
-                        }
+                        onClick={handleClick(collection)}
                         style={{
                           width: `${PLANET_SIZE}px`,
                           height: `${PLANET_SIZE}px`,
@@ -140,7 +162,11 @@ export default function AGalaxy() {
                 <GalaxyCenterPlanet
                   finished={!status.finished}
                   name={status.title}
-                  onClick={() => status.finished ? router.push(`/poll/${router.query.planetID}/ranking`) : router.push(`/poll/${router.query.planetID}`)}
+                  onClick={() =>
+                    status.finished
+                      ? router.push(`/poll/${router.query.planetID}/ranking`)
+                      : router.push(`/poll/${router.query.planetID}`)
+                  }
                 />
               </div>
             </div>

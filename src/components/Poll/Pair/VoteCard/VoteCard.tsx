@@ -18,6 +18,13 @@ interface VoteCardProps {
   onQuickView: () => void
 }
 
+const isSingleProject = (item: PairType) => {
+  const subProjects = item.subProjects
+  if (item.numOfChildren || (subProjects && subProjects.length > 0)) return false
+
+  return true;
+}
+
 export const VoteCard: React.FC<
   VoteCardProps & React.HTMLProps<HTMLDivElement>
 > = ({
@@ -126,11 +133,11 @@ export const VoteCard: React.FC<
             <div className="mb-3 flex grow flex-col justify-end">
               <div className="self-start rounded-lg border border-black-3 p-1">
                 <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
-                  {item.numOfChildren ? <Layers /> : <Browser />}
+                  {isSingleProject(item) ? <Browser /> : <Layers />}
                   <span className="font-IBM text-sm">
-                    {item.numOfChildren
-                      ? `${item.numOfChildren} + Projcets`
-                      : 'Single project'}
+                    {isSingleProject(item)
+                      ? 'Single project'
+                      : `${item.numOfChildren || item.subProjects?.length}+ Projects`}
                   </span>
                 </div>
               </div>
