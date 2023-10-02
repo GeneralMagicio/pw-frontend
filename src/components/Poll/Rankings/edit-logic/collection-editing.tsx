@@ -76,7 +76,6 @@ export const changeCollectionPercentage = (
   newValue: number
 ): EditingOverallRankingType[] => {
   let ranking = cloneDeep(value)
-  // ranking = changeCollectionPercentage(value, itemId, newValue)
   for (let i = 0; i < ranking.length; i++) {
     if (ranking[i].id === itemId)
       ranking = changePercentageInList(
@@ -84,12 +83,16 @@ export const changeCollectionPercentage = (
         itemId,
         newValue
       )
-    else if (!isEditingRank(ranking[i].ranking[0])) {
-      ranking[i].ranking = changeCollectionPercentage(
-        ranking[i].ranking as EditingOverallRankingType[],
-        itemId,
-        newValue
-      )
+    else {
+      for (let j = 0; j < ranking[i].ranking.length; j++) {
+        if (!isEditingRank(ranking[i].ranking[j])) {
+          ranking[i].ranking[j] = changeCollectionPercentage(
+            [ranking[i].ranking[j] as EditingOverallRankingType],
+            itemId,
+            newValue
+          )[0]
+        }
+      }
     }
   }
 

@@ -1,13 +1,12 @@
 import {
   OverallRanking,
-  hasSubcollections,
 } from '@/components/Poll/Rankings/OverallRanking'
 import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
 
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties } from '@/components/Poll/Rankings/edit-logic/utils'
+import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties, isRank } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
@@ -18,11 +17,10 @@ import { getOverallRanking } from '@/utils/poll'
 import router from 'next/router'
 import { useEffect, useState } from 'react'
 
-export const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
-  return ranking.reduce((acc, item) => {
-    if (hasSubcollections(item.ranking)) {
-      return [...acc, ...flattenRankingData(item.ranking)]
-    } else return [...acc, ...item.ranking]
+export const flattenRankingData = (input: OverallRankingType): Rank[] => {
+  return input.ranking.reduce((acc, item) => {
+    if (isRank(item)) return [...acc, item]
+    else return [...acc, ...flattenRankingData(item as OverallRankingType)]
   }, [] as Rank[])
 }
 
@@ -90,9 +88,9 @@ export default function RankingPage() {
   useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
-      setRankings(
-        addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
-      )
+      const ranking = addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
+      console.log("added locked:", ranking)
+      setRankings(ranking)
     }
     main()
   }, [setRankings])
@@ -119,7 +117,7 @@ export default function RankingPage() {
         <AttestationModal
           isOpen={isOpen}
           onClose={() => setOpen(false)}
-          ranking={rankings ? flattenRankingData(rankings) : []}
+          ranking={rankings ? flattenRankingData({rankings} as any) : []}
         />
       )}
       {rankings && tempRankings && (

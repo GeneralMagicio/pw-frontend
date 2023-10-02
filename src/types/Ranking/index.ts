@@ -30,7 +30,7 @@ export type OverallRankingType = {
   id: number
   collectionTitle: string
   votingPower: number
-  ranking: OverallRankingType[] | Rank[]
+  ranking: (OverallRankingType | Rank)[]
 }
 
 export interface EditingRank extends Rank {
@@ -38,7 +38,7 @@ export interface EditingRank extends Rank {
   error: boolean
 }
 export interface EditingOverallRankingType extends OverallRankingType {
-  ranking: EditingOverallRankingType[] | EditingRank[]
+  ranking: (EditingOverallRankingType | EditingRank)[]
   locked: boolean
   error: boolean
   expanded?: boolean

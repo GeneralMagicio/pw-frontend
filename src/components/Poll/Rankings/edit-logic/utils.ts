@@ -1,10 +1,17 @@
-import { flattenRankingData } from "@/pages/ranking"
-import { OverallRankingType, EditingOverallRankingType, EditingRank, Rank } from "@/types/Ranking"
-import { toFixedNumber } from "@/utils/helpers"
-import cloneDeep from "lodash.clonedeep"
+import { flattenRankingData } from '@/pages/ranking'
+import {
+  OverallRankingType,
+  EditingOverallRankingType,
+  EditingRank,
+  Rank,
+} from '@/types/Ranking'
+import { toFixedNumber } from '@/utils/helpers'
+import cloneDeep from 'lodash.clonedeep'
 
-export function removeAddedProperties(input: EditingOverallRankingType[]) : OverallRankingType[] {
-  const ranking : OverallRankingType[] = cloneDeep(input)
+export function removeAddedProperties(
+  input: EditingOverallRankingType[]
+): OverallRankingType[] {
+  const ranking: OverallRankingType[] = cloneDeep(input)
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore
     delete ranking[i].locked
@@ -17,60 +24,103 @@ export function removeAddedProperties(input: EditingOverallRankingType[]) : Over
         // @ts-ignore
         delete ranking[i].ranking[j].error
       }
-    }
-    else ranking[i].ranking = removeAddedProperties(ranking[i].ranking as EditingOverallRankingType[])
+    } else
+      ranking[i].ranking = removeAddedProperties(
+        ranking[i].ranking as EditingOverallRankingType[]
+      )
   }
 
   return ranking
 }
 
-export function addLockedProperty<T extends OverallRankingType[]> (ranking: T) : EditingOverallRankingType[] {
+export function addLockedProperty<T extends OverallRankingType[]>(
+  ranking: T
+): EditingOverallRankingType[] {
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore
     ranking[i].locked = ranking[i].locked ?? false
     // @ts-ignore
     ranking[i].error = ranking[i].error ?? false
-    if (isRank(ranking[i].ranking[0])) {
-      for (let j = 0; j < ranking[i].ranking.length; j++) {
+
+    for (let j = 0; j < ranking[i].ranking.length; j++) {
+      if (isRank(ranking[i].ranking[j])) {
         // @ts-ignore
         ranking[i].ranking[j].locked = ranking[i].ranking[j].locked ?? false
         // @ts-ignore
         ranking[i].ranking[j].error = ranking[i].ranking[j].error ?? false
       }
+      // @ts-ignore
+      else
+        ranking[i].ranking[j] = addLockedProperty([
+          ranking[i].ranking[j],
+        ] as OverallRankingType[])[0]
     }
-    else addLockedProperty(ranking[i].ranking as OverallRankingType[])
   }
 
   return cloneDeep(ranking) as unknown as EditingOverallRankingType[]
 }
 
-export const resetErrorProperty = (ranking: OverallRankingType[]) : EditingOverallRankingType[] => {
+export const resetErrorProperty = (
+  ranking: OverallRankingType[]
+): EditingOverallRankingType[] => {
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore
     ranking[i].error = false
-    if (isRank(ranking[i].ranking[0])) {
-      for (let j = 0; j < ranking[i].ranking.length; j++) {
+
+    for (let j = 0; j < ranking[i].ranking.length; j++) {
+      if (isRank(ranking[i].ranking[j])) {
         // @ts-ignore
         ranking[i].ranking[j].error = false
       }
+      // @ts-ignore
+      else
+        ranking[i].ranking[j] = resetErrorProperty([
+          ranking[i].ranking[j],
+        ] as OverallRankingType[])[0]
     }
-    else resetErrorProperty(ranking[i].ranking as OverallRankingType[])
   }
 
-  return cloneDeep(ranking) as EditingOverallRankingType[]
+  return cloneDeep(ranking) as unknown as EditingOverallRankingType[]
 }
 
-export const setErrorProperty = (ranking: EditingOverallRankingType[], type: "project" | "collection", id: number, val: boolean) : EditingOverallRankingType[] => {
+// export const resetErrorProperty = (ranking: OverallRankingType[]) : EditingOverallRankingType[] => {
+//   for (let i = 0; i < ranking.length; i++) {
+//     // @ts-ignore
+//     ranking[i].error = false
+//     if (isRank(ranking[i].ranking[0])) {
+//       for (let j = 0; j < ranking[i].ranking.length; j++) {
+//         // @ts-ignore
+//         ranking[i].ranking[j].error = false
+//       }
+//     }
+//     else resetErrorProperty(ranking[i].ranking as OverallRankingType[])
+//   }
+
+//   return cloneDeep(ranking) as EditingOverallRankingType[]
+// }
+
+export const setErrorProperty = (
+  ranking: EditingOverallRankingType[],
+  type: 'project' | 'collection',
+  id: number,
+  val: boolean
+): EditingOverallRankingType[] => {
   for (let i = 0; i < ranking.length; i++) {
     // @ts-ignore
-    if (type === "collection" && ranking[i].id === id) ranking[i].error = val
+    if (type === 'collection' && ranking[i].id === id) ranking[i].error = val
     if (isRank(ranking[i].ranking[0])) {
       for (let j = 0; j < ranking[i].ranking.length; j++) {
         // @ts-ignore
-        if (type === "project" && ranking[i].ranking[j].id === id) ranking[i].ranking[j].error = val
+        if (type === 'project' && ranking[i].ranking[j].id === id)
+          ranking[i].ranking[j].error = val
       }
-    }
-    else setErrorProperty(ranking[i].ranking as EditingOverallRankingType[], type, id, val)
+    } else
+      setErrorProperty(
+        ranking[i].ranking as EditingOverallRankingType[],
+        type,
+        id,
+        val
+      )
   }
 
   return cloneDeep(ranking) as EditingOverallRankingType[]
@@ -124,29 +174,49 @@ export const changeCollectionLockStatus = (
 export const validateRanking = (ranking: EditingOverallRankingType[]) => {
   for (let i = 0; i < ranking.length; i++) {
     if (ranking[i].votingPower < 0) return false
-    else if (!isEditingRank(ranking[i].ranking[0])) {
-      const val = validateRanking(ranking[i].ranking as EditingOverallRankingType[])
-      if (val === false) return false
+    else {
+      for (let j = 0; j < ranking[i].ranking.length; j++) {
+        if (!isEditingRank(ranking[i].ranking[j])) {
+          const val = validateRanking([
+            ranking[i].ranking[j] as EditingOverallRankingType,
+          ])
+          if (val === false) return false
+        }
+      }
     }
+    // else if (!isEditingRank(ranking[i].ranking[0])) {
+    //   const val = validateRanking(ranking[i].ranking as EditingOverallRankingType[])
+    //   if (val === false) return false
+    // }
   }
 
-  const flattenedRanking = flattenRankingData(ranking);
+  const flattenedRanking = flattenRankingData({
+    ranking,
+    id: -1,
+    collectionTitle: 'Root',
+    votingPower: 1,
+  })
 
-  const negativeValue = flattenedRanking.some((el) => toFixedNumber(el.share, 4) < 0)
+  const negativeValue = flattenedRanking.some(
+    (el) => toFixedNumber(el.share, 4) < 0
+  )
 
   if (negativeValue) {
-    console.log("neg value error")
+    console.log('neg value error')
     return false
   }
-  
-  const percentageSum = flattenedRanking.reduce((acc, curr) => acc = acc + curr.share, 0)
-  
-  if (percentageSum > 1.01) {
-    console.log("over 100 error", percentageSum)
-    return false
-  } 
 
-  return true;
+  const percentageSum = flattenedRanking.reduce(
+    (acc, curr) => (acc = acc + curr.share),
+    0
+  )
+
+  if (percentageSum > 1.01) {
+    console.log('over 100 error', percentageSum)
+    return false
+  }
+
+  return true
 }
 
 export const isEditingRank = (
@@ -156,13 +226,15 @@ export const isEditingRank = (
   return true
 }
 
-export const isRank = (
-  val: Rank | OverallRankingType
-): val is Rank => {
+export const isRank = (val: Rank | OverallRankingType): val is Rank => {
   if ('ranking' in val) return false
   return true
 }
 
-export const deltaCalculator = (currShare: number, totalShare: number, totalDelta: number) => {
-  return totalDelta * currShare / totalShare
+export const deltaCalculator = (
+  currShare: number,
+  totalShare: number,
+  totalDelta: number
+) => {
+  return (totalDelta * currShare) / totalShare
 }
