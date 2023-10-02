@@ -3,10 +3,10 @@ import {
 } from '@/components/Poll/Rankings/OverallRanking'
 import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
+import { changePercentage } from '@/components/Poll/Rankings/edit-logic/project-editing'
 
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties, isRank } from '@/components/Poll/Rankings/edit-logic/utils'
+import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react'
 
 export const flattenRankingData = (input: OverallRankingType): Rank[] => {
   return input.ranking.reduce((acc, item) => {
-    if (isRank(item)) return [...acc, item]
+    if (item.type === "project") return [...acc, item]
     else return [...acc, ...flattenRankingData(item as OverallRankingType)]
   }, [] as Rank[])
 }
@@ -88,7 +88,7 @@ export default function RankingPage() {
   useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
-      const ranking = addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
+      const ranking = addLockedProperty(data.sort((a, b) => b.share - a.share))
       console.log("added locked:", ranking)
       setRankings(ranking)
     }

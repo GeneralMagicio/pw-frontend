@@ -3,7 +3,7 @@ import {
   EditingRank,
 } from '@/types/Ranking/index'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
-import { isEditingRank } from './edit-logic/utils'
+// import { isEditingRank } from './edit-logic/utils'
 
 interface RankingsProps {
   data: EditingOverallRankingType[]
@@ -15,7 +15,7 @@ interface RankingsProps {
 export const hasNoSubcollections = (
   input: (EditingOverallRankingType | EditingRank)[]
 ) : input is EditingRank[] => {
-  return !input.some((el) => 'votingPower' in el)
+  return !input.some((el) => 'share' in el)
 }
 
 interface Props {
@@ -41,7 +41,7 @@ const Rows: React.FC<Props> = ({
         data={{
           id: data.id,
           name: data.collectionTitle,
-          share: data.votingPower,
+          share: data.share,
           locked: data.locked,
           error: data.error,
         }}
@@ -50,7 +50,7 @@ const Rows: React.FC<Props> = ({
         onEditChange={onEditChange('collection', data.id)}
         onLockClick={onLockClick(data.id, 'collection')}>
         {data.ranking.map((item) => {
-          if (isEditingRank(item)) {
+          if (item.type === "project") {
             return (
               <OverallRankingRow
                 data={{ name: item.name, share: item.share, id: item.id, locked: item.locked, error: item.error }}
@@ -81,7 +81,7 @@ const Rows: React.FC<Props> = ({
         data={{
           id: data.id,
           name: data.collectionTitle,
-          share: data.votingPower,
+          share: data.share,
           locked: data.locked,
           error: data.error,
         }}

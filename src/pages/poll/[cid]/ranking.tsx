@@ -78,7 +78,7 @@ export default function RankingPage() {
             {
               collectionTitle: data.collectionTitle,
               id: 50,
-              votingPower: 1,
+              share: 1,
               expanded: true,
               locked: true,
               ranking: data.ranking.map((item) => ({

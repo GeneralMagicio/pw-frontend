@@ -21,15 +21,17 @@ export type RankingResponse = {
 }
 
 export type Rank = {
+  type: "project"
   name: string
   id: number
   share: number
 }
 
 export type OverallRankingType = {
+  type: "composite project" | "collection"
   id: number
   collectionTitle: string
-  votingPower: number
+  share: number
   ranking: (OverallRankingType | Rank)[]
 }
 
