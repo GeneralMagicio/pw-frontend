@@ -9,7 +9,7 @@ import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { useRouter } from 'next/router'
 import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
-import { fetchCollections, fetchSuperProjects } from '@/utils/flow'
+import { fetchCollections, fetchCompositeProjects } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { PlanetSub } from '@/components/Icon/PlanetSub'
 import { fetchPairs } from '@/utils/poll'
@@ -32,19 +32,19 @@ export default function AGalaxy() {
   useEffect(() => {
     const main = async () => {
       if (router.query.planetID) {
-        const [collections, superProjects] = await Promise.all([
+        const [collections, compositeProjects] = await Promise.all([
           fetchCollections(String(router.query.planetID)),
-          fetchSuperProjects(String(router.query.planetID)),
+          fetchCompositeProjects(String(router.query.planetID)),
         ])
 
         // @ts-ignore
         setCollections([
           ...collections.map((item) => ({ ...item, type: 'collection' })),
-          ...superProjects.map((item) => ({ ...item, type: 'super project' })),
+          ...compositeProjects.map((item) => ({ ...item, type: 'super project' })),
         ])
         // setCollections([
         //   ...collections.map((item) => ({...item, type: "project"})),
-        //  ...superProjects.map((item) => ({...item, type: "super project"}))
+        //  ...compositeProjects.map((item) => ({...item, type: "super project"}))
         // ])
       }
     }
@@ -92,6 +92,7 @@ export default function AGalaxy() {
   }, [collections])
 
   const handleClick = (collection: PairType) => () => {
+    if (collection.locked) return;
     if (collection.type === 'collection')
       return collection.finished
           ? router.replace(`/poll/${collection.id}/ranking`)
@@ -146,7 +147,7 @@ export default function AGalaxy() {
 
                     return (
                       <div
-                        className="absolute h-[100px] w-[100px] cursor-pointer"
+                        className={cn("absolute h-[100px] w-[100px] cursor-pointer", {'cursor-auto' : collection.locked})}
                         key={x + y}
                         onClick={handleClick(collection)}
                         style={{

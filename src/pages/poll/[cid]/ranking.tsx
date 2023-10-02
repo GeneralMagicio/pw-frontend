@@ -1,4 +1,4 @@
-import { getRankings } from '@/utils/poll'
+import { getRankings, getCompositeProjectRankings } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
@@ -10,8 +10,8 @@ import {
   addLockedProperty,
   changeProjectLockStatus,
 } from '@/components/Poll/Rankings/edit-logic/utils'
-import { EditingOverallRankingType } from '@/types/Ranking/index'
-import router from 'next/router'
+import { EditingOverallRankingType, RankingResponse } from '@/types/Ranking/index'
+import { useRouter } from 'next/router'
 import { FinishVoteModal } from '@/components/FinishVoteModal'
 import Modal from '@/components/Modal/Modal'
 
@@ -22,6 +22,8 @@ export default function RankingPage() {
   const [editMode, setEditMode] = useState(false)
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(false)
+  const router = useRouter()
+  const type = router.query.type
 
   const handleBack = () => {
     if (editMode) {
@@ -68,7 +70,9 @@ export default function RankingPage() {
   useEffect(() => {
     const main = async () => {
       if (router.query.cid) {
-        const data = await getRankings(String(router.query.cid))
+        let data : RankingResponse;
+        if (type === "super")  data = await getCompositeProjectRankings(String(router.query.cid))
+        else data = await getRankings(String(router.query.cid))
         setRankings(
           addLockedProperty([
             {
@@ -88,7 +92,7 @@ export default function RankingPage() {
       }
     }
     main()
-  }, [setRankings])
+  }, [setRankings, router.query.cid, type])
 
   useEffect(() => {
     setTempRankings(rankings)

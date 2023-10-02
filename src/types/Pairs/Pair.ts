@@ -12,7 +12,7 @@ export interface PairType {
   parent_collection_id: number | null
   locked: boolean
   hasSubcollections: boolean,
-  hasSuperProjects: boolean,
+  hasCompositeProjects: boolean,
   finished: boolean,
   started: boolean,
   type: "collection" | "project" | "super project" | "sub project"

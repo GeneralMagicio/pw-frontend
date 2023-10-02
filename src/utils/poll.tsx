@@ -105,6 +105,14 @@ export async function getRankings(cid?: string) {
     .then((res) => res.data)
 }
 
+export async function getCompositeProjectRankings(pid: string) {
+  return axiosInstance
+    .get<RankingResponse>(`/flow/subprojects/ranking`, {
+      params: { pid },
+    })
+    .then((res) => res.data)
+}
+
 export async function getOverallRanking() {
   const {data} = await axiosInstance.get<OverallRankingType[]>(
     `/flow/ranking/overall`

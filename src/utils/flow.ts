@@ -10,9 +10,9 @@ export async function fetchCollections(cid?: string) {
     .then((res) => res.data)
 }
 
-export async function fetchSuperProjects(cid: string) {
+export async function fetchCompositeProjects(cid: string) {
   return axiosInstance
-    .get<PairType[]>('/flow/superProjects', {
+    .get<PairType[]>('/flow/compositeProjects', {
       params: { cid },
     })
     .then((res) => res.data)
