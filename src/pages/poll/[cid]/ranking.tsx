@@ -78,7 +78,7 @@ export default function RankingPage() {
             {
               collectionTitle: data.collectionTitle,
               id: 50,
-              share: 1,
+              share: data.votingPower,
               expanded: true,
               locked: true,
               type: "collection",

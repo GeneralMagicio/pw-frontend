@@ -25,7 +25,7 @@ export default function AGalaxy() {
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
   const [status, setStatus] = useState<{ finished: boolean; title: string }>({
-    finished: true,
+    finished: false,
     title: '',
   })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
@@ -57,10 +57,10 @@ export default function AGalaxy() {
     const func = async () => {
       if (router.query.planetID) {
         const res = await axiosInstance.get(`/collection/${Number(router.query.planetID)}`)
-        const c : PairType = res.data
+        const c = res.data
         setStatus({
-          finished: c?.finished || true,
-          title: c?.type || ""
+          finished: c.finished ?? true,
+          title: c.collection.name || ""
         })
       }
     }

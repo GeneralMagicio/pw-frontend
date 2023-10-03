@@ -18,6 +18,7 @@ export type RankingResponse = {
   collectionTitle: string
   ranking: RankingsType
   nextCollection: PairType
+  votingPower: number
 }
 
 export type Rank = {
