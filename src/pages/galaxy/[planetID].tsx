@@ -15,6 +15,7 @@ import { PlanetSub } from '@/components/Icon/PlanetSub'
 import { fetchPairs } from '@/utils/poll'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 const PLANET_SIZE = 150
 
@@ -27,7 +28,7 @@ export default function AGalaxy() {
     finished: true,
     title: '',
   })
-  const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+  // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
 
   useEffect(() => {
     const main = async () => {
@@ -55,12 +56,11 @@ export default function AGalaxy() {
   useEffect(() => {
     const func = async () => {
       if (router.query.planetID) {
-        const pair = await fetchPairs(String(router.query.planetID))
+        const res = await axiosInstance.get(`/collection/${Number(router.query.planetID)}`)
+        const c : PairType = res.data
         setStatus({
-          finished: !(
-            Math.floor(pair.votedPairs / pair.totalPairs) < pair.threshold
-          ),
-          title: pair.collectionTitle,
+          finished: c?.finished || true,
+          title: c?.type || ""
         })
       }
     }
@@ -81,15 +81,15 @@ export default function AGalaxy() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  useEffect(() => {
-    const allCollectionsUnlockedUnstarted = collections.every(
-      (collection) => !collection.locked && !collection.started
-    )
+  // useEffect(() => {
+  //   const allCollectionsUnlockedUnstarted = collections.every(
+  //     (collection) => !collection.locked && !collection.started
+  //   )
 
-    if (collections.length > 0 && allCollectionsUnlockedUnstarted)
-      setShowNewSectionsModal(true)
-    else setShowNewSectionsModal(false)
-  }, [collections])
+  //   if (collections.length > 0 && allCollectionsUnlockedUnstarted)
+  //     setShowNewSectionsModal(true)
+  //   else setShowNewSectionsModal(false)
+  // }, [collections])
 
   const handleClick = (collection: PairType) => () => {
     if (collection.locked) return;
@@ -118,14 +118,14 @@ export default function AGalaxy() {
         <ArrowBackward className="text-black" />
         <span>Go Back</span>
       </button>
-      {showNewSectionsModal && (
+      {/* {showNewSectionsModal && (
         <NewSectionsModal
           isOpen={true}
           onClose={() => {
             setShowNewSectionsModal(false)
           }}
         />
-      )}
+      )} */}
 
       <TransformWrapper centerOnInit centerZoomedOut initialScale={4}>
         <TransformComponent>
@@ -161,7 +161,7 @@ export default function AGalaxy() {
                     )
                   })}
                 <GalaxyCenterPlanet
-                  finished={!status.finished}
+                  finished={status.finished}
                   name={status.title}
                   onClick={() =>
                     status.finished

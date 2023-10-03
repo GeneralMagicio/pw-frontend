@@ -7,6 +7,7 @@ import router from 'next/router'
 
 interface Props {
   onAttest: () => void
+  onDone?: () => void
   onEdit: () => void
   onBack: () => void
   editMode: boolean
@@ -20,6 +21,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
   editMode,
   onBack,
   onUpdate,
+  onDone,
   error,
 }) => {
   return (
@@ -65,12 +67,20 @@ export const OverallRankingHeader: React.FC<Props> = ({
             <Shuffle />
           </button>
         )}
-        <button
-          className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
-          onClick={onAttest}>
-          Attest
-        </button>
+        {onDone ? (
+          <button
+            className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
+            onClick={onDone}>
+            Done
+          </button>
+        ) : (
+          <button
+            className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
+            onClick={onAttest}>
+            Attest
+          </button>
+        )}
       </div>
     </header>
   )
-} 
+}

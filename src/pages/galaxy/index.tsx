@@ -23,7 +23,7 @@ export default function Galaxy() {
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
   const [showHelpModal, setShowHelpModal] = useState(false)
-  const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+  // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   const [showCustomizeModal, setShowCustomizeModal] = useState(true)
   const { flowStatus } = useSession()
 
@@ -71,13 +71,17 @@ export default function Galaxy() {
 
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlockedUnstarted =
+    const justOnePlanetUnlockedUnstarted =
       collections.filter(
-        (collection) => !collection.locked && !collection.started
+        (collection) => !collection.locked || collection.started
       ).length === 1
 
+    console.log(collections.filter(
+      (collection) => !collection.locked || collection.started
+    ))
+
     const bool =
-      flowStatus.expertise && flowStatus.impact && onePlanetUnlockedUnstarted
+      flowStatus.expertise && flowStatus.impact && justOnePlanetUnlockedUnstarted
 
     return bool
   }, [collections, flowStatus])
@@ -86,19 +90,19 @@ export default function Galaxy() {
     setShowHelpModal(checkShowHelpModalCondition())
   }, [checkShowHelpModalCondition])
 
-  useEffect(() => {
-    const hasUnlockedUnstartedCollection = collections.some(
-      (collection) => !collection.locked && !collection.started
-    )
+  // useEffect(() => {
+  //   const hasUnlockedUnstartedCollection = collections.some(
+  //     (collection) => !collection.locked && !collection.started
+  //   )
 
-    if (
-      flowStatus.checkpoint.type !== 'initial' &&
-      hasUnlockedUnstartedCollection &&
-      !checkShowHelpModalCondition()
-    )
-      setShowNewSectionsModal(true)
-    else setShowNewSectionsModal(false)
-  }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
+  //   if (
+  //     flowStatus.checkpoint.type !== 'initial' &&
+  //     hasUnlockedUnstartedCollection &&
+  //     !checkShowHelpModalCondition()
+  //   )
+  //     setShowNewSectionsModal(true)
+  //   else setShowNewSectionsModal(false)
+  // }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
   if (
     checkShowHelpModalCondition() &&
@@ -114,14 +118,14 @@ export default function Galaxy() {
 
   return (
     <div className="overflow-hidden">
-      {showNewSectionsModal && (
+      {/* {showNewSectionsModal && (
         <NewSectionsModal
           isOpen={true}
           onClose={() => {
             setShowNewSectionsModal(false)
           }}
         />
-      )}
+      )} */}
       {showHelpModal && (
         <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
       )}

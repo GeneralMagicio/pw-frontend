@@ -105,10 +105,11 @@ export default function RankingPage() {
       <OverallRankingHeader
         editMode={editMode}
         error={error}
-        onAttest={() => {
+        onAttest={() => {}}
+        onBack={handleBack}
+        onDone={() => {
           setOpen(true)
         }}
-        onBack={handleBack}
         onEdit={() => {
           setEditMode(!editMode)
         }}
