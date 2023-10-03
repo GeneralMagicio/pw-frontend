@@ -15,6 +15,17 @@ export async function fetchPairs(cid?: string) {
     .then((res) => res.data)
 }
 
+export async function fetchSubProjectPairs(pid: string) {
+  const url = `/flow/subprojects/pairs`
+  return axiosInstance
+    .get<PairsType>(url, {
+      params: {
+        pid,
+      },
+    })
+    .then((res) => res.data)
+}
+
 export async function voteProjects({
   id1,
   id2,
@@ -32,6 +43,25 @@ export async function voteProjects({
     })
     .then((res) => res.data)
 }
+
+export async function voteSubProjects({
+  id1,
+  id2,
+  pickedId,
+}: {
+  id1: number
+  id2: number
+  pickedId: number | null
+}) {
+  return axiosInstance
+    .post('/flow/subprojects/vote', {
+      project1Id: id1,
+      project2Id: id2,
+      pickedId,
+    })
+    .then((res) => res.data)
+}
+
 export async function voteColletions({
   id1,
   id2,
@@ -71,6 +101,14 @@ export async function getRankings(cid?: string) {
   return axiosInstance
     .get<RankingResponse>(`/flow/ranking`, {
       params: { cid: cid === 'root' ? null : cid },
+    })
+    .then((res) => res.data)
+}
+
+export async function getCompositeProjectRankings(pid: string) {
+  return axiosInstance
+    .get<RankingResponse>(`/flow/subprojects/ranking`, {
+      params: { pid },
     })
     .then((res) => res.data)
 }

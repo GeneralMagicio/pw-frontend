@@ -57,7 +57,7 @@ export default function Galaxy() {
     const handleResize = () => {
       setCords(
         generateNonOverlappingOrbitCoordinates(5, 2.2)
-          .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
+          .concat(generateNonOverlappingOrbitCoordinates(10, 1.5))
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
       )
     }
@@ -68,9 +68,9 @@ export default function Galaxy() {
 
   const handlePlanetClick = (collection: PairType) => () => {
     if (collection.locked) return null
-    if (collection.finished && !collection.hasSubcollections)
+    if (collection.finished && !collection.hasSubcollections && !collection.hasCompositeProjects)
       return router.push(`/poll/${collection.id}/ranking`)
-    if (collection.hasSubcollections) {
+    if (collection.hasSubcollections || collection.hasCompositeProjects) {
       return router.push(`/galaxy/${collection.id}`)
     }
     return router.push(`/poll/${collection.id}`)
@@ -136,7 +136,7 @@ export default function Galaxy() {
       )}
 
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
-      <TransformWrapper centerOnInit initialScale={2.5}>
+      <TransformWrapper centerOnInit initialScale={2.1}>
         <TransformComponent>
           <div
             className="flex w-screen items-center justify-center overflow-hidden p-10"
@@ -170,6 +170,7 @@ export default function Galaxy() {
                         }}>
                         <CollectionPlanet
                           finished={collection.finished}
+                          hasCompositeProjects={collection.hasCompositeProjects}
                           hasSubcollections={collection.hasSubcollections}
                           locked={collection.locked}
                           name={collection.name}

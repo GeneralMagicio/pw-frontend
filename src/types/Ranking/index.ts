@@ -21,16 +21,18 @@ export type RankingResponse = {
 }
 
 export type Rank = {
+  type: "project"
   name: string
   id: number
   share: number
 }
 
 export type OverallRankingType = {
+  type: "composite project" | "collection"
   id: number
   collectionTitle: string
-  votingPower: number
-  ranking: OverallRankingType[] | Rank[]
+  share: number
+  ranking: (OverallRankingType | Rank)[]
 }
 
 export interface EditingRank extends Rank {
@@ -38,7 +40,7 @@ export interface EditingRank extends Rank {
   error: boolean
 }
 export interface EditingOverallRankingType extends OverallRankingType {
-  ranking: EditingOverallRankingType[] | EditingRank[]
+  ranking: (EditingOverallRankingType | EditingRank)[]
   locked: boolean
   error: boolean
   expanded?: boolean
