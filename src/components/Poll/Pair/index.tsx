@@ -33,6 +33,7 @@ export const Pair: React.FC<PairProps> = ({ onVote, voted, pair }) => {
       )}>
       <VoteCard
         item={a}
+        key={a.id}
         onClick={() => onVote(a, VOTES.LEFT)}
         onMouseEnter={() => setHoverdItem(VOTES.LEFT)}
         onMouseLeave={() => setHoverdItem(VOTES.NONE)}
@@ -55,6 +56,7 @@ export const Pair: React.FC<PairProps> = ({ onVote, voted, pair }) => {
       />
       <VoteCard
         item={b}
+        key={b.id}
         onClick={() => onVote(b, VOTES.RIGHT)}
         onMouseEnter={() => setHoverdItem(VOTES.RIGHT)}
         onMouseLeave={() => setHoverdItem(VOTES.NONE)}
