@@ -25,7 +25,7 @@ export const ConnectWalletButton: React.FC<{
         return (
           <button
             className={cn(
-              'min-w-[120px] rounded-full border border-black bg-transparent px-4  text-black',
+              'min-w-[120px] flex items-center justify-center rounded-full border border-black bg-transparent px-4  text-black',
               className
             )}
             onClick={

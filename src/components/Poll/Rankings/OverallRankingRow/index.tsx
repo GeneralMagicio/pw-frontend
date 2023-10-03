@@ -43,7 +43,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         </div>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">{(data.share * 3e6).toFixed(2)}</span>
+        <span className="">{(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}</span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
       <span className="w-12"></span>
@@ -53,6 +53,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 
 interface HeaderProps extends RankingProps {
   children: React.ReactNode
+  expanded?: boolean,
 }
 
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
@@ -61,12 +62,13 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   onEditChange,
   onLockClick,
   editMode,
+  expanded = false,
 }) => {
-  const [isExpanded, setExpanded] = useState(false)
+  const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
   return (
-    <div className="flex w-full cursor-pointer flex-col items-end font-Inter text-black">
+    <div className="flex w-full flex-col items-end font-Inter text-black">
       <div
         className={`mb-2 flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
         <span className="grow">{data.name}</span>
@@ -97,7 +99,8 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           {...getToggleProps({
             onClick: () => setExpanded((prevExpanded) => !prevExpanded),
           })}
-          className="flex w-12 items-center">
+          className="flex h-6 w-12 items-center justify-center"
+          >
           {isExpanded ? <CaretUp /> : <CaretDown />}
         </span>
       </div>

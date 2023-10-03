@@ -35,7 +35,7 @@ export const PlanetStatus: React.FC<Props> = ({
     ? 'View Projects'
     : finished
     ? 'See Results'
-    : 'Start Voting'
+    : 'Start ranking'
   return (
     <div
       className={`flex w-[172px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>

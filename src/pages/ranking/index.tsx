@@ -7,15 +7,14 @@ import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingR
 import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
 
 import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { isEditingRank, validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty } from '@/components/Poll/Rankings/edit-logic/utils'
+import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
   EditingOverallRankingType,
   OverallRankingType,
   Rank,
 } from '@/types/Ranking/index'
 import { axiosInstance } from '@/utils/axiosInstance'
-import { getLastTimestamp, getOverallRanking } from '@/utils/poll'
-import cloneDeep from 'lodash.clonedeep'
+import { getOverallRanking } from '@/utils/poll'
 import router from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -25,51 +24,6 @@ export const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
       return [...acc, ...flattenRankingData(item.ranking)]
     } else return [...acc, ...item.ranking]
   }, [] as Rank[])
-}
-
-const changeProjectLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (isEditingRank(item.ranking[0])) {
-      const index = item.ranking.findIndex((el) => el.id === id)
-      if (index !== -1) {
-        item.ranking[index].locked = !item.ranking[index].locked
-        return data
-      }
-    } else {
-      item.ranking = changeProjectLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
-}
-
-const changeCollectionLockStatus = (
-  input: EditingOverallRankingType[],
-  id: number
-): EditingOverallRankingType[] => {
-  const data = cloneDeep(input)
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (item.id === id) {
-      item.locked = !item.locked
-      return data
-    } else if (!isEditingRank(item.ranking[0])) {
-      item.ranking = changeCollectionLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
-    }
-  }
-
-  return data
 }
 
 export default function RankingPage() {
@@ -89,12 +43,12 @@ export default function RankingPage() {
   }
 
   const handleUpdateVotes = async () => {
-    if (!rankings) return
+    if (!rankings || !tempRankings) return
     setEditMode(false)
-    setRankings(tempRankings)
+    setRankings(addLockedProperty(removeAddedProperties(tempRankings)))
     await axiosInstance.post('/flow/ranking', {
       collectionId: null,
-      ranking: JSON.stringify(tempRankings)
+      ranking: JSON.stringify(removeAddedProperties(tempRankings))
     })
   }
 
@@ -152,10 +106,10 @@ export default function RankingPage() {
       <OverallRankingHeader
         editMode={editMode}
         error={error}
-        onBack={handleBack}
-        onDone={() => {
+        onAttest={() => {
           setOpen(true)
         }}
+        onBack={handleBack}
         onEdit={() => {
           setEditMode(!editMode)
         }}

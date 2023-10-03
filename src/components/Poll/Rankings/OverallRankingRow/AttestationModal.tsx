@@ -124,7 +124,7 @@ export const AttestationModal: React.FC<Props> = ({
           <div className="flex w-[80%] items-center">
             <p className="w-16"> 1- </p>
             <p className="w-[75%]">
-              Are you sure you want to attest to the voting result available in
+              Are you sure you want to attest to the ranking result available in
               this page?
             </p>
             <button

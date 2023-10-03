@@ -6,7 +6,7 @@ import { Tick } from '@/components/Icon/Tick'
 import router from 'next/router'
 
 interface Props {
-  onDone: () => void
+  onAttest: () => void
   onEdit: () => void
   onBack: () => void
   editMode: boolean
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const OverallRankingHeader: React.FC<Props> = ({
-  onDone,
+  onAttest,
   onEdit,
   editMode,
   onBack,
@@ -40,7 +40,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
         )}
       </button>
       <h4 className="font-IBM text-2xl font-bold">
-        {editMode ? 'Editing votes' : 'Check All Votes'}
+        {editMode ? 'Editing ranks' : 'Check All Ranks'}
       </h4>
       <div className="flex items-center gap-2">
         {error ? (
@@ -54,20 +54,20 @@ export const OverallRankingHeader: React.FC<Props> = ({
           <button
             className="flex h-14 w-56  items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 text-lg"
             onClick={onUpdate}>
-            Update votes
+            Update ranks
             <Tick color="black" />
           </button>
         ) : (
           <button
             className="flex h-14 w-56  items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 text-lg"
             onClick={onEdit}>
-            Edit votes
+            Edit ranks
             <Shuffle />
           </button>
         )}
         <button
           className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
-          onClick={onDone}>
+          onClick={onAttest}>
           Attest
         </button>
       </div>

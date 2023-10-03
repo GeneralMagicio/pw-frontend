@@ -13,7 +13,7 @@ export const WellDoneModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
         <h3 className="text-3xl font-bold">Well done</h3>
         <p className="text-xl font-bold leading-10">
-          You have taken the first step towards a personalized voting
+          You have taken the first step towards a personalized ranking
           experience. <br/> Thank you for sharing your knowledge!
         </p>
         <div className="mt-4 flex items-center justify-center">
@@ -22,7 +22,7 @@ export const WellDoneModal: React.FC<Props> = ({ isOpen, onClose }) => {
             onClick={() => {
               router.push('/poll/root')
             }}>
-            {'Dive into Strategy'} <ArrowForward className="ml-1" />
+            {'OP allocation'} <ArrowForward className="ml-1" />
           </button>
         </div>
       </div>
