@@ -2,8 +2,6 @@ import { flattenRankingData } from '@/pages/ranking'
 import {
   OverallRankingType,
   EditingOverallRankingType,
-  EditingRank,
-  Rank,
 } from '@/types/Ranking'
 import { toFixedNumber } from '@/utils/helpers'
 import cloneDeep from 'lodash.clonedeep'
@@ -17,20 +15,22 @@ export function removeAddedProperties(
     delete ranking[i].locked
     // @ts-ignore
     delete ranking[i].error
-    if (ranking[i].ranking[0].type === 'project') {
-      for (let j = 0; j < ranking[i].ranking.length; j++) {
+
+    for (let j = 0; j < ranking[i].ranking.length; j++) {
+      if (ranking[i].ranking[j].type === 'project') {
         // @ts-ignore
         delete ranking[i].ranking[j].locked
         // @ts-ignore
         delete ranking[i].ranking[j].error
       }
-    } else
-      ranking[i].ranking = removeAddedProperties(
-        ranking[i].ranking as EditingOverallRankingType[]
-      )
+      else
+        ranking[i].ranking[j] = removeAddedProperties([
+          ranking[i].ranking[j],
+        ] as EditingOverallRankingType[])[0]
+    }
   }
 
-  return ranking
+  return cloneDeep(ranking)
 }
 
 export function addLockedProperty<T extends OverallRankingType[]>(
@@ -49,7 +49,6 @@ export function addLockedProperty<T extends OverallRankingType[]>(
         // @ts-ignore
         ranking[i].ranking[j].error = ranking[i].ranking[j].error ?? false
       }
-      // @ts-ignore
       else
         ranking[i].ranking[j] = addLockedProperty([
           ranking[i].ranking[j],
@@ -72,7 +71,6 @@ export const resetErrorProperty = (
         // @ts-ignore
         ranking[i].ranking[j].error = false
       }
-      // @ts-ignore
       else
         ranking[i].ranking[j] = resetErrorProperty([
           ranking[i].ranking[j],
@@ -90,12 +88,10 @@ export const setErrorProperty = (
   val: boolean
 ): EditingOverallRankingType[] => {
   for (let i = 0; i < ranking.length; i++) {
-    // @ts-ignore
     if (type === 'collection' && ranking[i].id === id) ranking[i].error = val
 
     for (let j = 0; j < ranking[i].ranking.length; j++) {
       if (ranking[i].ranking[j].type === 'project') {
-        // @ts-ignore
         if (type === 'project' && ranking[i].ranking[j].id === id)
           ranking[i].ranking[j].error = val
       } else {
@@ -118,17 +114,19 @@ export const changeProjectLockStatus = (
   const data = cloneDeep(input)
   for (let i = 0; i < data.length; i++) {
     const item = data[i]
-    if (item.ranking[0].type === 'project') {
-      const index = item.ranking.findIndex((el) => el.id === id)
-      if (index !== -1) {
-        item.ranking[index].locked = !item.ranking[index].locked
-        return data
+    for (let j = 0; j < item.ranking.length; j++) {
+      if (item.ranking[j].type === 'project') {
+        // const index = item.ranking.findIndex((el) => el.id === id)
+        if (item.ranking[j].id === id) {
+          item.ranking[j].locked = !item.ranking[j].locked
+          return data
+        }
+      } else {
+        item.ranking[j] = changeProjectLockStatus(
+          [item.ranking[j]] as EditingOverallRankingType[],
+          id
+        )[0]
       }
-    } else {
-      item.ranking = changeProjectLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
     }
   }
 
@@ -141,16 +139,11 @@ export const changeCollectionLockStatus = (
 ): EditingOverallRankingType[] => {
   const data = cloneDeep(input)
   for (let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if (item.id === id) {
-      item.locked = !item.locked
-      return data
-    } else if (item.ranking[0].type !== 'project') {
-      item.ranking = changeCollectionLockStatus(
-        item.ranking as EditingOverallRankingType[],
-        id
-      )
+    if (data[i].id === id && data[i].type === "collection") {
+      data[i].locked = !data[i].locked
     }
+    else if (data[i].type === "collection") 
+      data[i].ranking = changeCollectionLockStatus(data[i].ranking as EditingOverallRankingType[], id)
   }
 
   return data

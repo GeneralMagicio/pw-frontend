@@ -2,7 +2,7 @@ import { getRankings, getCompositeProjectRankings } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
+import { changePercentage } from '@/components/Poll/Rankings/edit-logic/project-editing'
 import {
   validateRanking,
   resetErrorProperty,
@@ -81,13 +81,15 @@ export default function RankingPage() {
               share: 1,
               expanded: true,
               locked: true,
+              type: "collection",
               ranking: data.ranking.map((item) => ({
                 id: item.project.id,
                 share: item.share,
                 name: item.project.name,
+                type: "project",
               })),
             },
-          ])
+          ] as EditingOverallRankingType[])
         )
       }
     }

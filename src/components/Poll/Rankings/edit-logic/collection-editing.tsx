@@ -48,9 +48,7 @@ const multiplyCoeff = (
 
   const totalShare = collection.ranking.reduce((acc, curr) => {
     if (!curr.locked)
-      return (acc +=
-        ((curr as EditingRank).share || 0) +
-        ((curr as EditingOverallRankingType).share || 0))
+      return acc += curr.share
     return (acc += 0)
   }, 0)
 
