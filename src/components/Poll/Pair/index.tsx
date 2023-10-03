@@ -10,12 +10,12 @@ import { useRouter } from 'next/router'
 
 interface PairProps {
   onVote: (pair: PairType | null, voted: VOTES) => void
-  hidden?: boolean
+  // hidden?: boolean
   voted: VOTES
   pair: PairType[]
 }
 
-export const Pair: React.FC<PairProps> = ({ onVote, voted, pair, hidden }) => {
+export const Pair: React.FC<PairProps> = ({ onVote, voted, pair }) => {
   const router = useRouter()
   const [a, b] = pair
   const [hoverdItem, setHoverdItem] = useState<VOTES>(VOTES.NONE)
@@ -28,7 +28,7 @@ export const Pair: React.FC<PairProps> = ({ onVote, voted, pair, hidden }) => {
   return (
     <div
       className={cn(
-        { 'opacity-0': hidden },
+        // { 'opacity-0': hidden },
         'relative transition-opacity items-center z-10 mt-10 flex w-full min-w-max  max-w-screen-2xl shrink-0 justify-between gap-5'
       )}>
       <VoteCard
