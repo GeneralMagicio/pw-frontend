@@ -20,7 +20,7 @@ export const StrategicRanking: React.FC<{data: {name: string, share: number}[], 
     )
 
   return (
-    <div>
+    <div className='max-h-[320px] overflow-x-hidden overflow-y-scroll'>
       {data.map((item, index) => (
         <div
           className={`mx-2 mt-4 ${index === 0 ? 'mt-0' : ''} flex w-full justify-between border-b pb-4`}
