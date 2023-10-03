@@ -48,9 +48,6 @@ export const Header: React.FC<HeaderProps> = ({
       <button
         className={cn(
           ' relative  cursor-pointer flex items-center justify-center gap-2 group  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg group-hover:flex',
-          {
-            'opacity-0': router.query.cid === 'expertise',
-          }
         )}
         disabled={!canFinish}
         onClick={handleFinishVoting}>
