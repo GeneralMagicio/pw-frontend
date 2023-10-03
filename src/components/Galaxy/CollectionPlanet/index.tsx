@@ -32,7 +32,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
           className={`absolute -bottom-1/4  flex items-center gap-2 whitespace-nowrap  rounded-3xl border-6 border-gray-100 bg-white p-2 text-lg text-black opacity-70`}
           onClick={() => {}}
           onMouseEnter={() => setHover(true)}>
-          <span className="font-medium">{name}</span>
+          <span className="max-w-[256px] overflow-hidden text-ellipsis font-medium" title={name}>{name}</span>
           {locked ? <Lock /> : <ArrowForward className="text-black" />}
         </button>
       </>

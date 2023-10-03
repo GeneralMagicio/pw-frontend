@@ -1,30 +1,26 @@
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
 import { useCallback, useEffect, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
 import { SadSun } from '@/components/Icon/SadSun'
-import { fetchCollections, getFlowProgress } from '@/utils/flow'
+import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
 import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
-import { SHOW_HELP_STORAGE_KEY } from '@/utils/contants'
 
 const PLANET_SIZE = 150
-const PROGRESS_BLOCKS = 13
 
 export default function Galaxy() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
-  const [progress, setProgress] = useState(0)
   const [collections, setCollections] = useState<PairType[]>([])
   const [showHelpModal, setShowHelpModal] = useState(false)
   const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
@@ -41,13 +37,6 @@ export default function Galaxy() {
   }, [flowStatus])
 
   useEffect(() => {
-    setTimeout(() => setShowCustomizeModal(false), 6.5 * 1000)
-  }, [])
-
-  useEffect(() => {
-    getFlowProgress()
-      .then(setProgress)
-      .catch((err) => console.log(err))
     fetchCollections()
       .then((data) => setCollections(data))
       .catch((err) => console.log(err))
@@ -68,7 +57,11 @@ export default function Galaxy() {
 
   const handlePlanetClick = (collection: PairType) => () => {
     if (collection.locked) return null
-    if (collection.finished && !collection.hasSubcollections && !collection.hasCompositeProjects)
+    if (
+      collection.finished &&
+      !collection.hasSubcollections &&
+      !collection.hasCompositeProjects
+    )
       return router.push(`/poll/${collection.id}/ranking`)
     if (collection.hasSubcollections || collection.hasCompositeProjects) {
       return router.push(`/galaxy/${collection.id}`)
@@ -78,24 +71,19 @@ export default function Galaxy() {
 
   const checkShowHelpModalCondition = useCallback(() => {
     // This is a workaround until the backend returns a better checkpoint response
-    const onePlanetUnlocked =
-      collections.filter((collection) => !collection.locked).length === 1
-    const onePlanetUnstarted =
-      collections.filter((collection) => !collection.started).length === 1
+    const onePlanetUnlockedUnstarted =
+      collections.filter(
+        (collection) => !collection.locked && !collection.started
+      ).length === 1
+
     const bool =
-      flowStatus.expertise &&
-      flowStatus.impact &&
-      onePlanetUnlocked &&
-      onePlanetUnstarted
+      flowStatus.expertise && flowStatus.impact && onePlanetUnlockedUnstarted
+
     return bool
   }, [collections, flowStatus])
 
   useEffect(() => {
-    const shopHelpStorageValue = localStorage.getItem(SHOW_HELP_STORAGE_KEY)
-    if (!shopHelpStorageValue) {
-      setShowHelpModal(true)
-      localStorage.setItem(SHOW_HELP_STORAGE_KEY, 'shown')
-    }
+    setShowHelpModal(checkShowHelpModalCondition())
   }, [checkShowHelpModalCondition])
 
   useEffect(() => {
@@ -110,16 +98,19 @@ export default function Galaxy() {
     )
       setShowNewSectionsModal(true)
     else setShowNewSectionsModal(false)
-  }, [collections, checkShowHelpModalCondition, flowStatus])
+  }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
   if (
     checkShowHelpModalCondition() &&
     (showCustomizeModal || collections.length === 0)
-  )
+  ) {
+    setTimeout(() => setShowCustomizeModal(false), 3 * 1000)
     return <CustomizeExperienceModal isOpen={true} onClose={() => {}} />
+  }
 
-  if (collections.length === 0 || flowStatus.checkpoint.type === 'initial')
+  if (collections.length === 0 || flowStatus.checkpoint.type === 'initial') {
     return
+  }
 
   return (
     <div className="overflow-hidden">
