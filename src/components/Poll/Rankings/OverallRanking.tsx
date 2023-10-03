@@ -47,7 +47,7 @@ const Rows: React.FC<Props> = ({
         }}
         editMode={editMode}
         expanded={data.expanded || false}
-        onEditChange={onEditChange('collection', data.id)}
+        onEditChange={data.type === "collection" ? onEditChange('collection', data.id) : onEditChange('project', data.id)}
         onLockClick={onLockClick(data.id, 'collection')}>
         {data.ranking.map((item) => {
           if (item.type === "project") {
@@ -87,7 +87,7 @@ const Rows: React.FC<Props> = ({
         }}
         editMode={editMode}
         expanded={data.expanded || false}
-        onEditChange={onEditChange('collection', data.id)}
+        onEditChange={data.type === "collection" ? onEditChange('collection', data.id) : onEditChange('project', data.id)}
         onLockClick={onLockClick(data.id, 'collection')}>
         {data.ranking.map(({ name, id, share, locked, error }) => (
           <OverallRankingRow

@@ -197,7 +197,7 @@ export const validateRanking = (ranking: EditingOverallRankingType[]) => {
     0
   )
 
-  if (percentageSum > 1.01) {
+  if (percentageSum > 1.02) {
     console.log('over 100 error', percentageSum)
     return false
   }

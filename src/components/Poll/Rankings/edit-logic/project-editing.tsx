@@ -1,16 +1,13 @@
-import {
-  EditingOverallRankingType,
-  EditingRank,
-} from '@/types/Ranking'
+import { EditingOverallRankingType, EditingRank } from '@/types/Ranking'
 import cloneDeep from 'lodash.clonedeep'
 import { deltaCalculator } from './utils'
 
 export const changePercentageInList = (
-  list: EditingRank[],
+  list: (EditingRank | EditingOverallRankingType)[],
   itemId: number,
   newValue: number
 ) => {
-  const targetItem = list.find((item) => (item.id === itemId))
+  const targetItem = list.find((item) => item.id === itemId)
 
   if (!targetItem) throw new Error('')
 
@@ -19,18 +16,46 @@ export const changePercentageInList = (
   targetItem.share = newValue
 
   const totalShare = list.reduce((acc, curr) => {
-    if (curr.id !== itemId && !curr.locked) return acc += curr.share
-    else return acc += 0
+    if (curr.id !== itemId && !curr.locked) return (acc += curr.share)
+    else return (acc += 0)
   }, 0)
 
-  return list.map((item) =>
-    !item.locked && item.id !== itemId
-      ? { ...item, share: item.share - deltaCalculator(item.share, totalShare, diff) }
-      : { ...item }
-  )
+  if (targetItem.type === 'composite project') {
+    targetItem.ranking = changeSubProjectPercentages(targetItem.ranking as EditingRank[], diff)
+  }
+
+  return list.map((item) => {
+    if (!item.locked && item.id !== itemId && item.type === 'composite project')
+      return {
+        ...item,
+        share: item.share - deltaCalculator(item.share, totalShare, diff),
+        ranking: changeSubProjectPercentages(
+          item.ranking as EditingRank[],
+          deltaCalculator(item.share, totalShare, diff) * -1
+        ),
+      }
+    else if (!item.locked && item.id !== itemId)
+      return {
+        ...item,
+        share: item.share - deltaCalculator(item.share, totalShare, diff),
+      }
+    else return { ...item }
+  })
 }
 
+const changeSubProjectPercentages = (input: EditingRank[], diff: number) => {
+  let data = cloneDeep(input)
+  const total = data.reduce(
+    (acc, curr) => (acc += !curr.locked ? curr.share : 0),
+    0
+  )
+  data = data.map((item) => ({
+    ...item,
+    share: item.share + deltaCalculator(item.share, total, diff),
+  }))
 
+  return cloneDeep(data)
+}
 
 export const replaceList = (
   collection: EditingOverallRankingType,
@@ -38,7 +63,7 @@ export const replaceList = (
   newValue: number
 ) => {
   const index = collection.ranking.findIndex(
-    (item) => item.type === "project" && item.id === itemId
+    (item) => item.type !== 'collection' && item.id === itemId
   )
 
   if (index === -1) return { ...collection }
@@ -56,19 +81,28 @@ export const changePercentage = (
   value: EditingOverallRankingType[],
   itemId: number,
   newValue: number
-) : EditingOverallRankingType[] => {
-
+): EditingOverallRankingType[] => {
   const ranking = cloneDeep(value)
   for (let i = 0; i < ranking.length; i++) {
     // all are projects
-    if (ranking[i].ranking && ranking[i].ranking.every((el) => el.type === "project") ) {
+    if (
+      ranking[i].ranking &&
+      ranking[i].ranking.every((el) => el.type === 'project')
+    ) {
       ranking[i] = replaceList(ranking[i], itemId, newValue)
     }
-    // all are collections 
-    else if (ranking[i].ranking && ranking[i].ranking.every((el) => el.type === "collection") ) {
-      ranking[i].ranking = changePercentage(ranking[i].ranking as EditingOverallRankingType[], itemId, newValue)
+    // all are collections
+    else if (
+      ranking[i].ranking &&
+      ranking[i].ranking.every((el) => el.type === 'collection')
+    ) {
+      ranking[i].ranking = changePercentage(
+        ranking[i].ranking as EditingOverallRankingType[],
+        itemId,
+        newValue
+      )
     }
-    // some projects and some composite projects 
+    // some projects and some composite projects
     else if (ranking[i]) {
       ranking[i] = replaceList(ranking[i], itemId, newValue)
       // for (let j = 0; j < ranking[i].ranking.length; j++) {
@@ -76,7 +110,6 @@ export const changePercentage = (
       //   else ranking[i].ranking = changePercentage(ranking[i].ranking as EditingOverallRankingType[], itemId, newValue)
       // }
     }
-
   }
 
   return cloneDeep(ranking)
