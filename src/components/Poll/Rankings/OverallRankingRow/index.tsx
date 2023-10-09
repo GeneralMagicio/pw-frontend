@@ -37,7 +37,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
               locked={data.locked}
               onChange={onEditChange}
               onLockClick={onLockClick}
-              value={toFixedNumber(data.share * 100, 3)}
+              value={toFixedNumber(data.share * 100, 4)}
             />
           )}
         </div>
@@ -86,7 +86,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
                 locked={data.locked}
                 onChange={onEditChange}
                 onLockClick={onLockClick}
-                value={toFixedNumber(data.share * 100, 3)}
+                value={toFixedNumber(data.share * 100, 4)}
               />
             )}
           </div>

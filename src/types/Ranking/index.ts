@@ -20,29 +20,3 @@ export type RankingResponse = {
   nextCollection: PairType
   votingPower: number
 }
-
-export type Rank = {
-  type: "project"
-  name: string
-  id: number
-  share: number
-}
-
-export type OverallRankingType = {
-  type: "composite project" | "collection"
-  id: number
-  collectionTitle: string
-  share: number
-  ranking: (OverallRankingType | Rank)[]
-}
-
-export interface EditingRank extends Rank {
-  locked: boolean
-  error: boolean
-}
-export interface EditingOverallRankingType extends OverallRankingType {
-  ranking: (EditingOverallRankingType | EditingRank)[]
-  locked: boolean
-  error: boolean
-  expanded?: boolean
-}

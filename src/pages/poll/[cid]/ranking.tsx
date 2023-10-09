@@ -2,23 +2,24 @@ import { getRankings, getCompositeProjectRankings } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import { changePercentage } from '@/components/Poll/Rankings/edit-logic/project-editing'
+// import { changePercentage } from '@/components/Poll/Rankings/edit-logic/project-editing'
 import {
   validateRanking,
   resetErrorProperty,
   setErrorProperty,
-  addLockedProperty,
-  changeProjectLockStatus,
+  addAdditionalProperties,
+  setLockProperty,
 } from '@/components/Poll/Rankings/edit-logic/utils'
-import { EditingOverallRankingType, RankingResponse } from '@/types/Ranking/index'
+import { RankingResponse } from '@/types/Ranking/index'
 import { useRouter } from 'next/router'
 import { FinishVoteModal } from '@/components/FinishVoteModal'
 import Modal from '@/components/Modal/Modal'
+import { EditingCollectionRanking, editPercentage } from '@/components/Poll/Rankings/edit-logic/edit'
 
 export default function RankingPage() {
-  const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
+  const [rankings, setRankings] = useState<EditingCollectionRanking>()
   const [tempRankings, setTempRankings] =
-    useState<EditingOverallRankingType[]>()
+    useState<EditingCollectionRanking>()
   const [editMode, setEditMode] = useState(false)
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(false)
@@ -43,54 +44,47 @@ export default function RankingPage() {
   }
 
   const edit =
-    (data: EditingOverallRankingType[]) =>
-    (type: 'project' | 'collection', id: number) =>
+    (data: EditingCollectionRanking) =>
+    (id: number) =>
     (newValue: number) => {
-      if (type === 'project') {
-        const newRanking = changePercentage(data, id, newValue)
-        if (validateRanking(newRanking)) {
-          setError(false)
-          setTempRankings(resetErrorProperty(newRanking))
-        } else {
-          setError(true)
-          setTempRankings(setErrorProperty(data, 'project', id, true))
-        }
+      // if (type === 'project') {
+      const newRanking = editPercentage(data, id, newValue)
+      if (validateRanking(newRanking)) {
+        setError(false)
+        setTempRankings(resetErrorProperty(newRanking))
+      } else {
+        setError(true)
+        setTempRankings(setErrorProperty(data, id))
       }
     }
 
+  // const obj = 
+
   const changeLockStatus =
-    (data: EditingOverallRankingType[]) =>
-    (id: number, type: 'project' | 'collection') =>
+    (data: EditingCollectionRanking) =>
+    (id: number) =>
     () => {
-      if (type === 'project') {
-        setTempRankings(changeProjectLockStatus(data, id))
-      }
+      setTempRankings(setLockProperty(data, id))
     }
 
   useEffect(() => {
     const main = async () => {
       if (router.query.cid) {
-        let data : RankingResponse;
-        if (type === "super")  data = await getCompositeProjectRankings(String(router.query.cid))
-        else data = await getRankings(String(router.query.cid))
-        setRankings(
-          addLockedProperty([
-            {
-              collectionTitle: data.collectionTitle,
-              id: 50,
-              share: data.votingPower,
-              expanded: true,
-              locked: true,
-              type: "collection",
-              ranking: data.ranking.map((item) => ({
-                id: item.project.id,
-                share: item.share,
-                name: item.project.name,
-                type: "project",
-              })),
-            },
-          ] as EditingOverallRankingType[])
-        )
+        const data = await getRankings(String(router.query.cid))
+        setRankings({
+          collectionTitle: data.collectionTitle,
+          id: 50,
+          share: data.votingPower,
+          expanded: true,
+          locked: true,
+          type: "collection",
+          ranking: data.ranking.map((item) => ({
+            id: item.project.id,
+            share: item.share,
+            name: item.project.name,
+            type: "project",
+          }))
+        } as EditingCollectionRanking)
       }
     }
     main()

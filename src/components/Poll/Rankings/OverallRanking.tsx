@@ -1,30 +1,26 @@
-import {
-  EditingOverallRankingType,
-  EditingRank,
-} from '@/types/Ranking/index'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
-// import { isEditingRank } from './edit-logic/utils'
+import { EditingCollectionRanking, EditingProjectRanking } from './edit-logic/edit'
+// import { isEditingProjectRanking } from './edit-logic/utils'
 
 interface RankingsProps {
-  data: EditingOverallRankingType[]
+  data: EditingCollectionRanking
   editMode: boolean
   edit: Props['onEditChange']
   changeLockStatus: Props['onLockClick']
 }
 
-export const hasNoSubcollections = (
-  input: (EditingOverallRankingType | EditingRank)[]
-) : input is EditingRank[] => {
-  return !input.some((el) => 'share' in el)
-}
+// export const hasNoSubcollections = (
+//   input: (EditingCollectionRanking | EditingProjectRanking)[]
+// ) : input is EditingProjectRanking[] => {
+//   return !input.some((el) => 'share' in el)
+// }
 
 interface Props {
-  data: EditingOverallRankingType
+  data: EditingCollectionRanking
   children?: React.ReactNode
   editMode: boolean
-  onLockClick: (id: number, type: 'project' | 'collection') => () => void
+  onLockClick: (id: number) => () => void
   onEditChange: (
-    type: 'project' | 'collection',
     id: number
   ) => (newValue: number) => void
 }
@@ -34,8 +30,7 @@ const Rows: React.FC<Props> = ({
   onEditChange,
   onLockClick,
   editMode,
-}): any => {
-  if (!hasNoSubcollections(data.ranking)) {
+}) => {
     return (
       <OverallRankingHeader
         data={{
@@ -47,8 +42,8 @@ const Rows: React.FC<Props> = ({
         }}
         editMode={editMode}
         expanded={data.expanded || false}
-        onEditChange={data.type === "collection" ? onEditChange('collection', data.id) : onEditChange('project', data.id)}
-        onLockClick={onLockClick(data.id, 'collection')}>
+        onEditChange={onEditChange(data.id)}
+        onLockClick={onLockClick(data.id)}>
         {data.ranking.map((item) => {
           if (item.type === "project") {
             return (
@@ -56,8 +51,8 @@ const Rows: React.FC<Props> = ({
                 data={{ name: item.name, share: item.share, id: item.id, locked: item.locked, error: item.error }}
                 editMode={editMode}
                 key={item.id}
-                onEditChange={onEditChange('project', item.id)}
-                onLockClick={onLockClick(item.id, 'project')}
+                onEditChange={onEditChange(item.id)}
+                onLockClick={onLockClick(item.id)}
               />
             )
           } else
@@ -73,34 +68,6 @@ const Rows: React.FC<Props> = ({
         })}
       </OverallRankingHeader>
     )
-  }
-
-  return (
-    <>
-      <OverallRankingHeader
-        data={{
-          id: data.id,
-          name: data.collectionTitle,
-          share: data.share,
-          locked: data.locked,
-          error: data.error,
-        }}
-        editMode={editMode}
-        expanded={data.expanded || false}
-        onEditChange={data.type === "collection" ? onEditChange('collection', data.id) : onEditChange('project', data.id)}
-        onLockClick={onLockClick(data.id, 'collection')}>
-        {data.ranking.map(({ name, id, share, locked, error }) => (
-          <OverallRankingRow
-            data={{ name, share, id, locked, error }}
-            editMode={editMode}
-            key={id}
-            onEditChange={onEditChange('project', id)}
-            onLockClick={onLockClick(id, 'project')}
-          />
-        ))}
-      </OverallRankingHeader>
-    </>
-  )
 }
 
 export const OverallRanking: React.FC<RankingsProps> = ({
@@ -116,8 +83,15 @@ export const OverallRanking: React.FC<RankingsProps> = ({
         <span className=" w-40 text-sm">{`Budget Allocation`}</span>
         <span className="w-[215px]  text-sm">OP Received</span>
       </div>
-      {data.map((ranking) => (
-        <Rows
+      {/* <Rows
+        data={data}
+        editMode={editMode}
+        key={data.id}
+        onEditChange={edit}
+        onLockClick={changeLockStatus}
+      /> */}
+      {data.ranking.map((ranking) => (
+        ranking.type !== "project" && <Rows
           data={ranking}
           editMode={editMode}
           key={ranking.id}

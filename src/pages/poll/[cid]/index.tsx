@@ -7,10 +7,8 @@ import { Footer } from '@/components/Poll/Pair/Footer/Footer'
 import {
   fetchPairs,
   fetchSubProjectPairs,
-  voteColletions,
   voteExpertise,
   voteProjects,
-  voteSubProjects,
 } from '@/utils/poll'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
@@ -67,20 +65,26 @@ export default function Poll() {
   }, [router.query.cid])
 
   useEffect(() => {
-    if (pairs?.type === 'collection') {
-      setActiveQuestion(
-        'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
-      )
-    } else if (pairs?.type === 'expertise') {
+    // if (pairs?.type === 'collection') {
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
+    //   )
+    // } else if (pairs?.type === 'expertise') {
+    //   setActiveQuestion('What area do you feel most confident discussing?')
+    // } else if (pairs?.type === 'project')
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    //   )
+    // else if (pairs?.type === 'sub project')
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    //   )
+    if (pairs?.type === 'expertise') {
       setActiveQuestion('What area do you feel most confident discussing?')
-    } else if (pairs?.type === 'project')
-      setActiveQuestion(
-        'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-      )
-    else if (pairs?.type === 'sub project')
-      setActiveQuestion(
-        'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-      )
+    }
+    else setActiveQuestion(
+      'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    )
   }, [pairs])
 
   useEffect(() => {
@@ -93,13 +97,7 @@ export default function Poll() {
     if (!pairs) return 
 
     const [a, b] = pair
-    const voteRequestsMap = {
-      collection: voteColletions,
-      project: voteProjects,
-      expertise: voteExpertise,
-      ['sub project']: voteSubProjects,
-    }
-    const voteRequest = voteRequestsMap[pairs?.type]
+    const voteRequest = pairs?.type === "expertise" ? voteExpertise : voteProjects
     await voteRequest({
       id1: a.id,
       id2: b.id,
