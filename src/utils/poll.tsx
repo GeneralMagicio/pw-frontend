@@ -88,6 +88,7 @@ export async function getOverallRanking() : Promise<CollectionRanking> {
     ranking: data,
     share: 1,
     type: "collection",
+    hasRanking: true,
   }
   // return data
 }

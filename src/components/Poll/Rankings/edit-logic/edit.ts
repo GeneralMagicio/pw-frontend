@@ -2,6 +2,7 @@ import cloneDeep from 'lodash.clonedeep'
 
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
+  hasRanking: true,
   id: number
   name: string
   share: number
@@ -9,7 +10,8 @@ export interface CollectionRanking {
 }
 
 export interface ProjectRanking {
-  type: 'project'
+  type: 'project' | 'collection' | 'composite project'
+  hasRanking: false,
   id: number
   share: number
   name: string
@@ -54,7 +56,7 @@ const ripplePercentage = (
       row.share += delta
     } else if (row.type === 'project' && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
-    } else if (row.type !== 'project' && !row.locked && row.id !== changedId) {
+    } else if (row.type !== 'project' && row.hasRanking && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
       row.ranking = ripplePercentage(row.ranking, changedId, shareOfDelta)
     }
@@ -90,7 +92,7 @@ export const editPercentage = (
       // @ts-ignore
       overallRanking.ranking[i].ranking = ripplePercentage(row.ranking, id, -1 * delta)
       return overallRanking
-    } else if (row.type !== 'project' && !row.locked) {
+    } else if (row.type !== 'project' && row.hasRanking && !row.locked) {
       overallRanking.ranking[i] = editPercentage(row, id, newValue)
     }
     

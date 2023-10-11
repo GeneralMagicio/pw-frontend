@@ -44,7 +44,7 @@ export function addAdditionalProperties<T extends CollectionRanking>(
       row.locked = row.locked ?? false
       // @ts-ignore
       row.error = row.error ?? false
-    } else {
+    } else if (row.hasRanking) {
       data.ranking[i] = addAdditionalProperties(row)
     }
   }
@@ -62,7 +62,7 @@ export function resetErrorProperty(
 
     if (row.type === "project") {
       row.error = false
-    } else {
+    } else if (row.hasRanking) {
       data.ranking[i] = resetErrorProperty(row)
     }
   }
@@ -85,7 +85,7 @@ export function setErrorProperty(
     if (row.id === id) {
       // row.locked = false
       row.error = !row.error
-    } else if (row.type !== "project") {
+    } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setErrorProperty(row, id)
     }
   }
@@ -111,7 +111,7 @@ export function setLockProperty(
       console.log
       // row.locked = false
       row.locked = !row.locked
-    } else if (row.type !== "project") {
+    } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setLockProperty(row, id)
     }
   }
@@ -127,7 +127,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
     if (row.share < 0 || row.share > 100) {console.log(row); return false}
     else acc += row.share
 
-    if (row.type !== "project" && !validateRanking(row)) return false;
+    if (row.type !== "project" && row.hasRanking && !validateRanking(row)) return false;
 
     if (acc !== max) {console.log(row); return false}
 

@@ -57,7 +57,7 @@ const Rows: React.FC<Props> = ({
               onLockClick={onLockClick(item.id)}
             />
           )
-        } else
+        } else if (item.hasRanking)
           return (
             <Rows
               data={item}
@@ -93,7 +93,7 @@ export const OverallRanking: React.FC<RankingsProps> = ({
         onLockClick={changeLockStatus}
       /> */}
       {data.ranking.map((ranking) => {
-        if (ranking.type !== 'project')
+        if (ranking.type !== 'project' && ranking.hasRanking)
           return (
             <Rows
               data={ranking}
