@@ -11,15 +11,15 @@ import {
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
 import { Close } from '@/components/Icon/Close'
-import { Rank } from '@/types/Ranking'
+import { ProjectRanking } from '../edit-logic/edit'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: Rank[]
+  ranking: ProjectRanking[]
 }
 
-type AttestItem = Pick<Rank, 'name' | 'share'>
+type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
 
 export const AttestationModal: React.FC<Props> = ({
   isOpen,

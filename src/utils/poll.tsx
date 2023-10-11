@@ -1,7 +1,8 @@
 import { User } from '@/types/user/User'
 import { axiosInstance } from './axiosInstance'
 import { PairsType, PollType } from '@/types/Pairs'
-import { OverallRankingType, RankingResponse } from '@/types/Ranking/index'
+import { RankingResponse } from '@/types/Ranking/index'
+import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 
 export async function fetchPairs(cid?: string) {
   const url =
@@ -44,42 +45,6 @@ export async function voteProjects({
     .then((res) => res.data)
 }
 
-export async function voteSubProjects({
-  id1,
-  id2,
-  pickedId,
-}: {
-  id1: number
-  id2: number
-  pickedId: number | null
-}) {
-  return axiosInstance
-    .post('/flow/subprojects/vote', {
-      project1Id: id1,
-      project2Id: id2,
-      pickedId,
-    })
-    .then((res) => res.data)
-}
-
-export async function voteColletions({
-  id1,
-  id2,
-  pickedId,
-}: {
-  id1: number
-  id2: number
-  pickedId: number | null
-}) {
-  return axiosInstance
-    .post('/flow/collections/vote', {
-      collection1Id: id1,
-      collection2Id: id2,
-      pickedId,
-    })
-    .then((res) => res.data)
-}
-
 export async function voteExpertise({
   id1,
   id2,
@@ -99,7 +64,7 @@ export async function voteExpertise({
 }
 export async function getRankings(cid?: string) {
   return axiosInstance
-    .get<RankingResponse>(`/flow/ranking`, {
+    .get<CollectionRanking>(`/flow/ranking`, {
       params: { cid: cid === 'root' ? null : cid },
     })
     .then((res) => res.data)
@@ -113,11 +78,19 @@ export async function getCompositeProjectRankings(pid: string) {
     .then((res) => res.data)
 }
 
-export async function getOverallRanking() {
-  const {data} = await axiosInstance.get<OverallRankingType[]>(
+export async function getOverallRanking() : Promise<CollectionRanking> {
+  const {data} = await axiosInstance.get<CollectionRanking[]>(
     `/flow/ranking/overall`
   )
-  return data
+  return {
+    id: -1,
+    name: "root",
+    ranking: data,
+    share: 1,
+    type: "collection",
+    hasRanking: true,
+  }
+  // return data
 }
 
 export async function getLastTimestamp() {

@@ -14,35 +14,6 @@ export interface RankingItem {
 
 export type RankingsType = RankingItem[]
 
-export type RankingResponse = {
-  collectionTitle: string
-  ranking: RankingsType
-  nextCollection: PairType
-  votingPower: number
-}
+export type ProjectType = "collection" | "project" | "composite project"
 
-export type Rank = {
-  type: "project"
-  name: string
-  id: number
-  share: number
-}
-
-export type OverallRankingType = {
-  type: "composite project" | "collection"
-  id: number
-  collectionTitle: string
-  share: number
-  ranking: (OverallRankingType | Rank)[]
-}
-
-export interface EditingRank extends Rank {
-  locked: boolean
-  error: boolean
-}
-export interface EditingOverallRankingType extends OverallRankingType {
-  ranking: (EditingOverallRankingType | EditingRank)[]
-  locked: boolean
-  error: boolean
-  expanded?: boolean
-}
+export type RankingResponse = {name: string, ranking: RankingItem[]}
