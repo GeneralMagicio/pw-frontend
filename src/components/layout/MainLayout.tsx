@@ -1,10 +1,5 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { Header } from './Header'
-import { login } from '@/utils/auth'
-import { axiosInstance } from '@/utils/axiosInstance'
-import axios, { AxiosError } from 'axios'
-import { useAccount, useNetwork, useSignMessage } from 'wagmi'
-import { Grid } from '../Icon/Grid'
 import cn from 'classnames'
 
 interface MainLayoutProps {

@@ -6,6 +6,8 @@ import { Web3Provider } from '@/providers/Web3'
 import localFont from 'next/font/local'
 import cn from 'classnames'
 import { SessionProvider } from '@/context/session'
+import { useLayoutEffect } from 'react'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 const IBMFont = localFont({
   src: [
@@ -49,6 +51,14 @@ const InterFont = localFont({
 })
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  useLayoutEffect(() => {
+    const token = window.localStorage.getItem('auth')
+    if(token) {
+      axiosInstance.defaults.headers.common['auth'] = `${token}`;
+    }
+  }, []);
+
   return (
     <>
     <div className={cn(IBMFont.variable, InterFont.variable)} id='font-container'>
