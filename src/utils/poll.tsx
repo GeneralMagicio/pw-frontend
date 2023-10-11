@@ -64,7 +64,7 @@ export async function voteExpertise({
 }
 export async function getRankings(cid?: string) {
   return axiosInstance
-    .get<RankingResponse>(`/flow/ranking`, {
+    .get<CollectionRanking>(`/flow/ranking`, {
       params: { cid: cid === 'root' ? null : cid },
     })
     .then((res) => res.data)
@@ -84,7 +84,7 @@ export async function getOverallRanking() : Promise<CollectionRanking> {
   )
   return {
     id: -1,
-    collectionTitle: "root",
+    name: "root",
     ranking: data,
     share: 1,
     type: "collection",

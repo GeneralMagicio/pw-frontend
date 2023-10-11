@@ -1,5 +1,6 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
+import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 import { ExpertiseChart } from '@/components/Profile/RadarChart'
 import { StrategicRanking } from '@/components/Profile/StrategicRanking'
 import { FlowStatus } from '@/types/Flow'
@@ -13,14 +14,14 @@ const convertToRadarChartFormat = (data: RankingResponse) => {
   return data.ranking.map(({share, project}) => ({share, name: project.name})) 
 }
 
-const convertToStrategicRankingFormat = (data: RankingResponse) => {
-  return data.ranking.map(({share, project}) => ({share, name: project.name})) 
+const convertToStrategicRankingFormat = (data: CollectionRanking) => {
+  return data.ranking.map(({share, name}) => ({share, name})) 
 }
 
 export default function Profile() {
 
   const [expertiseRanking, setExpertiseRanking] = useState<RankingResponse>()
-  const [impactRanking, setImpactRanking] = useState<RankingResponse>()
+  const [impactRanking, setImpactRanking] = useState<CollectionRanking>()
   const [status, setStatus] = useState<FlowStatus>()
 
   useEffect(() => {

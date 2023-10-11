@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep'
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
   id: number
-  collectionTitle: string
+  name: string
   share: number
   ranking: (CollectionRanking | ProjectRanking)[]
 }
@@ -51,7 +51,6 @@ const ripplePercentage = (
     let row = data[i]
     const shareOfDelta = deltaCalculator(row.share, totalShare, delta)
     if (!row.locked && row.id === changedId) {
-      console.log("Even reached here?")
       row.share += delta
     } else if (row.type === 'project' && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
@@ -69,25 +68,20 @@ export const editPercentage = (
   id: number,
   newValue: number
 ) => {
-  console.log("ep called")
   const overallRanking = cloneDeep(data)
 
   for (let i = 0; i < overallRanking.ranking.length; i++) {
     let row = overallRanking.ranking[i]
     if (row.type === 'project' && row.id === id && !row.locked) {
-      console.log('found it', row)
       const delta = newValue - row.share
       overallRanking.ranking = ripplePercentage(
         overallRanking.ranking,
         id,
         delta,
       )
-
-      console.log("new orr:", overallRanking.ranking)
       return overallRanking
     } else if (row.id === id && row.type !== 'project' && !row.locked) {
       const delta = newValue - row.share
-      console.log('Delta is:', delta)
       overallRanking.ranking = ripplePercentage(
         overallRanking.ranking,
         id,
@@ -97,15 +91,9 @@ export const editPercentage = (
       overallRanking.ranking[i].ranking = ripplePercentage(row.ranking, id, -1 * delta)
       return overallRanking
     } else if (row.type !== 'project' && !row.locked) {
-      console.log("Here 3")
       overallRanking.ranking[i] = editPercentage(row, id, newValue)
-      // row = editPercentage(row, id, newValue)
     }
     
-    console.log("Here 4")
-    // } else if (row.id === id) {
-    //   overallRanking
-    // }
   }
   return overallRanking
 }

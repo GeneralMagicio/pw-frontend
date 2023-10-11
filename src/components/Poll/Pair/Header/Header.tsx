@@ -11,7 +11,7 @@ interface HeaderProps {
   handleFinishVoting: () => void
   total: number
   threshold: number
-  collectionTitle: string
+  name: string
   voted?: number
   canFinish?: boolean
 }
@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   voted = 0,
   canFinish,
   threshold,
-  collectionTitle,
+  name,
 }) => {
   const router = useRouter()
   const progressPercentage = total ? Math.max((voted / total) * 100, 4) : 4
@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
         {!canFinish && (
           <div className="b-whi absolute -bottom-[230%] left-1/2 top-16 hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-[15px] leading-6 backdrop-blur-sm group-hover:block">
             To wrap up your{' '}
-            <span className="font-bold">{`${collectionTitle} `}</span>
+            <span className="font-bold">{`${name} `}</span>
             ranking, you need to make at least{' '}
             <span className="font-bold">{minVotesToUnlock}</span> Pairwise
             votes.

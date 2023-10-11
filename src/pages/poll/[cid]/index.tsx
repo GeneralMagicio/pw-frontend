@@ -115,8 +115,8 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
-        collectionTitle={pairs?.collectionTitle || ''}
         handleFinishVoting={goToRanking}
+        name={pairs?.name || ''}
         question={activeQuestion}
         threshold={pairs?.threshold || 0}
         total={pairs?.totalPairs || 0}
@@ -142,8 +142,8 @@ export default function Poll() {
         onBack={() => router.back()}
         // The condition checks for top-level collections pairwises
         text={
-          pairs?.pairs[0][0].collection_id !== null && pairs?.collectionTitle
-            ? `Evaluating ${pairs.collectionTitle}`
+          pairs?.pairs[0][0].collection_id !== null && pairs?.name
+            ? `Evaluating ${pairs.name}`
             : ''
         }
       />

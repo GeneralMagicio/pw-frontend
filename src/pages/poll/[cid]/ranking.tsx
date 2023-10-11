@@ -9,12 +9,13 @@ import {
   setErrorProperty,
   addAdditionalProperties,
   setLockProperty,
+  removeAdditionalProperties,
 } from '@/components/Poll/Rankings/edit-logic/utils'
-import { RankingResponse } from '@/types/Ranking/index'
 import { useRouter } from 'next/router'
 import { FinishVoteModal } from '@/components/FinishVoteModal'
 import Modal from '@/components/Modal/Modal'
 import { EditingCollectionRanking, editPercentage } from '@/components/Poll/Rankings/edit-logic/edit'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 export default function RankingPage() {
   const [rankings, setRankings] = useState<EditingCollectionRanking>()
@@ -35,12 +36,12 @@ export default function RankingPage() {
   }
 
   const handleUpdateVotes = async () => {
-    if (!rankings) return
+    if (!rankings || !tempRankings) return
     setEditMode(false)
     setRankings(tempRankings)
-    //   collectionId: rankings[0].id,
-    //   ranking: JSON.stringify(tempRankings),
-    // })
+    await axiosInstance.post('/flow/ranking', {
+      shares: removeAdditionalProperties(tempRankings),
+    })
   }
 
   const edit =
@@ -71,20 +72,9 @@ export default function RankingPage() {
     const main = async () => {
       if (router.query.cid) {
         const data = await getRankings(String(router.query.cid))
-        setRankings({
-          collectionTitle: data.collectionTitle,
-          id: 50,
-          share: data.votingPower,
-          expanded: true,
-          locked: true,
-          type: "collection",
-          ranking: data.ranking.map((item) => ({
-            id: item.project.id,
-            share: item.share,
-            name: item.project.name,
-            type: "project",
-          }))
-        } as EditingCollectionRanking)
+        console.log("data:", data)
+        // console.log("data.ranking:", data.)
+        setRankings(addAdditionalProperties(data))
       }
     }
     main()

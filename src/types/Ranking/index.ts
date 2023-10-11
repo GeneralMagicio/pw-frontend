@@ -14,9 +14,6 @@ export interface RankingItem {
 
 export type RankingsType = RankingItem[]
 
-export type RankingResponse = {
-  collectionTitle: string
-  ranking: RankingsType
-  nextCollection: PairType
-  votingPower: number
-}
+export type ProjectType = "collection" | "project" | "composite project"
+
+export type RankingResponse = {name: string, ranking: RankingItem[]}

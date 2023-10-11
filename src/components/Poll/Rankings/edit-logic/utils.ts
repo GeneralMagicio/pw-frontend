@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep'
-import { CollectionRanking, EditingCollectionRanking } from './edit'
+import { CollectionRanking, EditingCollectionRanking, ProjectRanking } from './edit'
 
 export function removeAdditionalProperties(
   input: EditingCollectionRanking
@@ -56,20 +56,18 @@ export function resetErrorProperty(
   input: EditingCollectionRanking
 ): EditingCollectionRanking {
   const data = cloneDeep(input)
-  data.locked = false
   data.error = false
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
     if (row.type === "project") {
-      row.locked = false
       row.error = false
     } else {
       data.ranking[i] = resetErrorProperty(row)
     }
   }
 
-  return input
+  return data
 }
 
 export function setErrorProperty(

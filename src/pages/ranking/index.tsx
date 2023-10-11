@@ -49,8 +49,7 @@ export default function RankingPage() {
     setEditMode(false)
     setRankings(addAdditionalProperties(removeAdditionalProperties(tempRankings)))
     await axiosInstance.post('/flow/ranking', {
-      collectionId: null,
-      ranking: JSON.stringify(removeAdditionalProperties(tempRankings)),
+      shares: removeAdditionalProperties(tempRankings),
     })
   }
 
@@ -61,7 +60,6 @@ export default function RankingPage() {
       const newRanking = editPercentage(data, id, newValue)
       if (validateRanking(newRanking)) {
         setError(false)
-        console.log("nr:", newRanking)
         setTempRankings(resetErrorProperty(newRanking))
       } else {
         setError(true)
@@ -75,14 +73,9 @@ export default function RankingPage() {
     }
   
   useEffect(() => {
-    console.log("tr:", tempRankings)
-  }, [tempRankings])
-
-  useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
       data.ranking.sort((a, b) => b.share - a.share)
-      console.log("with additinal:", addAdditionalProperties(data))
       setRankings(addAdditionalProperties(data))
     }
     main()
