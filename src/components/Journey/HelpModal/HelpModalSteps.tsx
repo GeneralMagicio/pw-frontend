@@ -15,7 +15,7 @@ export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
       <p className="self-start text-2xl font-bold"> Unlock, Engage, Impact </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          {`We've curated two exclusive collections for you to unlock, tailored to your expertise and OP allocation.
+          {`We've curated an exclusive collection for you to unlock, tailored to your expertise.
           This personalized approach ensures a more targeted and effective voting experience right from the beginning.`}
         </p>
         <img

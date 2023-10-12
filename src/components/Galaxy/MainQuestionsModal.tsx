@@ -23,7 +23,11 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
           Answer two brief queries to fuel your personalized voting adventure. Ready to launch?
           </p>
           <div className='mt-4 flex items-center justify-between'>
-            <p className='cursor-pointer text-sm font-medium' onClick={() => setStep(1)}> Show me the mechanics! </p>
+            <button
+              className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm font-medium text-white"
+              onClick={() => setStep(1)}>
+              {"Guide me through!"}
+            </button>
             <button
               className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
               onClick={() => {
