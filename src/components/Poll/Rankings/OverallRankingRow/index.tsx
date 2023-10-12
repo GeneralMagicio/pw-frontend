@@ -5,7 +5,10 @@ import React, { useState } from 'react'
 import { useCollapse } from 'react-collapsed'
 import { EditTextField } from '../EditTextField'
 import { toFixedNumber } from '@/utils/helpers'
-import { EditingCollectionRanking, EditingProjectRanking } from '../edit-logic/edit'
+import {
+  EditingCollectionRanking,
+  EditingProjectRanking,
+} from '../edit-logic/edit'
 import { Lock } from '@/components/Icon/Lock'
 
 interface RankingProps {
@@ -23,7 +26,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-    className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
+      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
       <span className="grow">{data.name}</span>
       <span className="flex w-52 items-center justify-center">
         <div className="flex h-[24px] items-center">
@@ -45,7 +48,9 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         </div>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">{(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}</span>
+        <span className="">
+          {(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}
+        </span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
       <span className="w-12"></span>
@@ -53,10 +58,10 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
   )
 }
 
-interface HeaderProps extends Omit<RankingProps, "data"> {
+interface HeaderProps extends Omit<RankingProps, 'data'> {
   data: EditingCollectionRanking
   children: React.ReactNode
-  expanded?: boolean,
+  expanded?: boolean
 }
 
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
@@ -100,11 +105,19 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span
           {...getToggleProps({
-            onClick: () => data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
+            onClick: () =>
+              data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
           })}
-          className="flex h-6 w-12 items-center justify-center"
-          >
-          {!data.isFinished ? <Lock/> : isExpanded ? <CaretUp /> : <CaretDown />}
+          className="flex h-6 w-12 items-center justify-center">
+          {!data.isFinished ? (
+            <span title="You have not voted in this collection yet">
+              <Lock />
+            </span>
+          ) : isExpanded ? (
+            <CaretUp />
+          ) : (
+            <CaretDown />
+          )}
         </span>
       </div>
       <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>

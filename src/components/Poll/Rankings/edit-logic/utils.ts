@@ -38,10 +38,9 @@ export function addAdditionalProperties<T extends CollectionRanking>(
   data.error = data.error ?? false
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
-
+    // @ts-ignore
+    row.locked = (row.locked || !data.isFinished) ?? false
     if (row.type === "project") {
-      // @ts-ignore
-      row.locked = row.locked ?? false
       // @ts-ignore
       row.error = row.error ?? false
     } else if (row.hasRanking) {
