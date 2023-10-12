@@ -5,9 +5,11 @@ import React, { useState } from 'react'
 import { useCollapse } from 'react-collapsed'
 import { EditTextField } from '../EditTextField'
 import { toFixedNumber } from '@/utils/helpers'
+import { EditingCollectionRanking, EditingProjectRanking } from '../edit-logic/edit'
+import { Lock } from '@/components/Icon/Lock'
 
 interface RankingProps {
-  data: { id: number | string; name: string; share: number; locked: boolean, error: boolean }
+  data: EditingProjectRanking
   onEditChange: (value: number) => void
   onLockClick: () => void
   editMode: boolean
@@ -21,7 +23,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
+    className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
       <span className="grow">{data.name}</span>
       <span className="flex w-52 items-center justify-center">
         <div className="flex h-[24px] items-center">
@@ -51,7 +53,8 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
   )
 }
 
-interface HeaderProps extends RankingProps {
+interface HeaderProps extends Omit<RankingProps, "data"> {
+  data: EditingCollectionRanking
   children: React.ReactNode
   expanded?: boolean,
 }
@@ -97,11 +100,11 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span
           {...getToggleProps({
-            onClick: () => setExpanded((prevExpanded) => !prevExpanded),
+            onClick: () => data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
           })}
           className="flex h-6 w-12 items-center justify-center"
           >
-          {isExpanded ? <CaretUp /> : <CaretDown />}
+          {!data.isFinished ? <Lock/> : isExpanded ? <CaretUp /> : <CaretDown />}
         </span>
       </div>
       <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>

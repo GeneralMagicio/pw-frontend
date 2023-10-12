@@ -87,6 +87,7 @@ export async function getOverallRanking() : Promise<CollectionRanking> {
     name: "root",
     ranking: data,
     share: 1,
+    isFinished: true,
     type: "collection",
     hasRanking: true,
   }

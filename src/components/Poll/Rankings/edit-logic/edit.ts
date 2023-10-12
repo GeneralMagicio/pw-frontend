@@ -3,6 +3,7 @@ import cloneDeep from 'lodash.clonedeep'
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
   hasRanking: true,
+  isFinished: boolean
   id: number
   name: string
   share: number

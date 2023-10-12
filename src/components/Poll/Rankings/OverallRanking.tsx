@@ -29,13 +29,7 @@ const Rows: React.FC<Props> = ({
 }) => {
   return (
     <OverallRankingHeader
-      data={{
-        id: data.id,
-        name: data.name,
-        share: data.share,
-        locked: data.locked,
-        error: data.error,
-      }}
+      data={data}
       editMode={editMode}
       expanded={data.expanded || false}
       onEditChange={onEditChange(data.id)}
@@ -44,13 +38,7 @@ const Rows: React.FC<Props> = ({
         if (item.type === 'project') {
           return (
             <OverallRankingRow
-              data={{
-                name: item.name,
-                share: item.share,
-                id: item.id,
-                locked: item.locked,
-                error: item.error,
-              }}
+              data={item}
               editMode={editMode}
               key={item.id}
               onEditChange={onEditChange(item.id)}
@@ -107,13 +95,7 @@ export const OverallRanking: React.FC<RankingsProps> = ({
           return (
             <div className='w-full'>
               <OverallRankingRow
-                data={{
-                  name: ranking.name,
-                  share: ranking.share,
-                  id: ranking.id,
-                  locked: ranking.locked,
-                  error: ranking.error,
-                }}
+                data={ranking}
                 editMode={editMode}
                 key={ranking.id}
                 onEditChange={edit(ranking.id)}
