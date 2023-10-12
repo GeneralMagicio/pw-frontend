@@ -25,16 +25,21 @@ export default function Galaxy() {
   const [showHelpModal, setShowHelpModal] = useState(false)
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   const [showCustomizeModal, setShowCustomizeModal] = useState(true)
-  const { flowStatus } = useSession()
+  const { flowStatus, updateFlowStatus } = useSession()
 
   useEffect(() => {
-    if (
-      (!flowStatus.impact || !flowStatus.expertise) &&
-      flowStatus.checkpoint.type !== 'initial'
-    ) {
-      setOpen(true)
+    const func = async () => {
+      const status = await updateFlowStatus()
+      if (
+        (!status.impact || !status.expertise) &&
+        status.checkpoint.type !== 'initial'
+      ) {
+        setOpen(true)
+      }
     }
-  }, [flowStatus])
+
+    func()
+  }, [updateFlowStatus])
 
   useEffect(() => {
     fetchCollections()

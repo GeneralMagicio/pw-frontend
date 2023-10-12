@@ -11,7 +11,7 @@ import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 interface Session {
   user: string | null
   flowStatus: FlowStatus
-  updateFlowStatus: () => Promise<unknown>
+  updateFlowStatus: () => Promise<FlowStatus>
 }
 
 const INITIAL_FLOW: FlowStatus = {
@@ -25,7 +25,7 @@ const INITIAL_FLOW: FlowStatus = {
 const SESSION: Session = {
   user: null,
   flowStatus: INITIAL_FLOW,
-  async updateFlowStatus() {},
+  async updateFlowStatus() {return INITIAL_FLOW},
 }
 export const SessionContext = React.createContext<Session>(SESSION)
 
@@ -39,6 +39,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     async updateFlowStatus() {
       const status = await getFlowStatus()
       setSession((s) => ({ ...s, flowStatus: status }))
+      return status
     },
   })
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)

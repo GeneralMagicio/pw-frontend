@@ -11,12 +11,13 @@ import {
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
 import { Close } from '@/components/Icon/Close'
-import { ProjectRanking } from '../edit-logic/edit'
+import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
+import { convertRankingToAttestationFormat } from '@/utils/helpers'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: ProjectRanking[]
+  ranking: CollectionRanking
 }
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
@@ -50,10 +51,7 @@ export const AttestationModal: React.FC<Props> = ({
   }
 
   const attest = async () => {
-    const items: AttestItem[] = ranking.map(({ name, share }) => ({
-      name,
-      share: Math.floor(share * 10000),
-    }))
+    const item = convertRankingToAttestationFormat(ranking)
 
     if (!isConnected) {
       try {
@@ -78,27 +76,25 @@ export const AttestationModal: React.FC<Props> = ({
     const schemaRegistry = new SchemaRegistry(easConfig.SchemaRegistry)
     eas.connect(signer as any)
     schemaRegistry.connect(signer as any)
-
     const schema = await schemaRegistry.getSchema({ uid: SCHEMA_UID })
     const schemaEncoder = new SchemaEncoder(schema.schema)
-
+    const encodedData = schemaEncoder.encodeData([
+      { name: 'listName', type: 'string', value: item.listName },
+      { name: 'listMetadataPtrType', type: 'uint256', value: item.listMetadataPtrType },
+      { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
+    ])
+    
     try {
-      const tx = await eas.multiAttest([
+      const tx = await eas.attest(
         {
           schema: SCHEMA_UID,
-          data: items.map((item): AttestationRequestData => {
-            const encodedData = schemaEncoder.encodeData([
-              { name: 'name', type: 'string', value: item.name },
-              { name: 'percent', type: 'uint16', value: item.share },
-            ])
-            return {
-              recipient: '0x0000000000000000000000000000000000000000',
-              revocable: false, // Be aware that if your schema is not revocable, this MUST be false
-              data: encodedData,
-            }
-          }),
+          data: {
+            data: encodedData,
+            recipient: '0x0000000000000000000000000000000000000000',
+            revocable: false,
+          },
         },
-      ])
+      )
 
       const newAttestationUID = await tx.wait()
       setUrl(`${easConfig.explorer}/address/${address}`)

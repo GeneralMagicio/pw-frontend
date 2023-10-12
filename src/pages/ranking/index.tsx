@@ -99,11 +99,11 @@ export default function RankingPage() {
         }}
         onUpdate={handleUpdateVotes}
       />
-      {isOpen && (
+      {isOpen && rankings && (
         <AttestationModal
           isOpen={isOpen}
           onClose={() => setOpen(false)}
-          ranking={rankings ? flattenRankingData(rankings) : []}
+          ranking={rankings}
         />
       )}
       {rankings && tempRankings && (
