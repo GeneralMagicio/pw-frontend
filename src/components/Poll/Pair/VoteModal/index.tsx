@@ -77,7 +77,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
           )}
         </div>
       </div>
-      <footer className="absolute inset-x-0 bottom-0 flex justify-between bg-white p-10 pt-6 font-IBM">
+      {/* <footer className="absolute inset-x-0 bottom-0 flex justify-between bg-white p-10 pt-6 font-IBM">
         <button
           className={
             'flex  min-w-fit items-center justify-center rounded-full border border-dark  px-8 text-sm'
@@ -99,7 +99,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
         ) : (
           <div />
         )}
-      </footer>
+      </footer> */}
     </>
   )
 }
