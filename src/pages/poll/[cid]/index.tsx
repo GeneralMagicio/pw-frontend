@@ -19,7 +19,6 @@ import { PairType } from '@/types/Pairs/Pair'
 export default function Poll() {
   const router = useRouter()
   const cid = router.query.cid
-  const type = router.query.type
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [showImpactModal, setShowImpactModal] = useState(false)
@@ -43,19 +42,11 @@ export default function Poll() {
   }
 
   const fetchData = async () => {
-    if (type === "super") {
-      const data = await fetchSubProjectPairs(String(cid))
-      if (!data.pairs.length) {
-        return Promise.reject(goToRanking())
-      }
-      setPairs(data)
-    } else {
-      const data = await fetchPairs(String(cid))
-      if (!data.pairs.length) {
-        return Promise.reject(goToRanking())
-      }
-      setPairs(data)
+    const data = await fetchPairs(String(cid))
+    if (!data.pairs.length) {
+      return Promise.reject(goToRanking())
     }
+    setPairs(data)
   }
 
   useEffect(() => {

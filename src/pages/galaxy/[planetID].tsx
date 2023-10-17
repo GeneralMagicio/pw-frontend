@@ -21,7 +21,7 @@ const PLANET_SIZE = 150
 
 export default function AGalaxy() {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
   const [status, setStatus] = useState<{ finished: boolean; title: string }>({
@@ -33,20 +33,9 @@ export default function AGalaxy() {
   useEffect(() => {
     const main = async () => {
       if (router.query.planetID) {
-        const [collections, compositeProjects] = await Promise.all([
-          fetchCollections(String(router.query.planetID)),
-          fetchCompositeProjects(String(router.query.planetID)),
-        ])
-
+        const collections = await fetchCollections(String(router.query.planetID))
         // @ts-ignore
-        setCollections([
-          ...collections.map((item) => ({ ...item, type: 'collection' })),
-          ...compositeProjects.map((item) => ({ ...item, type: 'super project' })),
-        ])
-        // setCollections([
-        //   ...collections.map((item) => ({...item, type: "project"})),
-        //  ...compositeProjects.map((item) => ({...item, type: "super project"}))
-        // ])
+        setCollections(collections.map((c) => ({...c, type: c.type === "composite_project" ? "composite project" : c.type})))
       }
     }
 
@@ -92,6 +81,7 @@ export default function AGalaxy() {
   // }, [collections])
 
   const handleClick = (collection: PairType) => () => {
+    console.log(collection)
     if (collection.locked) return;
     if (collection.type === 'collection')
       return collection.finished
@@ -101,10 +91,10 @@ export default function AGalaxy() {
                 collection.id
               }`
             )
-    else if (collection.type === 'super project')
+    else if (collection.type === 'composite project')
       return collection.finished
-          ? router.replace(`/poll/${collection.id}/ranking?type=super`)
-          : router.push(`/poll/${collection.id}?type=super`)
+          ? router.replace(`/poll/${collection.id}/ranking`)
+          : router.push(`/poll/${collection.id}`)
   }
 
   return (

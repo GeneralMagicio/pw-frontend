@@ -15,5 +15,5 @@ export interface PairType {
   hasCompositeProjects: boolean,
   finished: boolean,
   started: boolean,
-  type: "collection" | "project" | "super project" | "sub project"
+  type: "collection" | "project" | "composite project"
 }

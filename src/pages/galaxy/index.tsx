@@ -81,10 +81,6 @@ export default function Galaxy() {
         (collection) => !collection.locked || collection.started
       ).length === 1
 
-    console.log(collections.filter(
-      (collection) => !collection.locked || collection.started
-    ))
-
     const bool =
       flowStatus.expertise && flowStatus.impact && justOnePlanetUnlockedUnstarted
 

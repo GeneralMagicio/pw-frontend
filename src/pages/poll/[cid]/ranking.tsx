@@ -72,7 +72,7 @@ export default function RankingPage() {
     const main = async () => {
       if (router.query.cid) {
         const data = await getRankings(String(router.query.cid))
-        console.log("data:", data)
+        // console.log("data:", data)
         // console.log("data.ranking:", data.)
         setRankings(addAdditionalProperties(data))
       }

@@ -67,7 +67,7 @@ export default function RankingPage() {
   useEffect(() => {
     const main = async () => {
       const data = await getRankings('root')
-      console.log("data:", data)
+      // console.log("data:", data)
       // console.log("data.ranking:", data.)
       setRankings(addAdditionalProperties(data))
     }
