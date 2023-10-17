@@ -48,6 +48,7 @@ export const login = async (
 
     window.localStorage.setItem('auth', verifyRes.data)
     axiosInstance.defaults.headers.common['auth'] = verifyRes.data
+    window.location.reload()
     return verifyRes
   } catch (error) {
     console.error('ERROR', error)

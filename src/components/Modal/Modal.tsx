@@ -8,12 +8,14 @@ interface ModalProps {
   children: React.ReactElement
   className?: string
   backdrop?: boolean
+  closeOnOutsideClick?: boolean,
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
+  closeOnOutsideClick = true,
   backdrop = true,
   className = 'bg-white',
 }) => {
@@ -55,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, onClose])
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && closeOnOutsideClick) {
       onClose()
     }
   }

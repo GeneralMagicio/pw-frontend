@@ -16,7 +16,7 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
 
 
   return (
-      <Modal backdrop={false} className="mt-48 bg-white" isOpen={isOpen} onClose={onClose}>
+      <Modal backdrop={false} className="mt-48 bg-white" closeOnOutsideClick={false} isOpen={isOpen} onClose={onClose}>
         {step === 0 ? <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
           <p className="text-lg font-bold">Starting the journey!</p>
           <p className="text-xl">
