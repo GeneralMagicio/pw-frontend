@@ -53,7 +53,7 @@ export default function RankingPage() {
         setTempRankings(resetErrorProperty(newRanking))
       } else {
         setError(true)
-        setTempRankings(setErrorProperty(data, id))
+        setTempRankings(setErrorProperty(data, id, true))
       }
     }
 

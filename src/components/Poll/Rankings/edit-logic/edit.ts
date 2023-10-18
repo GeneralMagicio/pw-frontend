@@ -93,7 +93,7 @@ export const editPercentage = (
       // @ts-ignore
       overallRanking.ranking[i].ranking = ripplePercentage(row.ranking, id, -1 * delta)
       return overallRanking
-    } else if (row.type !== 'project' && row.hasRanking && !row.locked) {
+    } else if (row.type !== 'project' && row.hasRanking) {
       overallRanking.ranking[i] = editPercentage(row, id, newValue)
     }
     

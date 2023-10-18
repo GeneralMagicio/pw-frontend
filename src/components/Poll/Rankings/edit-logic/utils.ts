@@ -71,7 +71,8 @@ export function resetErrorProperty(
 
 export function setErrorProperty(
   input: EditingCollectionRanking,
-  id: number
+  id: number,
+  value: boolean,
   ): EditingCollectionRanking {
   const data = cloneDeep(input)
   if (data.id === id) {
@@ -83,9 +84,9 @@ export function setErrorProperty(
 
     if (row.id === id) {
       // row.locked = false
-      row.error = !row.error
+      row.error = value
     } else if (row.type !== "project" && row.hasRanking) {
-      data.ranking[i] = setErrorProperty(row, id)
+      data.ranking[i] = setErrorProperty(row, id, value)
     }
   }
   
@@ -128,7 +129,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
 
     if (row.type !== "project" && row.hasRanking && !validateRanking(row)) return false;
 
-    if (acc !== max) {console.log(row); return false}
+    if (acc > max) {console.log(row); return false}
 
   }
   return true;
