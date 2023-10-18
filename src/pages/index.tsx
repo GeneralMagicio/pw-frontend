@@ -1,5 +1,6 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
+import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
 import { CollectionsRight } from '@/components/Icon/CollectionsRight'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
@@ -15,9 +16,13 @@ import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
 import { VectorHorizontal4 } from '@/components/Icon/VectorHorizontal4'
 import { Votes } from '@/components/Icon/Votes'
+import useCountdown from '@/hooks/useCountDown'
+import { PAIRWISE_RELEASE_DATE } from '@/utils/contants'
+import { formatMilliseconds } from '@/utils/helpers'
 import Image from 'next/image'
 
 export default function Home() {
+  const [count] = useCountdown(PAIRWISE_RELEASE_DATE.valueOf() - Date.now())
   return (
     <div className="overflow-x-hidden">
       <div className="relative">
@@ -35,16 +40,15 @@ export default function Home() {
           src="/images/center-universe.svg"
           width="1289"
         />
-        <Star className="absolute right-80    top-40" />
+        <Star className="absolute right-80 top-40" />
         <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
           <h2 className="text-[64px] font-bold text-red">
             Retroactive Public Goods Funding
           </h2>
-          <p className="text-2xl ">Impact = Profit</p>
-          <ConnectWalletButton
-            alternativeText="Start"
-            className="flex h-12 items-center bg-black"
-          />
+          <p className="font-Inter text-2xl ">
+            Impact <ArrowForward className="inline-flex" width={24} /> Profit
+          </p>
+          <p className="font-Inter text-2xl font-bold">Starting on Nov 6</p>
         </div>
         <Image
           alt="Galaxy"
@@ -129,14 +133,14 @@ export default function Home() {
           <CollectionsRight className="absolute -right-[320px] -mt-[40%]" />
         </div>
         <VectorHorizontal4 className="ml-28 mr-auto" />
-        <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
+        <div className="my-6 -mr-32 ml-auto  flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
           <h3 className="text-[32px] font-bold">Check and Modify Your Votes</h3>
           <p className="text-lg font-medium">
             Review and refine your votes at any time. Your opinions matter, and
             we want to make sure your choices reflect your passion for the
             projects that resonate with you.
           </p>
-          <Votes className="absolute -right-[350px] -mt-[60px]" />
+          <Votes className="absolute -left-[310px] -mt-[98px]" />
         </div>
       </div>
 
@@ -145,13 +149,17 @@ export default function Home() {
         <h2 className="text-5xl font-bold text-red">
           Ready to Shape the Galaxy?
         </h2>
-        <p className="text-[32px]  font-medium text-black">
-          Kickstart Your Journey: Connect Your Wallet Now
-        </p>
-        <ConnectWalletButton
-          alternativeText="Start"
-          className="flex h-12 items-center bg-black"
-        />
+        {count > 0 ? (
+          <button className="flex h-12 min-w-[200px] items-center justify-center rounded-full border border-black bg-transparent px-6 font-Inter  text-black">
+            {formatMilliseconds(count)}
+          </button>
+        ) : (
+          <ConnectWalletButton
+            alternativeText="Start"
+            className="flex h-12 items-center bg-black"
+          />
+        )}
+
         <Star
           className="absolute -bottom-20    -left-20"
           height={35}
