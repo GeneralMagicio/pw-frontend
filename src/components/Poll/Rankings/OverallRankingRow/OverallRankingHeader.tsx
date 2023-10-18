@@ -13,6 +13,7 @@ interface Props {
   editMode: boolean
   onUpdate: () => void
   error: boolean
+  isOverallRanking: boolean
 }
 
 export const OverallRankingHeader: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
   onUpdate,
   onDone,
   error,
+  isOverallRanking,
 }) => {
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
@@ -42,7 +44,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
         )}
       </button>
       <h4 className="font-IBM text-2xl font-bold">
-        {editMode ? 'Editing ranks' : 'Check All Ranks'}
+        {editMode ? 'Editing ranks' : isOverallRanking ? 'Check All Ranks' : 'Adjust Project Percentages'}
       </h4>
       <div className="flex items-center gap-2">
         {error ? (

@@ -90,6 +90,7 @@ export default function RankingPage() {
       <OverallRankingHeader
         editMode={editMode}
         error={error}
+        isOverallRanking={true}
         onAttest={() => {
           setOpen(true)
         }}
