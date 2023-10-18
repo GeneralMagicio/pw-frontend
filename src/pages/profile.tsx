@@ -44,7 +44,7 @@ export default function Profile() {
   
   if (expertiseRanking === undefined || impactRanking === undefined || status === undefined) return <div></div>
   
-  const expertiseButtonText = status.expertise ? "Edit expertise" : "Choose expertise"
+  // const expertiseButtonText = status.expertise ? "Edit expertise" : "Choose expertise"
   const impactButtonText = status.impact ? "Edit importance" : "Choose preferred fields"
 
   return (
@@ -54,22 +54,15 @@ export default function Profile() {
           <ConnectWalletButton className="h-12" />
         </header>
         <div className="flex w-full justify-between gap-10">
-          <div className="flex h-[475px] w-[50%] flex-col justify-between rounded-2xl p-6 shadow-card3">
+          <div className="flex h-[500px] w-[50%] flex-col justify-between rounded-2xl p-6 shadow-card3">
             <h2 className="mb-4 font-Inter text-2xl font-bold">
               Expertise Preference
             </h2>
-            <div className='h-[70%]'>
+            <div className='h-[95%]'>
               <ExpertiseChart data={convertToRadarChartFormat(expertiseRanking)} settled={status.expertise}/>
             </div>
-            <button
-              className={
-                'mt-4 flex h-12 w-fit min-w-[120px] items-center rounded-full bg-black px-4 py-2  text-sm text-white'
-              }
-              onClick={() => router.push(`/poll/expertise`)}>
-              {expertiseButtonText} <ArrowForward className="ml-2" />
-            </button>
           </div>
-          <div className="flex h-[475px] w-[50%]  flex-col justify-between rounded-2xl p-6 shadow-card3">
+          <div className="flex h-[500px] w-[50%]  flex-col justify-between rounded-2xl p-6 shadow-card3">
             <h2 className="mb-4 font-Inter text-2xl font-bold">
               Strategic Importance
             </h2>
@@ -80,7 +73,7 @@ export default function Profile() {
               className={
                 'mt-4 flex h-12 w-fit min-w-[120px] items-center rounded-full bg-black px-4 py-2 text-sm text-white'
               }
-              onClick={() => router.push(`/poll/root`)}>
+              onClick={status.impact ? () => router.push(`/poll/root/ranking`) : () => router.push(`/poll/root`)}>
               {impactButtonText} <ArrowForward className="ml-2" />
             </button>
           </div>
