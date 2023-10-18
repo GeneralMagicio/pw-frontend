@@ -112,6 +112,7 @@ export default function RankingPage() {
           data={tempRankings}
           edit={edit(tempRankings)}
           editMode={editMode}
+          totalPercentage={tempRankings.share}
         />
       )}
     </>
