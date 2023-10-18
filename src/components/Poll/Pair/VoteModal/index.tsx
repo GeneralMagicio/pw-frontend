@@ -26,7 +26,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
               {item.numOfChildren ? <Layers /> : <Browser />}
               <span className="font-IBM text-sm">
                 {item.numOfChildren
-                  ? `${item.numOfChildren} + Projcets`
+                  ? `${item.numOfChildren} + Projects`
                   : 'Single project'}
               </span>
             </div>
@@ -51,7 +51,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
               </div>
             </div>
           </div>
-          {item.childProjects?.length && (
+          {!item.childProjects?.length ? null : (
             <div className="mb-10 mt-6 font-Inter">
               <h5 className="border-b border-b-gray-10 pb-2 text-lg">
                 {item.childProjects.length} projects
