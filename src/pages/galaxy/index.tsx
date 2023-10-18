@@ -50,9 +50,9 @@ export default function Galaxy() {
   useEffect(() => {
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, 2.2)
-          .concat(generateNonOverlappingOrbitCoordinates(10, 1.5))
-          .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
+        generateNonOverlappingOrbitCoordinates(5, 2.3)
+          .concat(generateNonOverlappingOrbitCoordinates(10, 1.4))
+          .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
       )
     }
     handleResize()
@@ -132,7 +132,7 @@ export default function Galaxy() {
       )}
 
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
-      <TransformWrapper centerOnInit initialScale={2.1}>
+      <TransformWrapper centerOnInit initialScale={1.8}>
         <TransformComponent>
           <div
             className="flex w-screen items-center justify-center overflow-hidden p-10"

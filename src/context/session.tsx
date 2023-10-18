@@ -87,13 +87,13 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setSession({ ...session, user: 'SUCCESS', flowStatus: status })
     setIsLoginModalOpen(false)
   }, [address, chain, session, signMessageAsync])
-
+  
   // Login when the user changes their address with the extension (Without disconnecting first)
   useEffect(() => {
     const main = async () => {
       if (previousAddress.current !== undefined && address !== previousAddress.current) {
-        await handleLogin()
-        router.reload()
+        await logout()
+        setIsLoginModalOpen(true)
       }
     }
     main()
@@ -116,6 +116,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       {children}
       <Modal
         className="bg-gray-90"
+        closeOnOutsideClick={false}
         isOpen={isLoginModalOpen}
         onClose={toggleLoginModal}>
         <AuthenticateWalletModal
