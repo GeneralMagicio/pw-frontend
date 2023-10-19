@@ -1,4 +1,5 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
+import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 import { ExpertiseChart } from '@/components/Profile/RadarChart'
@@ -51,7 +52,13 @@ export default function Profile() {
     <div className="relative m-auto mt-32 flex w-auto max-w-[1158px] flex-col gap-6 rounded-[20px] bg-white px-20  py-10 font-IBM   text-black">
       <div className="flex flex-col items-center justify-center gap-6">
         <header className="mb-2 flex w-full ">
-          <ConnectWalletButton className="h-12" />
+          <button
+          className="rounded-xl border-4 border-gray-100 bg-white p-2 px-6 text-lg text-black"
+          onClick={() => {
+            router.back()
+          }}>
+            <ArrowBackward className="text-black" />
+          </button>
         </header>
         <div className="flex w-full justify-between gap-10">
           <div className="flex h-[500px] w-[50%] flex-col justify-between rounded-2xl p-6 shadow-card3">

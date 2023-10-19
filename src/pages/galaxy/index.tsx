@@ -48,10 +48,11 @@ export default function Galaxy() {
   }, [])
 
   useEffect(() => {
+    const width = window.innerWidth
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, 2.3)
-          .concat(generateNonOverlappingOrbitCoordinates(10, 1.4))
+        generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2.5 : 2.3)
+          .concat(generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4))
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
       )
     }
