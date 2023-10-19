@@ -20,6 +20,7 @@ import useCountdown from '@/hooks/useCountDown'
 import { PAIRWISE_RELEASE_DATE } from '@/utils/contants'
 import { formatMilliseconds } from '@/utils/helpers'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   const [count] = useCountdown(PAIRWISE_RELEASE_DATE.valueOf() - Date.now())
@@ -35,20 +36,25 @@ export default function Home() {
         />
         <Image
           alt="Galaxy"
-          className=" mx-auto h-full w-full  max-w-[1041px]"
+          className="mx-auto -mt-32 h-full w-full  max-w-[1041px]"
           height="1016"
           src="/images/center-universe.svg"
           width="1289"
         />
-        <Star className="absolute right-80 top-40" />
-        <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
-          <h2 className="text-[64px] font-bold text-red">
+        <Star className="absolute right-80 top-60" />
+        <div className="absolute inset-0 -top-10 m-auto flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
+          <h2 className="text-[60px] font-bold text-red">
             Retroactive Public Goods Funding
           </h2>
           <p className="font-Inter text-2xl ">
             Impact <ArrowForward className="inline-flex" width={24} /> Profit
           </p>
           <p className="font-Inter text-2xl font-bold">Starting on Nov 6</p>
+          <Link href="https://pairwise.vote">
+            <button className="flex h-12  min-w-[120px]  items-center rounded-full bg-black px-6">
+              <span className="font-bold text-white">See The Demo Version</span>
+            </button>
+          </Link>{' '}
         </div>
         <Image
           alt="Galaxy"
