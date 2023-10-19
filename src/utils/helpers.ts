@@ -1,6 +1,4 @@
-import {
-  CollectionRanking,
-} from '@/components/Poll/Rankings/edit-logic/edit'
+import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 
 export function generateNonOverlappingOrbitCoordinates(
   totalPoints: number,
@@ -96,17 +94,37 @@ export const convertRankingToAttestationFormat = (
     impactEvaluationLink: 'https://example.com/impact1',
     impactEvaluationDescription:
       'Donec vel maximus mi. Etiam vulputate at libero a euismod. Fusce id pulvinar dui. Etiam sit amet suscipit mauris. Donec viverra mauris elit. Cras at luctus libero, ac euismod sem. Etiam quis leo vestibulum tellus tincidunt bibendum vitae ac libero.',
-    listContent: flattenRanking(ranking).map((item) => ({RPGF3_Application_UID: item.id, OPAmount: totalOp * item.share})).filter((el) => el.OPAmount > 0)
+    listContent: flattenRanking(ranking)
+      .map((item) => ({
+        RPGF3_Application_UID: item.id,
+        OPAmount: totalOp * item.share,
+      }))
+      .filter((el) => el.OPAmount > 0),
   }
 
-  const listName = "List created by Pairwise"
+  const listName = 'List created by Pairwise'
   const listMetadataPtrType = 1
 
-  console.log("list:", obj.listContent)
+  console.log('list:', obj.listContent)
 
   return {
     listName,
     listMetadataPtrType,
-    listMetadataPtr: "https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/"
+    listMetadataPtr:
+      'https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/',
   }
+}
+
+export function formatMilliseconds(milliseconds: number): string {
+  const seconds: number = Math.floor(milliseconds / 1000)
+  const minutes: number = Math.floor(seconds / 60)
+  const hours: number = Math.floor(minutes / 60)
+  const days: number = Math.floor(hours / 24)
+
+  const remainingHours: number = hours % 24
+  const remainingMinutes: number = minutes % 60
+
+  return `${
+    days ? `${days} days, ` : ''
+  }${remainingHours} hours and ${remainingMinutes} minutes`
 }
