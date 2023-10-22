@@ -32,7 +32,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
             </div>
           </div>
         </div>
-        <div className="mb-[73px]  flex max-h-[437px] flex-col overflow-auto">
+        <div className="mb-[73px]  flex max-h-[500px] flex-col overflow-auto">
           <div className="flex gap-7">
             <img
               alt={item.name}
