@@ -9,10 +9,10 @@ interface Props {
 
 export const WellDoneModal: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
-    <Modal className="mb-80 bg-white" isOpen={isOpen} onClose={onClose}>
+    <Modal className="mb-8 bg-white" isOpen={isOpen} onClose={onClose}>
       <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
-        <h3 className="text-3xl font-bold">Well done</h3>
-        <p className="text-xl font-bold leading-10">
+        <h3 className="text-2xl font-bold">Well done</h3>
+        <p className="text-xl font-normal leading-10">
           You have taken the first step towards a personalized ranking
           experience. <br/> Thank you for sharing your knowledge!
         </p>

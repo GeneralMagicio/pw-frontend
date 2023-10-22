@@ -7,7 +7,7 @@ export const FinishVoteModal: React.FC = () => {
     <>
       <div className="flex max-w-[550px] flex-col justify-center gap-10 font-IBM">
         <header className="mb-2 flex w-full ">
-          <h3 className="text-3xl font-bold">Well done</h3>
+          <h3 className="text-2xl font-bold">Well done</h3>
         </header>
 
         <p className="text-center text-xl font-bold">
