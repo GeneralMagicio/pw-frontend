@@ -18,7 +18,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
       <div className="relative flex  min-w-[700px] flex-col  gap-6">
         <div className="flex flex-col">
           <header className="mb-2 flex justify-between">
-            <h3 className="font-Inter text-3xl font-bold">{item.name}</h3>
+            <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
             <Close className="cursor-pointer" onClick={handeClose} />
           </header>
           <div className="self-start rounded-lg border border-black-3 p-1">
@@ -32,7 +32,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
             </div>
           </div>
         </div>
-        <div className="mb-[73px]  flex max-h-[437px] flex-col overflow-auto">
+        <div className="mb-[73px]  flex max-h-[500px] flex-col overflow-auto">
           <div className="flex gap-7">
             <img
               alt={item.name}

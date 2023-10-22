@@ -29,7 +29,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
       <button
-        className="flex w-36 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white py-2 font-normal text-black"
+        className="flex w-36 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white py-2 text-black"
         onClick={onBack}>
         {!editMode ? (
           <>

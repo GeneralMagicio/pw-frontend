@@ -53,7 +53,7 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="flex h-[50px] items-center justify-center rounded-full text-sm"
+          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
           onClick={onPrevious}>
           <ArrowBackward className="mr-4" /> {'Previous'}
         </button>
@@ -86,7 +86,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="flex h-[50px] items-center justify-center rounded-full text-sm"
+          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
           onClick={onPrevious}>
           <ArrowBackward className="mr-4" /> {'Previous'}
         </button>

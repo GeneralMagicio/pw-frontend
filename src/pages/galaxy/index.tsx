@@ -14,6 +14,7 @@ import { HelpModal } from '@/components/Journey/HelpModal'
 import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
 import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
+import { Help } from '@/components/Icon/Help'
 
 const PLANET_SIZE = 150
 
@@ -188,7 +189,7 @@ export default function Galaxy() {
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => setShowHelpModal(true)}>
           Help
-          <PodiumSharp />
+          <Help />
         </button>
         <h4 className="font-IBM text-2xl font-bold">Welcome to RertroPGF</h4>
         <button

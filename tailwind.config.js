@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      button: {
+        fontWeight: '500', 
+      },
       minHeight: {
         'screen-content': 'calc(100vh - 177.45px)',
       },

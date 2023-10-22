@@ -7,7 +7,7 @@ export const FinishVoteModal: React.FC = () => {
     <>
       <div className="flex max-w-[550px] flex-col justify-center gap-10 font-IBM">
         <header className="mb-2 flex w-full ">
-          <h3 className="text-3xl font-bold">Well done</h3>
+          <h3 className="text-2xl font-bold">Well done</h3>
         </header>
 
         <p className="text-center text-xl font-bold">
@@ -18,7 +18,7 @@ export const FinishVoteModal: React.FC = () => {
             'flex h-12 w-fit items-center self-center rounded-full bg-black px-4 py-2  text-white'
           }
           onClick={() => router.push('/galaxy')}>
-          {`Let's explore them.`} <ArrowForward className="ml-2" />
+          {`Let's explore them`} <ArrowForward className="ml-2" />
         </button>
       </div>
     </>

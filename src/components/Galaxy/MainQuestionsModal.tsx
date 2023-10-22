@@ -3,6 +3,7 @@ import { ArrowForward } from "../Icon/ArrowForward"
 import Modal from "../Modal/Modal"
 import { useState } from "react";
 import { ArrowBackward } from "../Icon/ArrowBackward";
+import { Help } from "../Icon/Help";
 
 interface Props {
   isOpen: boolean;
@@ -24,9 +25,9 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
           </p>
           <div className='mt-4 flex items-center justify-between'>
             <button
-              className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm font-medium text-white"
+              className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm text-black"
               onClick={() => setStep(1)}>
-              {"Guide me through!"}
+              {"Guide me through"} <span className="ml-1"><Help/></span>
             </button>
             <button
               className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
