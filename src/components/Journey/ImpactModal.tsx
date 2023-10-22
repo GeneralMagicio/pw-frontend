@@ -12,7 +12,7 @@ interface Props {
 const StepOne: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
-      <h3 className="text-3xl font-bold">Allocate Your Influence</h3>
+      <h3 className="text-2xl font-bold">Allocate Your Influence</h3>
       <div className="flex flex-col gap-6 text-lg leading-8">
         <p>
           Having signaled your areas of expertise, it&apos;s time to
@@ -38,7 +38,7 @@ const StepOne: React.FC<{ onClick: () => void }> = ({ onClick }) => {
 const StepTwo: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <div className="flex max-w-xl flex-col gap-8 p-2 font-IBM text-black">
-      <h3 className="text-3xl font-bold">Question</h3>
+      <h3 className="text-2xl font-bold">Question</h3>
       <div className="flex flex-col gap-6 text-lg font-bold leading-8">
         <p>
           Which areas do you believe will bring the most value to the Optimism
@@ -61,14 +61,14 @@ export const ImpactModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const goToStepTwo = () => setStep(2)
 
-  const changeStep = (step: number) => setStep(step)
+  // const changeStep = (step: number) => setStep(step)
 
   return (
-    <Modal className="mb-80 bg-white" isOpen={isOpen} onClose={onClose}>
+    <Modal className="mb-8 bg-white" isOpen={isOpen} onClose={onClose}>
       <>
-        <div className="mb-8">
+        {/* <div className="mb-8 ml-auto w-fit">
           <DotStepper activeStep={step} changeStep={changeStep} steps={2} />
-        </div>
+        </div> */}
         {step === 1 ? (
           <StepOne onClick={goToStepTwo} />
         ) : (

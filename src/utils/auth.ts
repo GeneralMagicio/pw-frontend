@@ -45,6 +45,10 @@ export const login = async (
     const verifyRes = await axiosInstance.post('/auth/login', {
       ...{ message, signature },
     })
+
+    window.localStorage.setItem('auth', verifyRes.data)
+    axiosInstance.defaults.headers.common['auth'] = verifyRes.data
+    window.location.reload()
     return verifyRes
   } catch (error) {
     console.error('ERROR', error)
@@ -53,8 +57,11 @@ export const login = async (
 
 export const logout = async () => {
   try {
+    window.localStorage.removeItem('auth')
+    if(axiosInstance.defaults.headers.common['auth']) {
+      delete axiosInstance.defaults.headers.common['auth'];
+    }
     await axiosInstance.post('/auth/logout')
-    localStorage.removeItem('editedRanking')
   } catch (err) {
     console.error(err)
   }

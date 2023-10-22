@@ -1,5 +1,7 @@
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
+import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
+import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 import { ExpertiseChart } from '@/components/Profile/RadarChart'
 import { StrategicRanking } from '@/components/Profile/StrategicRanking'
 import { FlowStatus } from '@/types/Flow'
@@ -13,14 +15,14 @@ const convertToRadarChartFormat = (data: RankingResponse) => {
   return data.ranking.map(({share, project}) => ({share, name: project.name})) 
 }
 
-const convertToStrategicRankingFormat = (data: RankingResponse) => {
-  return data.ranking.map(({share, project}) => ({share, name: project.name})) 
+const convertToStrategicRankingFormat = (data: CollectionRanking) => {
+  return data.ranking.map(({share, name}) => ({share, name})) 
 }
 
 export default function Profile() {
 
   const [expertiseRanking, setExpertiseRanking] = useState<RankingResponse>()
-  const [impactRanking, setImpactRanking] = useState<RankingResponse>()
+  const [impactRanking, setImpactRanking] = useState<CollectionRanking>()
   const [status, setStatus] = useState<FlowStatus>()
 
   useEffect(() => {
@@ -43,32 +45,31 @@ export default function Profile() {
   
   if (expertiseRanking === undefined || impactRanking === undefined || status === undefined) return <div></div>
   
-  const expertiseButtonText = status.expertise ? "Edit expertise" : "Choose expertise"
+  // const expertiseButtonText = status.expertise ? "Edit expertise" : "Choose expertise"
   const impactButtonText = status.impact ? "Edit importance" : "Choose preferred fields"
 
   return (
     <div className="relative m-auto mt-32 flex w-auto max-w-[1158px] flex-col gap-6 rounded-[20px] bg-white px-20  py-10 font-IBM   text-black">
       <div className="flex flex-col items-center justify-center gap-6">
         <header className="mb-2 flex w-full ">
-          <ConnectWalletButton className="h-12" />
+          <button
+          className="rounded-xl border-4 border-gray-100 bg-white p-2 px-6 text-lg text-black"
+          onClick={() => {
+            router.back()
+          }}>
+            <ArrowBackward className="text-black" />
+          </button>
         </header>
         <div className="flex w-full justify-between gap-10">
-          <div className="flex h-[475px] w-[50%] flex-col justify-between rounded-2xl p-6 shadow-card3">
+          <div className="flex h-[500px] w-[50%] flex-col justify-between rounded-2xl p-6 shadow-card3">
             <h2 className="mb-4 font-Inter text-2xl font-bold">
               Expertise Preference
             </h2>
-            <div className='h-[70%]'>
+            <div className='h-[95%]'>
               <ExpertiseChart data={convertToRadarChartFormat(expertiseRanking)} settled={status.expertise}/>
             </div>
-            <button
-              className={
-                'mt-4 flex h-12 w-fit min-w-[120px] items-center rounded-full bg-black px-4 py-2  text-sm text-white'
-              }
-              onClick={() => router.push(`/poll/expertise`)}>
-              {expertiseButtonText} <ArrowForward className="ml-2" />
-            </button>
           </div>
-          <div className="flex h-[475px] w-[50%]  flex-col justify-between rounded-2xl p-6 shadow-card3">
+          <div className="flex h-[500px] w-[50%]  flex-col justify-between rounded-2xl p-6 shadow-card3">
             <h2 className="mb-4 font-Inter text-2xl font-bold">
               Strategic Importance
             </h2>
@@ -79,7 +80,7 @@ export default function Profile() {
               className={
                 'mt-4 flex h-12 w-fit min-w-[120px] items-center rounded-full bg-black px-4 py-2 text-sm text-white'
               }
-              onClick={() => router.push(`/poll/root`)}>
+              onClick={status.impact ? () => router.push(`/poll/root/ranking`) : () => router.push(`/poll/root`)}>
               {impactButtonText} <ArrowForward className="ml-2" />
             </button>
           </div>

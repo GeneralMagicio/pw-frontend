@@ -8,12 +8,14 @@ interface ModalProps {
   children: React.ReactElement
   className?: string
   backdrop?: boolean
+  closeOnOutsideClick?: boolean,
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
+  closeOnOutsideClick = true,
   backdrop = true,
   className = 'bg-white',
 }) => {
@@ -55,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, onClose])
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && closeOnOutsideClick) {
       onClose()
     }
   }
@@ -67,7 +69,7 @@ const Modal: React.FC<ModalProps> = ({
           onClick={handleOverlayClick}>
           <div
             className={cn(
-              'p-6 rounded-3xl max-h-[704px] overflow-hidden max-w-[1024px]',
+              'p-6 rounded-2xl max-h-[704px] overflow-hidden max-w-[1024px]',
               !className ? 'bg-white' : className,
               'mx-24 backdrop-blur-sm border-4 border-gray-30'
             )}

@@ -38,8 +38,8 @@ export const PlanetStatus: React.FC<Props> = ({
     : 'Start ranking'
   return (
     <div
-      className={`flex w-[172px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
-      <p className="text-base font-medium"> {title} </p>
+      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
+      <p className="max-w-[170px] overflow-hidden text-ellipsis text-base font-medium"> {title} </p>
       {finished ? <Voted /> : <NotVoted />}
       <div className=" flex items-center border-t border-gray-200 text-base font-medium">
         <p>{action}</p> <ArrowForward className="ml-2 scale-90" />
@@ -54,8 +54,8 @@ export const PlanetUnlocked: React.FC<Omit<Props, 'hasSubcollections'>> = ({
 }) => {
   return (
     <div
-      className={`flex w-[172px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
-      <p className="text-base font-medium"> {title} </p>
+      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
+      <p className="max-w-[170px] overflow-hidden text-ellipsis text-base font-medium"> {title} </p>
       {finished ? <Voted /> : <NotVoted />}
     </div>
   )

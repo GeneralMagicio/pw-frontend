@@ -9,6 +9,15 @@ export async function fetchCollections(cid?: string) {
     })
     .then((res) => res.data)
 }
+
+export async function fetchCompositeProjects(cid: string) {
+  return axiosInstance
+    .get<PairType[]>('/flow/compositeProjects', {
+      params: { cid },
+    })
+    .then((res) => res.data)
+}
+
 export async function getFlowStatus() {
   return axiosInstance.get<FlowStatus>('/flow/status').then((res) => res.data)
 }

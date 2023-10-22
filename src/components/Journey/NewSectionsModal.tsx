@@ -9,7 +9,7 @@ export const NewSectionsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <Modal className="bg-white/[.9]" isOpen={isOpen} onClose={onClose}>
       <div className="flex max-w-2xl flex-col gap-8 p-2 font-IBM text-black">
-        <h3 className="text-3xl font-bold">New Sections Unlocked!</h3>
+        <h3 className="text-2xl font-bold">New Sections Unlocked!</h3>
         <p className="text-xl font-bold leading-10">
           Congratulations! <br/> Your vote on the this section has unlocked additional
           sections for exploration. Discover new sections and sub-collections

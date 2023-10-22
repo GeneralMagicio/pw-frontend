@@ -11,7 +11,7 @@ interface HeaderProps {
   handleFinishVoting: () => void
   total: number
   threshold: number
-  collectionTitle: string
+  name: string
   voted?: number
   canFinish?: boolean
 }
@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   voted = 0,
   canFinish,
   threshold,
-  collectionTitle,
+  name,
 }) => {
   const router = useRouter()
   const progressPercentage = total ? Math.max((voted / total) * 100, 4) : 4
@@ -48,9 +48,6 @@ export const Header: React.FC<HeaderProps> = ({
       <button
         className={cn(
           ' relative  cursor-pointer flex items-center justify-center gap-2 group  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg group-hover:flex',
-          {
-            'opacity-0': router.query.cid === 'expertise',
-          }
         )}
         disabled={!canFinish}
         onClick={handleFinishVoting}>
@@ -68,13 +65,12 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </span>
         {!canFinish && (
-          <div className="b-whi absolute -bottom-[230%] left-1/2 top-16 hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-6 py-4 font-Inter text-[15px] leading-6 backdrop-blur-sm group-hover:block">
+          <div className="absolute -bottom-[230%] left-1/2 top-16 hidden w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl  bg-gray-90 p-2 font-Inter text-[14px] leading-6 backdrop-blur-sm group-hover:block">
             To wrap up your{' '}
-            <span className="font-bold">{`${collectionTitle} `}</span>
+            <span className="font-bold">{`${name} `}</span>
             ranking, you need to make at least{' '}
             <span className="font-bold">{minVotesToUnlock}</span> Pairwise
             votes.
-            <div className="absolute inset-x-0 top-0 mx-auto h-0 w-0  -translate-y-full border-x-8 border-b-8 border-x-transparent border-b-white"></div>
           </div>
         )}
       </button>

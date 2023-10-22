@@ -21,8 +21,8 @@ export default function RankingPage() {
       <RankingHeader onDone={() => {}} onEdit={() => {}}/>
       <WellDoneModal isOpen={true} onClose={() => {}}/>
       <Rankings
-        collectionTitle={rankings?.collectionTitle || ''}
         items={rankings?.ranking || []}
+        name={rankings?.name || ''}
       />
     </>
   )

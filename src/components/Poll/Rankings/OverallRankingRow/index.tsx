@@ -5,9 +5,14 @@ import React, { useState } from 'react'
 import { useCollapse } from 'react-collapsed'
 import { EditTextField } from '../EditTextField'
 import { toFixedNumber } from '@/utils/helpers'
+import {
+  EditingCollectionRanking,
+  EditingProjectRanking,
+} from '../edit-logic/edit'
+import { Lock } from '@/components/Icon/Lock'
 
 interface RankingProps {
-  data: { id: number | string; name: string; share: number; locked: boolean, error: boolean }
+  data: EditingProjectRanking
   onEditChange: (value: number) => void
   onLockClick: () => void
   editMode: boolean
@@ -37,13 +42,15 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
               locked={data.locked}
               onChange={onEditChange}
               onLockClick={onLockClick}
-              value={toFixedNumber(data.share * 100, 3)}
+              value={toFixedNumber(data.share * 100, 4)}
             />
           )}
         </div>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">{(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}</span>
+        <span className="">
+          {(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}
+        </span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
       <span className="w-12"></span>
@@ -51,9 +58,10 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
   )
 }
 
-interface HeaderProps extends RankingProps {
+interface HeaderProps extends Omit<RankingProps, 'data'> {
+  data: EditingCollectionRanking
   children: React.ReactNode
-  expanded?: boolean,
+  expanded?: boolean
 }
 
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
@@ -86,7 +94,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
                 locked={data.locked}
                 onChange={onEditChange}
                 onLockClick={onLockClick}
-                value={toFixedNumber(data.share * 100, 3)}
+                value={toFixedNumber(data.share * 100, 4)}
               />
             )}
           </div>
@@ -97,11 +105,19 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span
           {...getToggleProps({
-            onClick: () => setExpanded((prevExpanded) => !prevExpanded),
+            onClick: () =>
+              data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
           })}
-          className="flex h-6 w-12 items-center justify-center"
-          >
-          {isExpanded ? <CaretUp /> : <CaretDown />}
+          className="flex h-6 w-12 items-center justify-center">
+          {!data.isFinished ? (
+            <span title="You have not voted in this collection yet">
+              <Lock />
+            </span>
+          ) : isExpanded ? (
+            <CaretUp />
+          ) : (
+            <CaretDown />
+          )}
         </span>
       </div>
       <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>

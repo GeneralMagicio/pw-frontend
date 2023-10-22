@@ -7,11 +7,13 @@ import router from 'next/router'
 
 interface Props {
   onAttest: () => void
+  onDone?: () => void
   onEdit: () => void
   onBack: () => void
   editMode: boolean
   onUpdate: () => void
   error: boolean
+  isOverallRanking: boolean
 }
 
 export const OverallRankingHeader: React.FC<Props> = ({
@@ -20,12 +22,14 @@ export const OverallRankingHeader: React.FC<Props> = ({
   editMode,
   onBack,
   onUpdate,
+  onDone,
   error,
+  isOverallRanking,
 }) => {
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
       <button
-        className="flex w-36 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white py-2 font-normal text-black"
+        className="flex w-36 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white py-2 text-black"
         onClick={onBack}>
         {!editMode ? (
           <>
@@ -40,7 +44,7 @@ export const OverallRankingHeader: React.FC<Props> = ({
         )}
       </button>
       <h4 className="font-IBM text-2xl font-bold">
-        {editMode ? 'Editing ranks' : 'Check All Ranks'}
+        {editMode ? 'Editing ranks' : isOverallRanking ? 'Check All Ranks' : 'Adjust Project Percentages'}
       </h4>
       <div className="flex items-center gap-2">
         {error ? (
@@ -65,12 +69,20 @@ export const OverallRankingHeader: React.FC<Props> = ({
             <Shuffle />
           </button>
         )}
-        <button
-          className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
-          onClick={onAttest}>
-          Attest
-        </button>
+        {onDone ? (
+          <button
+            className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
+            onClick={onDone}>
+            Done
+          </button>
+        ) : (
+          <button
+            className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
+            onClick={onAttest}>
+            Attest
+          </button>
+        )}
       </div>
     </header>
   )
-} 
+}

@@ -11,6 +11,7 @@ interface CollectionPlanetProps {
   locked: boolean
   finished: boolean
   hasSubcollections: boolean
+  hasCompositeProjects: boolean
 }
 
 export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
@@ -18,6 +19,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
   locked,
   finished,
   hasSubcollections,
+  hasCompositeProjects,
 }) => {
   const [hover, setHover] = useState(false)
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
@@ -30,7 +32,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
           className={`absolute -bottom-1/4  flex items-center gap-2 whitespace-nowrap  rounded-3xl border-6 border-gray-100 bg-white p-2 text-lg text-black opacity-70`}
           onClick={() => {}}
           onMouseEnter={() => setHover(true)}>
-          <span className="font-medium">{name}</span>
+          <span className="max-w-[256px] overflow-hidden text-ellipsis font-medium" title={name}>{name}</span>
           {locked ? <Lock /> : <ArrowForward className="text-black" />}
         </button>
       </>
@@ -47,7 +49,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
           onMouseLeave={() => setHover(false)}>
           <PlanetStatus
             finished={finished}
-            hasSubcollections={hasSubcollections}
+            hasSubcollections={hasSubcollections || hasCompositeProjects}
             title={name || ''}
           />
         </div>

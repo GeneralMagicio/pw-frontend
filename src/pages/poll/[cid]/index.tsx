@@ -6,7 +6,7 @@ import { Header } from '@/components/Poll/Pair/Header'
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
 import {
   fetchPairs,
-  voteColletions,
+  fetchSubProjectPairs,
   voteExpertise,
   voteProjects,
 } from '@/utils/poll'
@@ -14,6 +14,7 @@ import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { PairsType, PollType } from '@/types/Pairs'
 import { ImpactModal } from '@/components/Journey/ImpactModal'
+import { PairType } from '@/types/Pairs/Pair'
 
 export default function Poll() {
   const router = useRouter()
@@ -40,14 +41,12 @@ export default function Poll() {
     }
   }
 
-  const fetchData = async (rest?: boolean) => {
+  const fetchData = async () => {
     const data = await fetchPairs(String(cid))
     if (!data.pairs.length) {
       return Promise.reject(goToRanking())
     }
-    const newPairs = [...(pairs ? pairs.pairs : []), ...data.pairs]
-    setPairs(rest ? data : { ...data, pairs: newPairs })
-    return newPairs
+    setPairs(data)
   }
 
   useEffect(() => {
@@ -57,23 +56,47 @@ export default function Poll() {
   }, [router.query.cid])
 
   useEffect(() => {
-    if (pairs?.type === 'collection') {
-      setActiveQuestion(
-        'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
-      )
-    } else if (pairs?.type === 'expertise') {
+    // if (pairs?.type === 'collection') {
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
+    //   )
+    // } else if (pairs?.type === 'expertise') {
+    //   setActiveQuestion('What area do you feel most confident discussing?')
+    // } else if (pairs?.type === 'project')
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    //   )
+    // else if (pairs?.type === 'sub project')
+    //   setActiveQuestion(
+    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    //   )
+    if (pairs?.type === 'expertise') {
       setActiveQuestion('What area do you feel most confident discussing?')
-    } else if (pairs?.type === 'project')
-      setActiveQuestion(
-        'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-      )
+    }
+    else setActiveQuestion(
+      'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+    )
   }, [pairs])
 
   useEffect(() => {
     if (isConnected && router.query.cid) {
-      fetchData(true).then(() => setOpen(true))
+      fetchData().then(() => setOpen(true))
     }
   }, [isConnected, router.query])
+
+  const onVote = async (pair: PairType[], picked?: number | undefined) => {
+    if (!pairs) return 
+
+    const [a, b] = pair
+    const voteRequest = pairs?.type === "expertise" ? voteExpertise : voteProjects
+    await voteRequest({
+      id1: a.id,
+      id2: b.id,
+      pickedId: picked || null,
+    })
+
+    await fetchData()
+  }
 
   return (
     <>
@@ -83,8 +106,8 @@ export default function Poll() {
             ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
             : false
         }
-        collectionTitle={pairs?.collectionTitle || ''}
         handleFinishVoting={goToRanking}
+        name={pairs?.name || ''}
         question={activeQuestion}
         threshold={pairs?.threshold || 0}
         total={pairs?.totalPairs || 0}
@@ -93,20 +116,8 @@ export default function Poll() {
 
       {pairs?.pairs && (
         <Pairs
-          onVote={(pair, picked) => {
-            const [a, b] = pair
-            const voteRequestsMap = {
-              collection: voteColletions,
-              project: voteProjects,
-              expertise: voteExpertise,
-            }
-            const voteRequest = voteRequestsMap[pairs?.type]
-            return voteRequest({
-              id1: a.id,
-              id2: b.id,
-              pickedId: picked || null,
-            }).then(fetchData)
-          }}
+          activeIndex={pairs.votedPairs + 1}
+          onVote={onVote}
           pairs={pairs.pairs}
         />
       )}
@@ -122,8 +133,8 @@ export default function Poll() {
         onBack={() => router.back()}
         // The condition checks for top-level collections pairwises
         text={
-          pairs?.pairs[0][0].collection_id !== null && pairs?.collectionTitle
-            ? `Evaluating ${pairs.collectionTitle}`
+          pairs?.pairs[0][0].collection_id !== null && pairs?.name
+            ? `Evaluating ${pairs.name}`
             : ''
         }
       />

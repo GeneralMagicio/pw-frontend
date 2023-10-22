@@ -1,35 +1,37 @@
-import {
-  OverallRanking,
-  hasSubcollections,
-} from '@/components/Poll/Rankings/OverallRanking'
+import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
-import { changePercentage } from '@/components/Poll/Rankings/edit-logic'
-
-import { changeCollectionPercentage } from '@/components/Poll/Rankings/edit-logic/collection-editing'
-import { validateRanking, resetErrorProperty, setErrorProperty, addLockedProperty, changeCollectionLockStatus, changeProjectLockStatus, removeAddedProperties } from '@/components/Poll/Rankings/edit-logic/utils'
 import {
-  EditingOverallRankingType,
-  OverallRankingType,
-  Rank,
-} from '@/types/Ranking/index'
+  CollectionRanking,
+  EditingCollectionRanking,
+  ProjectRanking,
+  editPercentage,
+} from '@/components/Poll/Rankings/edit-logic/edit'
+import {
+  validateRanking,
+  resetErrorProperty,
+  setErrorProperty,
+  addAdditionalProperties,
+  setLockProperty,
+  removeAdditionalProperties,
+} from '@/components/Poll/Rankings/edit-logic/utils'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { getOverallRanking } from '@/utils/poll'
 import router from 'next/router'
 import { useEffect, useState } from 'react'
 
-export const flattenRankingData = (ranking: OverallRankingType[]): Rank[] => {
-  return ranking.reduce((acc, item) => {
-    if (hasSubcollections(item.ranking)) {
-      return [...acc, ...flattenRankingData(item.ranking)]
-    } else return [...acc, ...item.ranking]
-  }, [] as Rank[])
+export const flattenRankingData = (
+  input: CollectionRanking
+): ProjectRanking[] => {
+  return input.ranking.reduce((acc, item) => {
+    if (item.type === 'project') return [...acc, item]
+    else return [...acc, ...flattenRankingData(item as CollectionRanking)]
+  }, [] as ProjectRanking[])
 }
 
 export default function RankingPage() {
-  const [rankings, setRankings] = useState<EditingOverallRankingType[]>()
-  const [tempRankings, setTempRankings] =
-    useState<EditingOverallRankingType[]>()
+  const [rankings, setRankings] = useState<EditingCollectionRanking>()
+  const [tempRankings, setTempRankings] = useState<EditingCollectionRanking>()
   const [editMode, setEditMode] = useState(false)
   const [isOpen, setOpen] = useState(false)
   const [error, setError] = useState(false)
@@ -45,54 +47,36 @@ export default function RankingPage() {
   const handleUpdateVotes = async () => {
     if (!rankings || !tempRankings) return
     setEditMode(false)
-    setRankings(addLockedProperty(removeAddedProperties(tempRankings)))
+    setRankings(addAdditionalProperties(removeAdditionalProperties(tempRankings)))
     await axiosInstance.post('/flow/ranking', {
-      collectionId: null,
-      ranking: JSON.stringify(removeAddedProperties(tempRankings))
+      shares: removeAdditionalProperties(tempRankings),
     })
   }
 
   const edit =
-    (data: EditingOverallRankingType[]) =>
-    (type: 'project' | 'collection', id: number) =>
+    (data: EditingCollectionRanking) =>
+    (id: number) =>
     (newValue: number) => {
-      if (type === 'collection') {
-        const newRanking = changeCollectionPercentage(data, id, newValue)
-        if (validateRanking(newRanking)) {
-          setError(false)
-          setTempRankings(resetErrorProperty(newRanking))
-        } else {
-          setError(true)
-          setTempRankings(setErrorProperty(data, 'collection', id, true))
-        }
-      } else if (type === 'project') {
-        const newRanking = changePercentage(data, id, newValue)
-        if (validateRanking(newRanking)) {
-          setError(false)
-          setTempRankings(resetErrorProperty(newRanking))
-        } else {
-          setError(true)
-          setTempRankings(setErrorProperty(data, 'project', id, true))
-        }
+      const newRanking = editPercentage(data, id, newValue)
+      if (validateRanking(newRanking)) {
+        setError(false)
+        setTempRankings(resetErrorProperty(newRanking))
+      } else {
+        setError(true)
+        setTempRankings(setErrorProperty(data, id, true))
       }
     }
 
   const changeLockStatus =
-    (data: EditingOverallRankingType[]) =>
-    (id: number, type: 'project' | 'collection') =>
-    () => {
-      if (type === 'project') {
-        setTempRankings(changeProjectLockStatus(data, id))
-      } else if (type === 'collection')
-        setTempRankings(changeCollectionLockStatus(data, id))
+    (data: EditingCollectionRanking) => (id: number) => () => {
+        setTempRankings(setLockProperty(data, id))
     }
-
+  
   useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
-      setRankings(
-        addLockedProperty(data.sort((a, b) => b.votingPower - a.votingPower))
-      )
+      data.ranking.sort((a, b) => b.share - a.share)
+      setRankings(addAdditionalProperties(data))
     }
     main()
   }, [setRankings])
@@ -106,6 +90,7 @@ export default function RankingPage() {
       <OverallRankingHeader
         editMode={editMode}
         error={error}
+        isOverallRanking={true}
         onAttest={() => {
           setOpen(true)
         }}
@@ -115,11 +100,11 @@ export default function RankingPage() {
         }}
         onUpdate={handleUpdateVotes}
       />
-      {isOpen && (
+      {isOpen && rankings && (
         <AttestationModal
           isOpen={isOpen}
           onClose={() => setOpen(false)}
-          ranking={rankings ? flattenRankingData(rankings) : []}
+          ranking={rankings}
         />
       )}
       {rankings && tempRankings && (
@@ -128,6 +113,7 @@ export default function RankingPage() {
           data={tempRankings}
           edit={edit(tempRankings)}
           editMode={editMode}
+          totalPercentage={tempRankings.share}
         />
       )}
     </>

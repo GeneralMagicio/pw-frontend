@@ -13,7 +13,7 @@ export const CustomizeExperienceModal: FC<Props> = ({isOpen, onClose}) => {
   return (
     <Modal backdrop={false} className="mb-60 bg-white/[.8]" isOpen={isOpen} onClose={onClose}>
       <div className="relative mt-16 flex h-[375px] flex-col items-center gap-16 px-2 font-IBM">
-        <h3 className="text-3xl font-bold"> Customizing Your Experience... </h3>
+        <h3 className="text-2xl font-bold"> Customizing Your Experience... </h3>
         <p className="text-center text-xl font-semibold">
           Please wait as we tailor your experience to match your expertise and
           preferences.

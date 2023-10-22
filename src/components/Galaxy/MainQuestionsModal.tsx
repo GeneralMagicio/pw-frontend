@@ -3,6 +3,7 @@ import { ArrowForward } from "../Icon/ArrowForward"
 import Modal from "../Modal/Modal"
 import { useState } from "react";
 import { ArrowBackward } from "../Icon/ArrowBackward";
+import { Help } from "../Icon/Help";
 
 interface Props {
   isOpen: boolean;
@@ -16,14 +17,18 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
 
 
   return (
-      <Modal backdrop={false} className="mt-48 bg-white" isOpen={isOpen} onClose={onClose}>
+      <Modal backdrop={false} className="mt-48 bg-white" closeOnOutsideClick={false} isOpen={isOpen} onClose={onClose}>
         {step === 0 ? <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
           <p className="text-lg font-bold">Starting the journey!</p>
           <p className="text-xl">
           Answer two brief queries to fuel your personalized voting adventure. Ready to launch?
           </p>
           <div className='mt-4 flex items-center justify-between'>
-            <p className='cursor-pointer text-sm font-medium' onClick={() => setStep(1)}> Show me the mechanics! </p>
+            <button
+              className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm text-black"
+              onClick={() => setStep(1)}>
+              {"Guide me through"} <span className="ml-1"><Help/></span>
+            </button>
             <button
               className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
               onClick={() => {

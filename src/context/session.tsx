@@ -11,7 +11,7 @@ import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 interface Session {
   user: string | null
   flowStatus: FlowStatus
-  updateFlowStatus: () => Promise<unknown>
+  updateFlowStatus: () => Promise<FlowStatus>
 }
 
 const INITIAL_FLOW: FlowStatus = {
@@ -25,7 +25,7 @@ const INITIAL_FLOW: FlowStatus = {
 const SESSION: Session = {
   user: null,
   flowStatus: INITIAL_FLOW,
-  async updateFlowStatus() {},
+  async updateFlowStatus() {return INITIAL_FLOW},
 }
 export const SessionContext = React.createContext<Session>(SESSION)
 
@@ -39,6 +39,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     async updateFlowStatus() {
       const status = await getFlowStatus()
       setSession((s) => ({ ...s, flowStatus: status }))
+      return status
     },
   })
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -86,13 +87,13 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setSession({ ...session, user: 'SUCCESS', flowStatus: status })
     setIsLoginModalOpen(false)
   }, [address, chain, session, signMessageAsync])
-
+  
   // Login when the user changes their address with the extension (Without disconnecting first)
   useEffect(() => {
     const main = async () => {
       if (previousAddress.current !== undefined && address !== previousAddress.current) {
-        await handleLogin()
-        router.reload()
+        await logout()
+        setIsLoginModalOpen(true)
       }
     }
     main()
@@ -115,6 +116,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       {children}
       <Modal
         className="bg-gray-90"
+        closeOnOutsideClick={false}
         isOpen={isLoginModalOpen}
         onClose={toggleLoginModal}>
         <AuthenticateWalletModal

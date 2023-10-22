@@ -17,9 +17,10 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const changeStep = (step: number) => setStep(step) 
 
   return (
-    <Modal className="bg-white/[.9] py-8" isOpen={isOpen} onClose={onClose}>
+    <Modal className="relative bg-white/[.9] py-8" isOpen={isOpen} onClose={onClose}>
       <>
-        <div className="mb-8">
+        {/* Rewrite without absolute */ }
+        <div className="absolute right-8 top-10 w-fit">
           <DotStepper activeStep={step} changeStep={changeStep} steps={3} />
         </div>
         <div className='max-h-[550px] max-w-[800px]'>
