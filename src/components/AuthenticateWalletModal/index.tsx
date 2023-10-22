@@ -28,7 +28,7 @@ export const AuthenticateWalletModal: React.FC<
           </p>
           <button
             className={
-              'min-w-[120px] rounded-full bg-red px-4 py-2 font-bold text-white'
+              'min-w-[120px] rounded-full bg-red px-4 py-2 text-white'
             }
             onClick={handleLogin}>
             Authenticate wallet

@@ -25,7 +25,7 @@ export const MainQuestionsModal: React.FC<Props> = ({isOpen, onClose}) => {
           </p>
           <div className='mt-4 flex items-center justify-between'>
             <button
-              className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm font-medium text-black"
+              className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm text-black"
               onClick={() => setStep(1)}>
               {"Guide me through"} <span className="ml-1"><Help/></span>
             </button>
