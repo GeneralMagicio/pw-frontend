@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash.clonedeep'
 import { CollectionRanking, EditingCollectionRanking, ProjectRanking } from './edit'
+import { toFixedNumber } from '@/utils/helpers'
 
 export function removeAdditionalProperties(
   input: EditingCollectionRanking
@@ -120,17 +121,20 @@ export function setLockProperty(
 }
 
 export const validateRanking = (data: EditingCollectionRanking) => {
+  const max = data.share;
+  let acc = 0;
   for (let i = 0; i < data.ranking.length; i++) {
-    const max = data.ranking[i].share
-    const row = data.ranking[i]
-    let acc = 0
-    if (row.share < 0 || row.share > 100) {console.log(row); return false}
-    else acc += row.share
+    const row = data.ranking[i];
+    if (toFixedNumber(row.share, 5) < 0 || toFixedNumber(row.share, 5) > 1) {
+      return false;
+    } else acc += row.share;
 
-    if (row.type !== "project" && row.hasRanking && !validateRanking(row)) return false;
+    if (row.type !== 'project' && row.hasRanking && !validateRanking(row))
+      return false;
 
-    if (acc > max) {console.log(row); return false}
-
+    if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
+      return false;
+    }
   }
   return true;
-}
+};
