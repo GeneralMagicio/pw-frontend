@@ -14,7 +14,7 @@ export function removeAdditionalProperties(
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
-    if (row.type === "project") {
+    if (!row.hasRanking) {
       // @ts-ignore
       delete row.locked
       // @ts-ignore
@@ -41,10 +41,10 @@ export function addAdditionalProperties<T extends CollectionRanking>(
     let row = data.ranking[i]
     // @ts-ignore
     row.locked = (row.locked || !data.isFinished) ?? false
-    if (row.type === "project") {
+    if (!row.hasRanking) {
       // @ts-ignore
       row.error = row.error ?? false
-    } else if (row.hasRanking) {
+    } else {
       data.ranking[i] = addAdditionalProperties(row)
     }
   }
@@ -60,9 +60,9 @@ export function resetErrorProperty(
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
-    if (row.type === "project") {
+    if (!row.hasRanking) {
       row.error = false
-    } else if (row.hasRanking) {
+    } else {
       data.ranking[i] = resetErrorProperty(row)
     }
   }
@@ -84,7 +84,6 @@ export function setErrorProperty(
     let row = data.ranking[i]
 
     if (row.id === id) {
-      // row.locked = false
       row.error = value
     } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setErrorProperty(row, id, value)
@@ -109,8 +108,6 @@ export function setLockProperty(
     let row = data.ranking[i]
 
     if (row.id === id) {
-      console.log
-      // row.locked = false
       row.locked = !row.locked
     } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setLockProperty(row, id)

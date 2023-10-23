@@ -55,9 +55,10 @@ const ripplePercentage = (
     const shareOfDelta = deltaCalculator(row.share, totalShare, delta)
     if (!row.locked && row.id === changedId) {
       row.share += delta
-    } else if (row.type === 'project' && !row.locked && row.id !== changedId) {
+      if (row.hasRanking) row.ranking = ripplePercentage(row.ranking, changedId, -1 * shareOfDelta)
+    } else if (!row.hasRanking && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
-    } else if (row.type !== 'project' && row.hasRanking && !row.locked && row.id !== changedId) {
+    } else if (row.hasRanking && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
       row.ranking = ripplePercentage(row.ranking, changedId, shareOfDelta)
     }
@@ -85,13 +86,14 @@ export const editPercentage = (
       return overallRanking
     } else if (row.id === id && row.type !== 'project' && !row.locked) {
       const delta = newValue - row.share
+      // console.log("Here we are")
+      // console.log(overallRanking.ranking[i])
       overallRanking.ranking = ripplePercentage(
         overallRanking.ranking,
         id,
         delta
       )
-      // @ts-ignore
-      overallRanking.ranking[i].ranking = ripplePercentage(row.ranking, id, -1 * delta)
+      // if (row.hasRanking) row.ranking = ripplePercentage(row.ranking, id, -1 * delta)
       return overallRanking
     } else if (row.type !== 'project' && row.hasRanking) {
       overallRanking.ranking[i] = editPercentage(row, id, newValue)
