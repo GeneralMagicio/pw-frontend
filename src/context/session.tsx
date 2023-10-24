@@ -117,7 +117,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
       <Modal
         className="bg-gray-90"
         closeOnOutsideClick={false}
-        isOpen={isLoginModalOpen}
+        isOpen={false}
         onClose={toggleLoginModal}>
         <AuthenticateWalletModal
           handleClose={toggleLoginModal}

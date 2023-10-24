@@ -7,7 +7,7 @@ import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
 import { SadSun } from '@/components/Icon/SadSun'
-import { fetchCollections } from '@/utils/flow'
+import { fetchCollectionsTemp } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
@@ -43,8 +43,8 @@ export default function Galaxy() {
   }, [updateFlowStatus])
 
   useEffect(() => {
-    fetchCollections()
-      .then((data) => setCollections(data))
+    fetchCollectionsTemp()
+      .then((data) => setCollections([...data, ...data, ...data, ...data.slice(4)]))
       .catch((err) => console.log(err))
   }, [])
 
@@ -52,9 +52,10 @@ export default function Galaxy() {
     const width = window.innerWidth
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2.5 : 2.3)
-          .concat(generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4))
-          .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
+        generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 2.5 : 2.3)
+          .concat(generateNonOverlappingOrbitCoordinates(15, width < 1600 ? 1.3 : 1.4))
+          .concat(generateNonOverlappingOrbitCoordinates(22, 1.1))
+          // .concat(generateNonOverlappingOrbitCoordinates(27, 1))
       )
     }
     handleResize()
