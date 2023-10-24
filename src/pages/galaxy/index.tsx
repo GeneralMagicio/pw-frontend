@@ -7,7 +7,7 @@ import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
 import { SadSun } from '@/components/Icon/SadSun'
-import { fetchCollectionsTemp } from '@/utils/flow'
+import { fetchCollectionsTempp } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
@@ -43,7 +43,7 @@ export default function Galaxy() {
   }, [updateFlowStatus])
 
   useEffect(() => {
-    fetchCollectionsTemp()
+    fetchCollectionsTempp()
       .then((data) => setCollections([...data, ...data, ...data, ...data.slice(4)]))
       .catch((err) => console.log(err))
   }, [])

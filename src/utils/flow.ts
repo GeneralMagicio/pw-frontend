@@ -2,7 +2,7 @@ import { PairType } from '@/types/Pairs/Pair'
 import { axiosInstance } from './axiosInstance'
 import { FlowStatus } from '@/types/Flow'
 
-export async function fetchCollectionsTemp() {
+export async function fetchCollectionsTempp() {
   return axiosInstance
     .get<PairType[]>('/flow/collectionsTemp', {
       params: { cid: null },
