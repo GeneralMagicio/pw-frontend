@@ -5,6 +5,7 @@ export interface CollectionRanking {
   hasRanking: true,
   isFinished: boolean
   id: number
+  RPGF3Id?: string
   name: string
   share: number
   ranking: (CollectionRanking | ProjectRanking)[]
@@ -14,6 +15,7 @@ export interface ProjectRanking {
   type: 'project' | 'collection' | 'composite project'
   hasRanking: false,
   id: number
+  RPGF3Id: string
   share: number
   name: string
 }

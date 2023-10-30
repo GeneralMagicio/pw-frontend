@@ -49,7 +49,7 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
             <button
               className={cn(
                 btnClassName,
-                'flex items-center gap-2  whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
+                'flex items-center gap-2 w-fit whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
               )}>
               <span className="font-medium">
                 {finished ? 'Review' : 'Begin'}

@@ -33,7 +33,7 @@ export default function RankingPage() {
   const [rankings, setRankings] = useState<EditingCollectionRanking>()
   const [tempRankings, setTempRankings] = useState<EditingCollectionRanking>()
   const [editMode, setEditMode] = useState(false)
-  const [isOpen, setOpen] = useState(false)
+  // const [isOpen, setOpen] = useState(false)
   const [error, setError] = useState(false)
 
   const handleBack = () => {
@@ -91,22 +91,20 @@ export default function RankingPage() {
         editMode={editMode}
         error={error}
         isOverallRanking={true}
-        onAttest={() => {
-          setOpen(true)
-        }}
+        // onAttest={() => {}}
         onBack={handleBack}
         onEdit={() => {
           setEditMode(!editMode)
         }}
         onUpdate={handleUpdateVotes}
       />
-      {isOpen && rankings && (
+      {/* {isOpen && rankings && (
         <AttestationModal
           isOpen={isOpen}
           onClose={() => setOpen(false)}
           ranking={rankings}
         />
-      )}
+      )} */}
       {rankings && tempRankings && (
         <OverallRanking
           changeLockStatus={changeLockStatus(tempRankings)}

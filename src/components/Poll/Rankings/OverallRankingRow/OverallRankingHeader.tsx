@@ -6,7 +6,7 @@ import { Tick } from '@/components/Icon/Tick'
 import router from 'next/router'
 
 interface Props {
-  onAttest: () => void
+  onAttest?: () => void
   onDone?: () => void
   onEdit: () => void
   onBack: () => void
@@ -75,13 +75,13 @@ export const OverallRankingHeader: React.FC<Props> = ({
             onClick={onDone}>
             Done
           </button>
-        ) : (
+        ) : onAttest ? (
           <button
             className="flex items-center gap-2 whitespace-nowrap rounded-xl  border-6 border-gray-4 bg-black px-6  py-2 text-lg text-white"
             onClick={onAttest}>
             Attest
           </button>
-        )}
+        ) : null}
       </div>
     </header>
   )

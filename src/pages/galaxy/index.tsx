@@ -134,7 +134,7 @@ export default function Galaxy() {
       )}
 
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
-      <TransformWrapper centerOnInit initialScale={1.8}>
+      <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
           <div
             className="flex w-screen items-center justify-center overflow-hidden p-10"
