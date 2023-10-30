@@ -60,7 +60,7 @@ export default function AGalaxy() {
   useEffect(() => {
     const handleResize = () => {
       setCords(
-        generateNonOverlappingOrbitCoordinates(5, 2.5)
+        generateNonOverlappingOrbitCoordinates(6, 3)
           .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
       )
