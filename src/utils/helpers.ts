@@ -1,6 +1,5 @@
-import {
-  CollectionRanking,
-} from '@/components/Poll/Rankings/edit-logic/edit'
+import { pinFileToIPFS } from '@/components/Poll/Rankings/OverallRankingRow/attest-utils'
+import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 
 export function generateNonOverlappingOrbitCoordinates(
   totalPoints: number,
@@ -74,39 +73,46 @@ export const toFixedNumber = (num: number, digits: number) => {
 }
 
 const flattenRanking = (input: CollectionRanking) => {
-  const result: { id: number; share: number }[] = []
+  const result: { RPGF3Id: string; share: number }[] = []
   for (let i = 0; i < input.ranking.length; i++) {
     const row = input.ranking[i]
     if (row.type === 'project' || row.type === 'composite project')
-      result.push({ id: row.id, share: row.share })
+      result.push({ RPGF3Id: row.RPGF3Id!, share: row.share })
     if (row.hasRanking) result.push(...flattenRanking(row))
   }
 
   return result
 }
 
-export const convertRankingToAttestationFormat = (
-  ranking: CollectionRanking
+export const convertRankingToAttestationFormat = async (
+  ranking: CollectionRanking,
+  collectionName: string,
+  collectionDescription: string,
 ) => {
   const totalOp = 3e7
 
   const obj = {
     listDescription:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id luctus eros. In molestie non elit molestie consequat. Duis gravida, urna ut dictum lacinia, dolor libero fermentum nulla, vel porta metus purus a nulla. Aenean ut dictum metus. Vivamus fermentum lorem fringilla, ultricies nunc eget, commodo leo. Proin ac ultricies augue.',
-    impactEvaluationLink: 'https://example.com/impact1',
+      `${collectionDescription} Submitted by Pairwise.`,
+    impactEvaluationLink: 'https://pairwise.vote',
     impactEvaluationDescription:
-      'Donec vel maximus mi. Etiam vulputate at libero a euismod. Fusce id pulvinar dui. Etiam sit amet suscipit mauris. Donec viverra mauris elit. Cras at luctus libero, ac euismod sem. Etiam quis leo vestibulum tellus tincidunt bibendum vitae ac libero.',
-    listContent: flattenRanking(ranking).map((item) => ({RPGF3_Application_UID: item.id, OPAmount: totalOp * item.share})).filter((el) => el.OPAmount > 0)
+      `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
+    listContent: flattenRanking(ranking)
+      .map((item) => ({
+        RPGF3_Application_UID: item.RPGF3Id,
+        OPAmount: Math.floor(totalOp * item.share),
+      }))
+      .filter((el) => el.OPAmount > 0),
   }
 
-  const listName = "List created by Pairwise"
+  const listName = collectionName
   const listMetadataPtrType = 1
 
-  console.log("list:", obj.listContent)
+  const url = await pinFileToIPFS(obj)
 
   return {
     listName,
     listMetadataPtrType,
-    listMetadataPtr: "https://ipfs.io/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/"
+    listMetadataPtr: `https://ipfs.io/ipfs/${url}`,
   }
 }

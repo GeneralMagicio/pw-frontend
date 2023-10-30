@@ -3,6 +3,7 @@ import { axiosInstance } from './axiosInstance'
 import { PairsType, PollType } from '@/types/Pairs'
 import { RankingResponse } from '@/types/Ranking/index'
 import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
+import { PairType } from '@/types/Pairs/Pair'
 
 export async function fetchPairs(cid?: string) {
   const url =
@@ -93,6 +94,13 @@ export async function getOverallRanking() : Promise<CollectionRanking> {
   }
   // return data
 }
+
+export async function getCollection(id: number) : Promise<PairType> {
+  const {data} = await axiosInstance.get(`/collection/${id}`)
+  return data.collection;
+}
+
+
 
 export async function getLastTimestamp() {
   const {data} = await axiosInstance.get<number>(

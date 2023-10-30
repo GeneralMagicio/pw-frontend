@@ -1,4 +1,4 @@
-import { getRankings, getCompositeProjectRankings } from '@/utils/poll'
+import { getRankings, getCompositeProjectRankings, getCollection } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
@@ -13,19 +13,27 @@ import {
 } from '@/components/Poll/Rankings/edit-logic/utils'
 import { useRouter } from 'next/router'
 import { FinishVoteModal } from '@/components/FinishVoteModal'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import Modal from '@/components/Modal/Modal'
-import { EditingCollectionRanking, editPercentage } from '@/components/Poll/Rankings/edit-logic/edit'
+import {
+  EditingCollectionRanking,
+  editPercentage,
+} from '@/components/Poll/Rankings/edit-logic/edit'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
+import { PairType } from '@/types/Pairs/Pair'
 
-export default function RankingPage() {
+export default function RankingPage({
+  isMoon,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [rankings, setRankings] = useState<EditingCollectionRanking>()
-  const [tempRankings, setTempRankings] =
-    useState<EditingCollectionRanking>()
+  const [tempRankings, setTempRankings] = useState<EditingCollectionRanking>()
+  const [collection, setCollection] = useState<PairType>()
   const [editMode, setEditMode] = useState(false)
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(false)
   const router = useRouter()
-  const type = router.query.type
+  // const type = router.query.type
 
   const handleBack = () => {
     if (editMode) {
@@ -45,9 +53,7 @@ export default function RankingPage() {
   }
 
   const edit =
-    (data: EditingCollectionRanking) =>
-    (id: number) =>
-    (newValue: number) => {
+    (data: EditingCollectionRanking) => (id: number) => (newValue: number) => {
       // if (type === 'project') {
       const newRanking = editPercentage(data, id, newValue)
       if (validateRanking(newRanking)) {
@@ -59,26 +65,28 @@ export default function RankingPage() {
       }
     }
 
-  // const obj = 
+  // const obj =
 
   const changeLockStatus =
-    (data: EditingCollectionRanking) =>
-    (id: number) =>
-    () => {
+    (data: EditingCollectionRanking) => (id: number) => () => {
       setTempRankings(setLockProperty(data, id))
     }
 
   useEffect(() => {
     const main = async () => {
       if (router.query.cid) {
-        const data = await getRankings(String(router.query.cid))
+        const [data, collection] = await Promise.all([
+          getRankings(String(router.query.cid)),
+          getCollection(Number(router.query.cid))
+        ])
         // console.log("data:", data)
         // console.log("data.ranking:", data.)
+        setCollection(collection)
         setRankings(addAdditionalProperties(data))
       }
     }
     main()
-  }, [setRankings, router.query.cid, type])
+  }, [setRankings, router.query.cid])
 
   useEffect(() => {
     setTempRankings(rankings)
@@ -90,22 +98,30 @@ export default function RankingPage() {
         editMode={editMode}
         error={error}
         isOverallRanking={false}
-        onAttest={() => {}}
+        onAttest={isMoon ? () => setOpen(true) : undefined}
         onBack={handleBack}
-        onDone={() => {
-          setOpen(true)
-        }}
+        onDone={!isMoon ? () => setOpen(true) : undefined}
         onEdit={() => {
           setEditMode(!editMode)
         }}
         onUpdate={handleUpdateVotes}
       />
-      <Modal
+      {isMoon && rankings && collection && (
+        <AttestationModal
+          collectionName={collection.name}
+          colletionDescription={collection.description}
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          ranking={rankings}
+        />
+      )}
+      {!isMoon && <Modal
         className="mb-96 bg-white"
         isOpen={open}
         onClose={() => setOpen(false)}>
         <FinishVoteModal />
-      </Modal>
+      </Modal>}
+
       {rankings && tempRankings && (
         <OverallRanking
           changeLockStatus={changeLockStatus(tempRankings)}
@@ -118,3 +134,20 @@ export default function RankingPage() {
     </>
   )
 }
+
+export const getServerSideProps = (async (context) => {
+  const cid = context.params?.cid
+
+  if (!cid) return { props: { isMoon: false } }
+
+  const res = await axiosInstance.get<boolean>('/flow/isMoon', {
+    params: {
+      cid,
+    },
+  })
+
+  const isMoon = res.data
+  return { props: { isMoon } }
+}) satisfies GetServerSideProps<{
+  isMoon: boolean
+}>

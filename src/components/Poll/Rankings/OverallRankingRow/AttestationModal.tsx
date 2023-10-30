@@ -13,11 +13,14 @@ import {
 import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
 import { convertRankingToAttestationFormat } from '@/utils/helpers'
+import Link from 'next/link'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: CollectionRanking
+  ranking: CollectionRanking,
+  collectionName: string;
+  colletionDescription: string;
 }
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
@@ -26,6 +29,8 @@ export const AttestationModal: React.FC<Props> = ({
   isOpen,
   onClose,
   ranking,
+  collectionName,
+  colletionDescription
 }) => {
   const [step, setSteps] = useState<number>(1)
   const [loading, setLoading] = useState(false)
@@ -51,7 +56,7 @@ export const AttestationModal: React.FC<Props> = ({
   }
 
   const attest = async () => {
-    const item = convertRankingToAttestationFormat(ranking)
+    const item = await convertRankingToAttestationFormat(ranking, collectionName, colletionDescription)
 
     if (!isConnected) {
       try {
@@ -69,6 +74,10 @@ export const AttestationModal: React.FC<Props> = ({
     }
     if (!signer) {
       console.log('no signer')
+      return
+    }
+    if (!address) {
+      console.log('no address')
       return
     }
 
@@ -90,14 +99,14 @@ export const AttestationModal: React.FC<Props> = ({
           schema: SCHEMA_UID,
           data: {
             data: encodedData,
-            recipient: '0x0000000000000000000000000000000000000000',
+            recipient: address,
             revocable: false,
           },
         },
       )
 
       const newAttestationUID = await tx.wait()
-      setUrl(`${easConfig.explorer}/address/${address}`)
+      setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
       setSteps(3)
     } catch (e) {
       console.error('error on sending tx:', e)
@@ -162,6 +171,15 @@ export const AttestationModal: React.FC<Props> = ({
               </button>
             </a>
           </div>
+        )}
+        {step > 3 && (
+            <Link
+              className="ml-8 flex w-32 justify-center self-center rounded-lg bg-gray-600 py-3 text-white"
+              href='/galaxy'>
+              <button>
+                Done
+              </button>
+            </Link>
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
