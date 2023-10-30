@@ -125,7 +125,7 @@ export const VoteCard: React.FC<
             <img
               alt={item.name}
               className="h-[170px] w-full rounded-2xl border-0 object-cover"
-              src={item.image}></img>
+              src={item.image || "/nip.png"}></img>
             <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
             <p className={cn(styles['line-clamp-4'], 'font-Inter')}>
               {item.description}
