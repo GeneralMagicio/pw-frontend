@@ -33,9 +33,16 @@ export default function AGalaxy() {
   useEffect(() => {
     const main = async () => {
       if (router.query.planetID) {
-        const collections = await fetchCollections(String(router.query.planetID))
-        // @ts-ignore
-        setCollections(collections.map((c) => ({...c, type: c.type === "composite_project" ? "composite project" : c.type})))
+        const collections = await fetchCollections(
+          String(router.query.planetID)
+        )
+        setCollections(
+          collections.map((c) => ({
+            ...c,
+            // @ts-ignore
+            type: c.type === 'composite_project' ? 'composite project' : c.type,
+          }))
+        )
       }
     }
 
@@ -45,11 +52,13 @@ export default function AGalaxy() {
   useEffect(() => {
     const func = async () => {
       if (router.query.planetID) {
-        const res = await axiosInstance.get(`/collection/${Number(router.query.planetID)}`)
+        const res = await axiosInstance.get(
+          `/collection/${Number(router.query.planetID)}`
+        )
         const c = res.data
         setStatus({
           finished: c.finished ?? true,
-          title: c.collection.name || ""
+          title: c.collection.name || '',
         })
       }
     }
@@ -82,19 +91,18 @@ export default function AGalaxy() {
 
   const handleClick = (collection: PairType) => () => {
     console.log(collection)
-    if (collection.locked) return;
     if (collection.type === 'collection')
       return collection.finished
-          ? router.replace(`/poll/${collection.id}/ranking`)
-          : router.push(
-              `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${
-                collection.id
-              }`
-            )
+        ? router.replace(`/poll/${collection.id}/ranking`)
+        : router.push(
+            `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${
+              collection.id
+            }`
+          )
     else if (collection.type === 'composite project')
       return collection.finished
-          ? router.replace(`/poll/${collection.id}/ranking`)
-          : router.push(`/poll/${collection.id}`)
+        ? router.replace(`/poll/${collection.id}/ranking`)
+        : router.push(`/poll/${collection.id}`)
   }
 
   return (
@@ -106,7 +114,7 @@ export default function AGalaxy() {
           router.back()
         }}>
         <ArrowBackward className="text-black" />
-        <span>Go Back</span>
+        <span>Back</span>
       </button>
       {/* {showNewSectionsModal && (
         <NewSectionsModal
@@ -137,7 +145,10 @@ export default function AGalaxy() {
 
                     return (
                       <div
-                        className={cn("absolute h-[100px] w-[100px] cursor-pointer", {'cursor-auto' : collection.locked})}
+                        className={cn(
+                          'absolute h-[100px] w-[100px] cursor-pointer',
+                          { 'cursor-auto': collection.locked }
+                        )}
                         key={x + y}
                         onClick={handleClick(collection)}
                         style={{

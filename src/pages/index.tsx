@@ -38,7 +38,7 @@ export default function Home() {
         <Star className="absolute right-80    top-40" />
         <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
           <h2 className="text-[64px] font-bold text-red">
-            Retroactive Public Goods Funding
+            Curate RetroPGF 3 Voting Lists with Pairwise
           </h2>
           <p className="text-2xl ">Impact = Profit</p>
           <ConnectWalletButton
@@ -67,11 +67,14 @@ export default function Home() {
         />
         <Star className="absolute right-16    top-28" />
         <h2 className="relative w-[899px] text-[44px] font-bold">
-          {`Our collective wisdom is what drives RetroPGF!`}
+          Empowering BadgeHolders
         </h2>
         <p className="relative text-center text-[24px]">
-          {`Join the Optimism Collective's mission!
-          With 30 million OP tokens to be distributed in the third round of RetroPGF, your ranking will shape the direction of our collective future.`}
+          Welcome to Pairwise, your go-to platform for curating project lists
+          for RetroPGF 3! Immerse yourself in a streamlined experience, tailored
+          to empower you, the badgeholder, in creating a meaningful impact.
+          Start shaping your influence in the Optimism ecosystem and have fun
+          doing it!
         </p>
         <a
           href="https://community.optimism.io/docs/governance/retropgf-3/"
@@ -94,49 +97,50 @@ export default function Home() {
         />
 
         <h2 className="text-center text-[52px] font-bold text-red">
-          Begin Your Journey
+          Beginning Your Journey
         </h2>
         <VectorHorizontal className="mx-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">
-            Embark on the RetroPGF Odyssey
-          </h3>
+          <h3 className="text-[32px] font-bold">Simplifying Project Review</h3>
           <p className="text-lg font-medium">
-            Dive into the RetroPGF universe and discover a realm of projects
-            that hold the promise of positive change. Browse through our
-            collection and get a sneak peek into the potential impact you can
-            drive.
+            Crafted for RPGF, Pairwise transforms the overwhelming task of
+            reviewing numerous projects into a manageable and focused activity.
+            Concentrate on the projects you know best, and contribute to a more
+            informed and balanced allocation of funds.
           </p>
         </div>
         <VectorHorizontal2 className="mx-auto" />
         <div className="my-6 -mr-32 ml-auto flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Galactic Governance Awaits</h3>
+          <h3 className="text-[32px] font-bold">Streamlining List Creation</h3>
           <p className="text-lg font-medium">
-            Step into the RetroPGF cosmos, where your votes will determine the
-            trajectory of projects destined to shape our universe. Each
-            selection you make sends ripples through the space of innovation.
+            With Pairwise, you can easily create, edit, and share curated lists
+            of projects, to be imported directly into Agora and Supermodular for
+            final voting. By progressing through planets and moons, the process
+            of list-making is engaging and fun!
           </p>
           <CollectionsLeft className="absolute -left-[350px] -mt-[300px]" />
         </div>
         <VectorHorizontal3 className="mx-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Unlock More Collections</h3>
+          <h3 className="text-[32px] font-bold">Leveraging Your Expertise</h3>
           <p className="text-lg font-medium">
-            Unleash your influence by voting on the unlocked collection. Your
-            votes are your voice, shaping the future of these projects. Every
-            click is a step toward making a difference.
+            Pairwise streamlines the review process, guiding you to the
+            categories and projects that align with your expertise. Your
+            insights are crucial; they ensure that funds are distributed to
+            projects that truly make an impact in the Optimism ecosystem.
           </p>
           <CollectionsRight className="absolute -right-[320px] -mt-[40%]" />
         </div>
         <VectorHorizontal4 className="ml-28 mr-auto" />
-        <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Check and Modify Your Votes</h3>
+        <div className="my-6 -mr-32 ml-auto  flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
+          <h3 className="text-[32px] font-bold">Fostering Collective Impact</h3>
           <p className="text-lg font-medium">
-            Review and refine your votes at any time. Your opinions matter, and
-            we want to make sure your choices reflect your passion for the
-            projects that resonate with you.
+            Pairwise is more than just a tool; it’s a community of informed
+            badge holders shaping the outcomes and future of RetroPGF. Join us
+            in making a lasting impact, guaranteeing that projects with proven
+            impact and value receive the recognition and resources they deserve.
           </p>
-          <Votes className="absolute -right-[350px] -mt-[60px]" />
+          <Votes className="absolute -left-[300px] -mt-[98px]" />
         </div>
       </div>
 

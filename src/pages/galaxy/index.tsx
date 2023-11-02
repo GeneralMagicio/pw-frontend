@@ -53,7 +53,9 @@ export default function Galaxy() {
     const handleResize = () => {
       setCords(
         generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2.5 : 2.3)
-          .concat(generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4))
+          .concat(
+            generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4)
+          )
           .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
       )
     }
@@ -63,7 +65,6 @@ export default function Galaxy() {
   }, [])
 
   const handlePlanetClick = (collection: PairType) => () => {
-    if (collection.locked) return null
     if (
       collection.finished &&
       !collection.hasSubcollections &&
@@ -84,7 +85,9 @@ export default function Galaxy() {
       ).length === 1
 
     const bool =
-      flowStatus.expertise && flowStatus.impact && justOnePlanetUnlockedUnstarted
+      flowStatus.expertise &&
+      flowStatus.impact &&
+      justOnePlanetUnlockedUnstarted
 
     return bool
   }, [collections, flowStatus])
@@ -170,7 +173,7 @@ export default function Galaxy() {
                           finished={collection.finished}
                           hasCompositeProjects={collection.hasCompositeProjects}
                           hasSubcollections={collection.hasSubcollections}
-                          locked={collection.locked}
+                          locked={false}
                           name={collection.name}
                         />
                       </div>
@@ -195,7 +198,7 @@ export default function Galaxy() {
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => router.push('/ranking')}>
-          Check ranks
+          Ranking
           <PodiumSharp />
         </button>
       </div>
