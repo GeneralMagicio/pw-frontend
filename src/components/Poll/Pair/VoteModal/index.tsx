@@ -2,9 +2,9 @@ import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { ArrowForwardSharp } from '@/components/Icon/ArrowForwardSharp'
 import { Browser } from '@/components/Icon/Browser'
 import { Close } from '@/components/Icon/Close'
+import Image from 'next/image'
 import { Layers } from '@/components/Icon/Layers'
 import { PairType } from '@/types/Pairs/Pair'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 interface VoteModalProps {
@@ -18,7 +18,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
       <div className="relative flex  min-w-[700px] flex-col  gap-6">
         <div className="flex flex-col">
           <header className="mb-2 flex justify-between">
-            <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
+            <h3 className="text-2xl font-bold ">{item.name}</h3>
             <Close className="cursor-pointer" onClick={handeClose} />
           </header>
           <div className="self-start rounded-lg border border-black-3 p-1">
@@ -41,7 +41,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
               src={item.image}
               width={360}
             />
-            <div className="flex  grow flex-col gap-6 overflow-auto  font-Inter text-lg">
+            <div className="flex grow flex-col gap-6 overflow-auto text-lg ">
               <div className="flex flex-col gap-2">
                 <p
                   dangerouslySetInnerHTML={{
@@ -52,7 +52,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
             </div>
           </div>
           {!item.childProjects?.length ? null : (
-            <div className="mb-10 mt-6 font-Inter">
+            <div className="mt-6 mb-10 ">
               <h5 className="border-b border-b-gray-10 pb-2 text-lg">
                 {item.childProjects.length} projects
               </h5>
@@ -77,7 +77,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
           )}
         </div>
       </div>
-      {/* <footer className="absolute inset-x-0 bottom-0 flex justify-between bg-white p-10 pt-6 font-IBM">
+      {/* <footer className="absolute inset-x-0 bottom-0 flex justify-between p-10 pt-6 bg-white font-IBM">
         <button
           className={
             'flex  min-w-fit items-center justify-center rounded-full border border-dark  px-8 text-sm'

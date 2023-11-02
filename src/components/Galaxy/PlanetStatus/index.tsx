@@ -1,7 +1,7 @@
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { Check } from '@/components/Icon/Check'
-import { PauseSharp } from '@/components/Icon/PauseSharp'
 import { CollectionProgressStatus } from '../types'
+import { PauseSharp } from '@/components/Icon/PauseSharp'
 
 interface Props {
   progress: CollectionProgressStatus
@@ -48,7 +48,7 @@ export const PlanetStatus: React.FC<Props> = ({
     : 'Begin ranking'
   return (
     <div
-      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
+      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2  text-black`}>
       <p className="max-w-[170px] overflow-hidden text-ellipsis text-base font-medium">
         {' '}
         {title}{' '}
@@ -60,7 +60,7 @@ export const PlanetStatus: React.FC<Props> = ({
       ) : (
         <Pending />
       )}
-      <div className=" flex items-center border-t border-gray-200 text-base font-medium">
+      <div className="flex items-center border-t border-gray-200 text-base font-medium ">
         <p>{action}</p> <ArrowForward className="ml-2 scale-90" />
       </div>
     </div>
@@ -73,7 +73,7 @@ export const PlanetUnlocked: React.FC<Omit<Props, 'hasSubcollections'>> = ({
 }) => {
   return (
     <div
-      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2 font-Inter text-black`}>
+      className={`flex w-[195px] cursor-pointer flex-col items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-100 bg-white p-2  text-black`}>
       <p className="max-w-[170px] overflow-hidden text-ellipsis text-base font-medium">
         {' '}
         {title}{' '}

@@ -6,6 +6,7 @@ import { Eye } from '@/components/Icon/Eye'
 import { PairType } from '@/types/Pairs/Pair'
 import { CardBorderLeft } from '@/components/Icon/CardBorderLeft'
 import { CardBorderRight } from '@/components/Icon/CardBorderRight'
+import Image from 'next/image'
 
 interface VoteCardProps {
   placement: 'left' | 'right'
@@ -121,10 +122,13 @@ export const VoteCard: React.FC<
             })`,
           }}>
           <div className="flex flex-col h-full gap-2 grow" onClick={onClick}>
-            <img
+            <Image
               alt={item.name}
               className="h-[170px] w-full rounded-2xl border-0 object-cover pb-2"
-              src={item.image || '/nip.png'}></img>
+              height="300"
+              src={item.image || '/nip.png'}
+              width="300"
+            />
             <div className="text-2xl font-bold">{item.name}</div>
             <div className={cn(styles['line-clamp-4'])}>
               {item.contributionDescription}
