@@ -5,11 +5,12 @@ import cn from 'classnames'
 import { generateShapeID } from '@/utils/helpers'
 import { PlanetShape } from '../PlanetShape'
 import { PlanetStatus, PlanetUnlocked } from '../PlanetStatus'
+import { CollectionProgressStatus } from '../types'
 
 interface CollectionPlanetProps {
   name: string
   locked: boolean
-  finished: boolean
+  progress: CollectionProgressStatus
   hasSubcollections: boolean
   hasCompositeProjects: boolean
 }
@@ -17,7 +18,7 @@ interface CollectionPlanetProps {
 export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
   name,
   locked,
-  finished,
+  progress,
   hasSubcollections,
   hasCompositeProjects,
 }) => {
@@ -48,8 +49,8 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
           })}
           onMouseLeave={() => setHover(false)}>
           <PlanetStatus
-            finished={finished}
             hasSubcollections={hasSubcollections || hasCompositeProjects}
+            progress={progress}
             title={name || ''}
           />
         </div>
@@ -58,7 +59,7 @@ export const CollectionPlanet: React.FC<CollectionPlanetProps> = ({
             'hidden': hover,
           })}
           onMouseEnter={() => setHover(true)}>
-          <PlanetUnlocked finished={finished} title={name || ''} />
+          <PlanetUnlocked progress={progress} title={name || ''} />
         </div>
       </div>
     </div>

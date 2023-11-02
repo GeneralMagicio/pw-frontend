@@ -1,3 +1,5 @@
+import { CollectionProgressStatus } from "@/components/Galaxy/types"
+
 export interface PairType {
   id: number
   name: string
@@ -13,7 +15,7 @@ export interface PairType {
   locked: boolean
   hasSubcollections: boolean,
   hasCompositeProjects: boolean,
-  finished: boolean,
+  progress: CollectionProgressStatus,
   started: boolean,
   type: "collection" | "project" | "composite project"
 }

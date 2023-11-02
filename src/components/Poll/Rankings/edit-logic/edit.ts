@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep'
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
   hasRanking: true,
-  isFinished: boolean
+  // isFinished: boolean
   id: number
   RPGF3Id?: string
   name: string
@@ -57,7 +57,7 @@ const ripplePercentage = (
     const shareOfDelta = deltaCalculator(row.share, totalShare, delta)
     if (!row.locked && row.id === changedId) {
       row.share += delta
-      if (row.hasRanking) row.ranking = ripplePercentage(row.ranking, changedId, -1 * shareOfDelta)
+      if (row.hasRanking) row.ranking = ripplePercentage(row.ranking, changedId, -1 * delta)
     } else if (!row.hasRanking && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
     } else if (row.hasRanking && !row.locked && row.id !== changedId) {
