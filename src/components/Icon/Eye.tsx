@@ -3,10 +3,10 @@ import { SVGProps } from 'react'
 export const Eye: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
   return (
     <svg
-      width="1.5em"
+      fill="none"
       height="1.5em"
       viewBox="0 0 24 24"
-      fill="none"
+      width="1.5em"
       xmlns="http://www.w3.org/2000/svg">
       <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#0D0D0D" />
       <path
