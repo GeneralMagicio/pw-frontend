@@ -1,4 +1,4 @@
-import { CollectionProgressStatus } from "@/components/Galaxy/types"
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 
 export interface PairType {
   id: number
@@ -6,6 +6,7 @@ export interface PairType {
   url: string
   image: string
   description: string
+  contributionDescription: string
   collection_id: number | null
   created_at: string
   numOfChildren: number
@@ -13,9 +14,9 @@ export interface PairType {
   subProjects?: Array<PairType>
   parent_collection_id: number | null
   locked: boolean
-  hasSubcollections: boolean,
-  hasCompositeProjects: boolean,
-  progress: CollectionProgressStatus,
-  started: boolean,
-  type: "collection" | "project" | "composite project"
+  hasSubcollections: boolean
+  hasCompositeProjects: boolean
+  progress: CollectionProgressStatus
+  started: boolean
+  type: 'collection' | 'project' | 'composite project'
 }
