@@ -18,14 +18,14 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
   isRight,
   project,
 }) => {
-  const { name, locked, progress } = project
+  const { name, progress } = project
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
 
-  const finished = progress === "Finished"
+  const finished = progress === 'Finished'
   const btnClassName = finished ? 'bg-white text-black' : 'text-white bg-black'
   return (
     <>
-      <PlanetShape id={shapeID} locked={locked} />
+      <PlanetShape id={shapeID} />
       <div
         className={cn('absolute top-1 flex whitespace-nowrap ', {
           'left-full': isRight,
@@ -35,22 +35,17 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
         <div className="flex flex-col gap-2">
           <h4 className="flex items-center gap-2 font-IBM text-lg font-medium text-black">
             {name}
-            {locked ? (
-              <Lock className="text-black" />
-            ) : (
-              <Unlocked className="text-black" />
-            )}
           </h4>
-          {(finished || locked) && (
+          {finished && (
             <span className="font-IBM text-sm font-medium text-black">
               {finished ? '[Voted]' : '[Not finished]'}
             </span>
           )}
-          {(!locked || finished) && (
+          {finished && (
             <button
               className={cn(
                 btnClassName,
-                'flex items-center gap-2 w-fit whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
+                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
               )}>
               <span className="font-medium">
                 {finished ? 'Review' : 'Begin'}

@@ -76,12 +76,14 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
       <p className="self-start text-2xl font-bold"> Discover your impact </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-        Navigate to the &apos;Check Votes&apos; section now! View all the allocations you have made to each area and get ready to attest your allocations!
+          Navigate to the &apos;Check Votes&apos; section now! View all the
+          allocations you have made to each area and get ready to attest your
+          allocations!
         </p>
         <img
           alt="ethers"
-          className="self-start"
-          src="/images/help-three-check-votes.png"
+          className="w-[250px] self-start"
+          src="/images/ranking-image.png"
         />
       </div>
       <div className="flex items-center justify-between">
