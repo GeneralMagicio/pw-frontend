@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
               <ArrowForward />
             ) : (
               <>
-                <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red text-center font-IBM text-[8px] text-white">
+                <span className="absolute -bottom-1 -right-1 flex h-4 items-center justify-center rounded-full bg-red text-center font-IBM text-[8px] text-white">
                   {voteCountsToUnklock}
                 </span>
                 <Lock />
