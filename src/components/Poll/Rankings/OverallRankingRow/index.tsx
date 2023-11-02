@@ -33,7 +33,11 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           {!editMode ? (
             <>
               <span className="mr-1 text-[8px] text-red">%</span>
-              <span className="">{(data.share * 100).toFixed(2)}</span>
+              <span className="">
+                {(data.share * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
+              </span>
             </>
           ) : (
             <EditTextField
@@ -49,7 +53,9 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
       </span>
       <span className="flex w-36 items-center">
         <span className="">
-          {(toFixedNumber(data.share, 6) * 3e6).toFixed(2)}
+          {(toFixedNumber(data.share, 6) * 3e6).toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+          })}
         </span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
@@ -85,7 +91,11 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             {!editMode ? (
               <>
                 <span className="mr-1 text-[8px] text-red">%</span>
-                <span className="">{(data.share * 100).toFixed(2)}</span>
+                <span className="">
+                  {(data.share * 100).toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
               </>
             ) : (
               <EditTextField
@@ -100,20 +110,20 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           </div>
         </span>
         <span className="flex w-36 items-center">
-          <span className="">{(data.share * 3e6).toFixed(2)}</span>
+          <span className="">
+            {(data.share * 3e6).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+          </span>
           <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
         </span>
         <span
           {...getToggleProps({
             onClick: () =>
-              data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
+              setExpanded((prevExpanded) => !prevExpanded),
           })}
           className="flex h-6 w-12 items-center justify-center">
-          {!data.isFinished ? (
-            <span title="You have not voted in this collection yet">
-              <Lock />
-            </span>
-          ) : isExpanded ? (
+          {isExpanded ? (
             <CaretUp />
           ) : (
             <CaretDown />

@@ -6,14 +6,11 @@ import { Header } from '@/components/Poll/Pair/Header'
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
 import {
   fetchPairs,
-  fetchSubProjectPairs,
-  voteExpertise,
   voteProjects,
 } from '@/utils/poll'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { PairsType, PollType } from '@/types/Pairs'
-import { ImpactModal } from '@/components/Journey/ImpactModal'
+import { PairsType } from '@/types/Pairs'
 import { PairType } from '@/types/Pairs/Pair'
 
 export default function Poll() {
@@ -21,24 +18,15 @@ export default function Poll() {
   const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
-  const [showImpactModal, setShowImpactModal] = useState(false)
+  // const [showImpactModal, setShowImpactModal] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
 
   const goToRanking = () => {
-    switch (cid) {
-      case PollType.EXPERTISE:
-        router.push('/poll/expertise/ranking')
-        return
-      case PollType.IMPACT:
-        router.push('/poll/root/ranking')
-        return
-      default:
-        router.push({
-          pathname: `${router.pathname}/ranking`,
-          query: router.query,
-        })
-    }
+    router.push({
+      pathname: `${router.pathname}/ranking`,
+      query: router.query,
+    })
   }
 
   const fetchData = async () => {
@@ -49,11 +37,11 @@ export default function Poll() {
     setPairs(data)
   }
 
-  useEffect(() => {
-    if (router.query.cid === 'root') {
-      setShowImpactModal(true)
-    }
-  }, [router.query.cid])
+  // useEffect(() => {
+  //   if (router.query.cid === 'root') {
+  //     setShowImpactModal(true)
+  //   }
+  // }, [router.query.cid])
 
   useEffect(() => {
     // if (pairs?.type === 'collection') {
@@ -70,10 +58,10 @@ export default function Poll() {
     //   setActiveQuestion(
     //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
     //   )
-    if (pairs?.type === 'expertise') {
-      setActiveQuestion('What area do you feel most confident discussing?')
-    }
-    else setActiveQuestion(
+    // if (pairs?.type === 'expertise') {
+    //   setActiveQuestion('What area do you feel most confident discussing?')
+    // }
+    setActiveQuestion(
       'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
     )
   }, [pairs])
@@ -88,8 +76,7 @@ export default function Poll() {
     if (!pairs) return 
 
     const [a, b] = pair
-    const voteRequest = pairs?.type === "expertise" ? voteExpertise : voteProjects
-    await voteRequest({
+    await voteProjects({
       id1: a.id,
       id2: b.id,
       pickedId: picked || null,
@@ -121,13 +108,9 @@ export default function Poll() {
           pairs={pairs.pairs}
         />
       )}
-      {showImpactModal ? (
-        <ImpactModal isOpen={showImpactModal} onClose={() => {setShowImpactModal(false); setOpen(false)}} />
-      ) : (
-        <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <Question onStart={() => setOpen(false)} question={activeQuestion} />
-        </Modal>
-      )}
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <Question onStart={() => setOpen(false)} question={activeQuestion} />
+      </Modal>
 
       <Footer
         onBack={() => router.back()}

@@ -6,41 +6,36 @@ import { useRouter } from 'next/router'
 import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
-import { SadSun } from '@/components/Icon/SadSun'
 import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
-import { useSession } from '@/context/session'
 import { HelpModal } from '@/components/Journey/HelpModal'
-import { MainQuestionsModal } from '@/components/Galaxy/MainQuestionsModal'
-import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
-import { CustomizeExperienceModal } from '@/components/Journey/CustomizeExperienceModal'
 import { Help } from '@/components/Icon/Help'
 
 const PLANET_SIZE = 150
 
 export default function Galaxy() {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
   const [showHelpModal, setShowHelpModal] = useState(false)
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
-  const [showCustomizeModal, setShowCustomizeModal] = useState(true)
-  const { flowStatus, updateFlowStatus } = useSession()
+  // const [showCustomizeModal, setShowCustomizeModal] = useState(true)
+  // const { flowStatus, updateFlowStatus } = useSession()
 
-  useEffect(() => {
-    const func = async () => {
-      const status = await updateFlowStatus()
-      if (
-        (!status.impact || !status.expertise) &&
-        status.checkpoint.type !== 'initial'
-      ) {
-        setOpen(true)
-      }
-    }
+  // useEffect(() => {
+  //   const func = async () => {
+  //     const status = await updateFlowStatus()
+  //     if (
+  //       (!status.impact || !status.expertise) &&
+  //       status.checkpoint.type !== 'initial'
+  //     ) {
+  //       setOpen(true)
+  //     }
+  //   }
 
-    func()
-  }, [updateFlowStatus])
+  //   func()
+  // }, [updateFlowStatus])
 
   useEffect(() => {
     fetchCollections()
@@ -66,7 +61,7 @@ export default function Galaxy() {
 
   const handlePlanetClick = (collection: PairType) => () => {
     if (
-      collection.finished &&
+      collection.progress === 'Finished' &&
       !collection.hasSubcollections &&
       !collection.hasCompositeProjects
     )
@@ -84,13 +79,10 @@ export default function Galaxy() {
         (collection) => !collection.locked || collection.started
       ).length === 1
 
-    const bool =
-      flowStatus.expertise &&
-      flowStatus.impact &&
-      justOnePlanetUnlockedUnstarted
+    const bool = justOnePlanetUnlockedUnstarted
 
     return bool
-  }, [collections, flowStatus])
+  }, [collections])
 
   useEffect(() => {
     setShowHelpModal(checkShowHelpModalCondition())
@@ -110,15 +102,15 @@ export default function Galaxy() {
   //   else setShowNewSectionsModal(false)
   // }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
 
-  if (
-    checkShowHelpModalCondition() &&
-    (showCustomizeModal || collections.length === 0)
-  ) {
-    setTimeout(() => setShowCustomizeModal(false), 3 * 1000)
-    return <CustomizeExperienceModal isOpen={true} onClose={() => {}} />
-  }
+  // if (
+  //   checkShowHelpModalCondition() &&
+  //   (showCustomizeModal || collections.length === 0)
+  // ) {
+  //   setTimeout(() => setShowCustomizeModal(false), 3 * 1000)
+  //   return <CustomizeExperienceModal isOpen={true} onClose={() => {}} />
+  // }
 
-  if (collections.length === 0 || flowStatus.checkpoint.type === 'initial') {
+  if (collections.length === 0) {
     return
   }
 
@@ -170,23 +162,23 @@ export default function Galaxy() {
                           top: `${y - PLANET_SIZE / 2}px`,
                         }}>
                         <CollectionPlanet
-                          finished={collection.finished}
                           hasCompositeProjects={collection.hasCompositeProjects}
                           hasSubcollections={collection.hasSubcollections}
                           locked={false}
                           name={collection.name}
+                          progress={collection.progress}
                         />
                       </div>
                     )
                   })}
-                {open ? <SadSun /> : <HappySun />}
+                <HappySun />
               </div>
             </div>
           </div>
         </TransformComponent>
       </TransformWrapper>
 
-      <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} />
+      {/* <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} /> */}
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <button
           className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"

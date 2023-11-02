@@ -1,4 +1,4 @@
-import { getRankings, getCompositeProjectRankings, getCollection } from '@/utils/poll'
+import { getRankings, getCollection } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'

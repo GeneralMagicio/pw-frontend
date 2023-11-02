@@ -7,12 +7,11 @@ import {
 
 interface RankingsProps {
   data: EditingCollectionRanking
-  totalPercentage: number, 
+  totalPercentage: number
   editMode: boolean
   edit: Props['onEditChange']
   changeLockStatus: Props['onLockClick']
 }
-
 
 interface Props {
   data: EditingCollectionRanking
@@ -69,10 +68,14 @@ export const OverallRanking: React.FC<RankingsProps> = ({
   totalPercentage,
 }) => {
   return (
-    <div className="container relative mx-auto mt-8 mb-32 flex min-w-[1200px] grow flex-col items-end gap-1 px-16">
+    <div className="container relative mx-auto mb-32 mt-8 flex min-w-[1200px] grow flex-col items-end gap-1 px-16">
       <div className="flex w-full items-center gap-6 rounded-md border-b border-b-gray-10 bg-white/[.2] px-6  py-4 font-Inter text-black">
         <span className="grow text-sm">Project</span>
-        <span className=" w-64 text-sm">{`Budget Allocation (Total: ${(totalPercentage * 100).toFixed(2)}%)`}</span>
+        <span className=" w-64 text-sm">{`Budget Allocation (Total: ${(
+          totalPercentage * 100
+        ).toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+        })}%)`}</span>
         <span className="w-[215px]  text-sm">OP Received</span>
       </div>
       {/* <Rows
@@ -95,7 +98,7 @@ export const OverallRanking: React.FC<RankingsProps> = ({
           )
         else
           return (
-            <div className='w-full'>
+            <div className="w-full">
               <OverallRankingRow
                 data={ranking}
                 editMode={editMode}

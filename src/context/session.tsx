@@ -1,8 +1,6 @@
 import { AuthenticateWalletModal } from '@/components/AuthenticateWalletModal'
 import Modal from '@/components/Modal/Modal'
-import { FlowStatus } from '@/types/Flow'
 import { isLoggedIn, login, logout } from '@/utils/auth'
-import { getFlowStatus } from '@/utils/flow'
 import { useRouter } from 'next/router'
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 import { useContext } from 'react'
@@ -10,22 +8,22 @@ import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 
 interface Session {
   user: string | null
-  flowStatus: FlowStatus
-  updateFlowStatus: () => Promise<FlowStatus>
+  // flowStatus: FlowStatus
+  // updateFlowStatus: () => Promise<FlowStatus>
 }
 
-const INITIAL_FLOW: FlowStatus = {
-  checkpoint: {
-    type: 'initial',
-    collectionId: 1,
-  },
-  impact: false,
-  expertise: false,
-}
+// const INITIAL_FLOW: FlowStatus = {
+//   checkpoint: {
+//     type: 'initial',
+//     collectionId: 1,
+//   },
+//   impact: false,
+//   expertise: false,
+// }
 const SESSION: Session = {
   user: null,
-  flowStatus: INITIAL_FLOW,
-  async updateFlowStatus() {return INITIAL_FLOW},
+  // flowStatus: INITIAL_FLOW,
+  // async updateFlowStatus() {return INITIAL_FLOW},
 }
 export const SessionContext = React.createContext<Session>(SESSION)
 
@@ -36,11 +34,11 @@ export const useSession = () => {
 export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [session, setSession] = useState<Session>({
     ...SESSION,
-    async updateFlowStatus() {
-      const status = await getFlowStatus()
-      setSession((s) => ({ ...s, flowStatus: status }))
-      return status
-    },
+    // async updateFlowStatus() {
+    //   const status = await getFlowStatus()
+    //   setSession((s) => ({ ...s, flowStatus: status }))
+    //   return status
+    // },
   })
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const router = useRouter()
@@ -62,11 +60,9 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
           const isLogged = await isLoggedIn()
           setIsLoginModalOpen(!Boolean(isLogged))
           if (isLogged) {
-            const status = await getFlowStatus()
             return setSession({
               ...session,
               user: 'SUCCESS',
-              flowStatus: status,
             })
           }
         } catch {}
@@ -83,8 +79,7 @@ export const SessionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const handleLogin = useCallback(async () => {
     await login(chain!.id, address!, signMessageAsync)
-    const status = await getFlowStatus()
-    setSession({ ...session, user: 'SUCCESS', flowStatus: status })
+    setSession({ ...session, user: 'SUCCESS' })
     setIsLoginModalOpen(false)
   }, [address, chain, session, signMessageAsync])
   
