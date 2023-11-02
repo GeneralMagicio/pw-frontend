@@ -1,6 +1,3 @@
-import { ArrowForward } from '@/components/Icon/ArrowForward'
-import { PodiumSharp } from '@/components/Icon/PodiumSharp'
-import Modal from '@/components/Modal/Modal'
 import { useEffect, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
@@ -9,13 +6,11 @@ import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { useRouter } from 'next/router'
 import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
-import { fetchCollections, fetchCompositeProjects } from '@/utils/flow'
+import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
-import { PlanetSub } from '@/components/Icon/PlanetSub'
-import { fetchPairs } from '@/utils/poll'
-import { NewSectionsModal } from '@/components/Journey/NewSectionsModal'
 import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 
 const PLANET_SIZE = 150
 
@@ -24,8 +19,8 @@ export default function AGalaxy() {
   // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
-  const [status, setStatus] = useState<{ finished: boolean; title: string }>({
-    finished: false,
+  const [status, setStatus] = useState<{ progress: CollectionProgressStatus; title: string }>({
+    progress: "Pending",
     title: '',
   })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
@@ -48,7 +43,7 @@ export default function AGalaxy() {
         const res = await axiosInstance.get(`/collection/${Number(router.query.planetID)}`)
         const c = res.data
         setStatus({
-          finished: c.finished ?? true,
+          progress: c.progress,
           title: c.collection.name || ""
         })
       }
@@ -84,7 +79,7 @@ export default function AGalaxy() {
     console.log(collection)
     if (collection.locked) return;
     if (collection.type === 'collection')
-      return collection.finished
+      return collection.progress === "Finished"
           ? router.replace(`/poll/${collection.id}/ranking`)
           : router.push(
               `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${
@@ -92,7 +87,7 @@ export default function AGalaxy() {
               }`
             )
     else if (collection.type === 'composite project')
-      return collection.finished
+      return collection.progress === "Finished"
           ? router.replace(`/poll/${collection.id}/ranking`)
           : router.push(`/poll/${collection.id}`)
   }
@@ -151,13 +146,9 @@ export default function AGalaxy() {
                     )
                   })}
                 <GalaxyCenterPlanet
-                  finished={status.finished}
+                  // progress={status.progress}
                   name={status.title}
-                  onClick={() =>
-                    status.finished
-                      ? router.push(`/poll/${router.query.planetID}/ranking`)
-                      : router.push(`/poll/${router.query.planetID}`)
-                  }
+                  onClick={() => router.push(`/poll/${router.query.planetID}/ranking`)}
                 />
               </div>
             </div>

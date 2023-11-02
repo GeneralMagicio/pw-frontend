@@ -106,14 +106,10 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         <span
           {...getToggleProps({
             onClick: () =>
-              data.isFinished && setExpanded((prevExpanded) => !prevExpanded),
+              setExpanded((prevExpanded) => !prevExpanded),
           })}
           className="flex h-6 w-12 items-center justify-center">
-          {!data.isFinished ? (
-            <span title="You have not voted in this collection yet">
-              <Lock />
-            </span>
-          ) : isExpanded ? (
+          {isExpanded ? (
             <CaretUp />
           ) : (
             <CaretDown />

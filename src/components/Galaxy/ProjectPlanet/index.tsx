@@ -18,9 +18,10 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
   isRight,
   project,
 }) => {
-  const { name, locked, finished } = project
+  const { name, locked, progress } = project
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
 
+  const finished = progress === "Finished"
   const btnClassName = finished ? 'bg-white text-black' : 'text-white bg-black'
   return (
     <>

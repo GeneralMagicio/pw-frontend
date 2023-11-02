@@ -28,8 +28,8 @@ export function removeAdditionalProperties(
   return data as CollectionRanking
 }
 
-export function addAdditionalProperties<T extends CollectionRanking>(
-  input: T
+export function addAdditionalProperties(
+  input: CollectionRanking | EditingCollectionRanking
 ): EditingCollectionRanking {
   const data = cloneDeep(input)
 
@@ -40,7 +40,7 @@ export function addAdditionalProperties<T extends CollectionRanking>(
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
     // @ts-ignore
-    row.locked = (row.locked || !data.isFinished) ?? false
+    row.locked = row.locked ?? false
     if (!row.hasRanking) {
       // @ts-ignore
       row.error = row.error ?? false
@@ -123,6 +123,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
   for (let i = 0; i < data.ranking.length; i++) {
     const row = data.ranking[i];
     if (toFixedNumber(row.share, 5) < 0 || toFixedNumber(row.share, 5) > 1) {
+      console.log("Error neg or 1", row)
       return false;
     } else acc += row.share;
 
@@ -130,6 +131,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
       return false;
 
     if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
+      console.log("Error parent", acc, "and max:", max)
       return false;
     }
   }
