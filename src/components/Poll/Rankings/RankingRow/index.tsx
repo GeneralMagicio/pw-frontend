@@ -6,7 +6,7 @@ interface RankingProps {
 }
 export const RankingRow: React.FC<RankingProps> = ({ data }) => {
   return (
-    <div className="flex cursor-pointer items-center gap-6 rounded-xl bg-gray-40 px-6 py-3 font-Inter text-black">
+    <div className="flex cursor-pointer items-center gap-6 rounded-xl bg-gray-40 px-6 py-3  text-black">
       <Move />
       <span className="grow">{data.project.name}</span>
       <span className="flex w-[27%] items-center justify-center">

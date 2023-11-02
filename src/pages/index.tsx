@@ -1,11 +1,12 @@
-import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
 import { CollectionsRight } from '@/components/Icon/CollectionsRight'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
+import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { Discord } from '@/components/Icon/Discord'
 import { GMIcon } from '@/components/Icon/GMIcon'
 import { Github } from '@/components/Icon/Github'
+import Image from 'next/image'
 import { Linkedin } from '@/components/Icon/Linkedin'
 import { Medium } from '@/components/Icon/Medium'
 import { Star } from '@/components/Icon/Star'
@@ -15,7 +16,6 @@ import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
 import { VectorHorizontal4 } from '@/components/Icon/VectorHorizontal4'
 import { Votes } from '@/components/Icon/Votes'
-import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -170,7 +170,7 @@ export default function Home() {
           <Discord />
           <Medium />
         </div>
-        <div className="flex items-center gap-2 font-Inter text-lg text-black">
+        <div className="flex items-center gap-2  text-lg text-black">
           Magically crafted by <GMIcon />
         </div>
       </footer>

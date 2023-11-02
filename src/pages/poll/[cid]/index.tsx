@@ -1,17 +1,15 @@
+import { fetchPairs, voteProjects } from '@/utils/poll'
 import { useEffect, useState } from 'react'
-import Modal from '@/components/Modal/Modal'
-import { Question } from '@/components/Poll/Pair/Question'
-import { Pairs } from '@/components/Poll/Pairs'
-import { Header } from '@/components/Poll/Pair/Header'
+
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
-import {
-  fetchPairs,
-  voteProjects,
-} from '@/utils/poll'
+import { Header } from '@/components/Poll/Pair/Header'
+import Modal from '@/components/Modal/Modal'
+import { PairType } from '@/types/Pairs/Pair'
+import { Pairs } from '@/components/Poll/Pairs'
+import { PairsType } from '@/types/Pairs'
+import { Question } from '@/components/Poll/Pair/Question'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { PairsType } from '@/types/Pairs'
-import { PairType } from '@/types/Pairs/Pair'
 
 export default function Poll() {
   const router = useRouter()
@@ -62,7 +60,7 @@ export default function Poll() {
     //   setActiveQuestion('What area do you feel most confident discussing?')
     // }
     setActiveQuestion(
-      'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
+      'Which of these projects has had a greater positive impact on Optimism?'
     )
   }, [pairs])
 
@@ -73,7 +71,7 @@ export default function Poll() {
   }, [isConnected, router.query])
 
   const onVote = async (pair: PairType[], picked?: number | undefined) => {
-    if (!pairs) return 
+    if (!pairs) return
 
     const [a, b] = pair
     await voteProjects({
@@ -117,7 +115,7 @@ export default function Poll() {
         // The condition checks for top-level collections pairwises
         text={
           pairs?.pairs[0][0].collection_id !== null && pairs?.name
-            ? `Evaluating ${pairs.name}`
+            ? pairs.name
             : ''
         }
       />

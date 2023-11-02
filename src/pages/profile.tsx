@@ -8,11 +8,10 @@ import router from 'next/router'
 import { useEffect, useState } from 'react'
 
 const convertToStrategicRankingFormat = (data: CollectionRanking) => {
-  return data.ranking.map(({share, name}) => ({share, name})) 
+  return data.ranking.map(({ share, name }) => ({ share, name }))
 }
 
 export default function Profile() {
-
   const [impactRanking, setImpactRanking] = useState<CollectionRanking>()
 
   useEffect(() => {
@@ -20,36 +19,35 @@ export default function Profile() {
       const impactRanking = await getRankings()
 
       setImpactRanking(impactRanking)
-
     }
 
     getData()
   }, [])
 
-  
   if (impactRanking === undefined) return <div></div>
-  
-  const impactButtonText = "Edit importance"
+
+  const impactButtonText = 'Edit importance'
 
   return (
     <div className="relative m-auto mt-32 flex w-auto max-w-[1158px] flex-col gap-6 rounded-[20px] bg-white px-20  py-10 font-IBM   text-black">
       <div className="flex flex-col items-center justify-center gap-6">
-        <header className="mb-2 flex w-full ">
+        <header className="flex w-full mb-2 ">
           <button
-          className="rounded-xl border-4 border-gray-100 bg-white p-2 px-6 text-lg text-black"
-          onClick={() => {
-            router.back()
-          }}>
+            className="p-2 px-6 text-lg text-black bg-white border-4 border-gray-100 rounded-xl"
+            onClick={() => {
+              router.back()
+            }}>
             <ArrowBackward className="text-black" />
           </button>
         </header>
-        <div className="flex w-full justify-between gap-10">
+        <div className="flex justify-between w-full gap-10">
           <div className="flex h-[500px] w-[50%]  flex-col justify-between rounded-2xl p-6 shadow-card3">
-            <h2 className="mb-4 font-Inter text-2xl font-bold">
-              Strategic Importance
-            </h2>
-            <div className='h-[70%]'>
-              <StrategicRanking data={convertToStrategicRankingFormat(impactRanking)} settled={true}/>
+            <h2 className="mb-4 text-2xl font-bold">Strategic Importance</h2>
+            <div className="h-[70%]">
+              <StrategicRanking
+                data={convertToStrategicRankingFormat(impactRanking)}
+                settled={true}
+              />
             </div>
             <button
               className={

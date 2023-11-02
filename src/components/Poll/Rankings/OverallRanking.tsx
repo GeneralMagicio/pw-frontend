@@ -1,8 +1,8 @@
-import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
 import {
   EditingCollectionRanking,
   EditingProjectRanking,
 } from './edit-logic/edit'
+import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
 // import { isEditingProjectRanking } from './edit-logic/utils'
 
 interface RankingsProps {
@@ -69,7 +69,7 @@ export const OverallRanking: React.FC<RankingsProps> = ({
 }) => {
   return (
     <div className="container relative mx-auto mb-32 mt-8 flex min-w-[1200px] grow flex-col items-end gap-1 px-16">
-      <div className="flex w-full items-center gap-6 rounded-md border-b border-b-gray-10 bg-white/[.2] px-6  py-4 font-Inter text-black">
+      <div className="flex w-full items-center gap-6 rounded-md border-b border-b-gray-10 bg-white/[.2] px-6  py-4  text-black">
         <span className="grow text-sm">Project</span>
         <span className=" w-64 text-sm">{`Budget Allocation (Total: ${(
           totalPercentage * 100

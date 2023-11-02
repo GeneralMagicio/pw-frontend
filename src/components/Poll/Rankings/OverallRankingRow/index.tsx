@@ -1,15 +1,16 @@
-import { CaretDown } from '@/components/Icon/CaretDown'
-import { CaretUp } from '@/components/Icon/CaretUp'
-import { Move } from '@/components/Icon/Move'
-import React, { useState } from 'react'
-import { useCollapse } from 'react-collapsed'
-import { EditTextField } from '../EditTextField'
-import { toFixedNumber } from '@/utils/helpers'
 import {
   EditingCollectionRanking,
   EditingProjectRanking,
 } from '../edit-logic/edit'
+import React, { useState } from 'react'
+
+import { CaretDown } from '@/components/Icon/CaretDown'
+import { CaretUp } from '@/components/Icon/CaretUp'
+import { EditTextField } from '../EditTextField'
 import { Lock } from '@/components/Icon/Lock'
+import { Move } from '@/components/Icon/Move'
+import { toFixedNumber } from '@/utils/helpers'
+import { useCollapse } from 'react-collapsed'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -26,7 +27,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3 font-Inter text-black`}>
+      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3  text-black`}>
       <span className="grow">{data.name}</span>
       <span className="flex w-52 items-center justify-center">
         <div className="flex h-[24px] items-center">
@@ -82,7 +83,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
   return (
-    <div className="flex w-full flex-col items-end font-Inter text-black">
+    <div className="flex w-full flex-col items-end text-black ">
       <div
         className={`mb-2 flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
         <span className="grow">{data.name}</span>
@@ -119,15 +120,10 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span
           {...getToggleProps({
-            onClick: () =>
-              setExpanded((prevExpanded) => !prevExpanded),
+            onClick: () => setExpanded((prevExpanded) => !prevExpanded),
           })}
           className="flex h-6 w-12 items-center justify-center">
-          {isExpanded ? (
-            <CaretUp />
-          ) : (
-            <CaretDown />
-          )}
+          {isExpanded ? <CaretUp /> : <CaretDown />}
         </span>
       </div>
       <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>
