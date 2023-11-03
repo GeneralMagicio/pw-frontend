@@ -41,23 +41,24 @@ export async function getRankings(cid?: string) {
     .then((res) => res.data)
 }
 
-export async function getOverallRanking() : Promise<CollectionRanking> {
-  const {data} = await axiosInstance.get<CollectionRanking[]>(
+export async function getOverallRanking(): Promise<CollectionRanking> {
+  const { data } = await axiosInstance.get<CollectionRanking[]>(
     `/flow/ranking/overall`
   )
   return {
     id: -1,
-    name: "root",
+    name: 'root',
     ranking: data,
     share: 1,
     // isFinished: true,
-    type: "collection",
+    type: 'collection',
     hasRanking: true,
+    progress: 'Pending',
   }
   // return data
 }
 
-export async function getCollection(id: number) : Promise<PairType> {
-  const {data} = await axiosInstance.get(`/collection/${id}`)
-  return data.collection;
+export async function getCollection(id: number): Promise<PairType> {
+  const { data } = await axiosInstance.get(`/collection/${id}`)
+  return data.collection
 }
