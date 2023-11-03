@@ -56,5 +56,31 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
     )
   }
 
+  if (progress === 'Finished') {
+    return (
+      <div className="flex gap-2">
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
+          Ranked <Check className="w-3 h-3 ml-1" color="#22B7A0" />
+        </span>
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#F366001A] p-1 px-2 text-xs text-[#F36600]">
+          List not created
+        </span>
+      </div>
+    )
+  }
+
+  if (progress === 'Attested') {
+    return (
+      <div className="flex gap-2">
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
+          Ranked <Check className="w-3 h-3 ml-1" color="#22B7A0" />
+        </span>
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
+          List created <Check className="w-3 h-3 ml-1" color="#22B7A0" />
+        </span>
+      </div>
+    )
+  }
+
   return null
 }
