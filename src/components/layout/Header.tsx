@@ -1,8 +1,6 @@
 import Link from 'next/link'
-import { Logo } from '@/components/Icon/Logo'
 import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { useSession } from '@/context/session'
-import cn from 'classnames'
 import { useState } from 'react'
 import Image from 'next/image'
 
@@ -29,16 +27,6 @@ export function Header() {
         <div onMouseEnter={() => setShowButton(true)}>
           <ConnectWalletButton className="h-[36px] bg-red" />
         </div>
-        {user && showButton && (
-          <div
-            className={cn(
-              'absolute right-0 top-12 whitespace-nowrap rounded-2xl bg-white px-10 py-6  text-black'
-            )}>
-            <Link href="/profile">
-              <span className="cursor-pointer hover:underline">My account</span>
-            </Link>
-          </div>
-        )}
       </div>
     </header>
   )
