@@ -1,6 +1,3 @@
-import { ArrowForward } from '@/components/Icon/ArrowForward'
-import { ArrowForwardSharp } from '@/components/Icon/ArrowForwardSharp'
-import { Browser } from '@/components/Icon/Browser'
 import { Close } from '@/components/Icon/Close'
 import { sanitize } from 'dompurify'
 import Image from 'next/image'
@@ -36,10 +33,12 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
         <div className="mb-[45px]  flex max-h-[500px] flex-col overflow-auto">
           <div className="flex justify-between">
             <div className="flex min-w-[360px] flex-col gap-4">
-              <img
+              <Image
                 alt={item.name}
                 className="w-full shrink-0 rounded-2xl"
+                height={360}
                 src={item.image || '/nip.png'}
+                width={360}
               />
               <div>
                 <span className="font-medium"> Website: </span>
