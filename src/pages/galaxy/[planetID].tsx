@@ -88,19 +88,13 @@ export default function AGalaxy() {
   // }, [collections])
 
   const handleClick = (collection: PairType) => () => {
-    console.log(collection)
-    if (collection.type === 'collection')
-      return collection.progress === 'Finished'
-        ? router.replace(`/poll/${collection.id}/ranking`)
-        : router.push(
-            `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${
-              collection.id
-            }`
-          )
-    else if (collection.type === 'composite project')
-      return collection.progress === 'Finished'
-        ? router.replace(`/poll/${collection.id}/ranking`)
-        : router.push(`/poll/${collection.id}`)
+    if (collection.progress === 'Pending' || collection.progress === 'WIP') {
+      return router.push(
+        `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
+      )
+    }
+
+    return router.replace(`/ranking`)
   }
 
   return (
