@@ -109,7 +109,7 @@ export default function RankingPage({
       {isMoon && rankings && collection && (
         <AttestationModal
           collectionName={collection.name}
-          colletionDescription={collection.description}
+          colletionDescription={collection.impactDescription}
           isOpen={open}
           onClose={() => setOpen(false)}
           ranking={rankings}
