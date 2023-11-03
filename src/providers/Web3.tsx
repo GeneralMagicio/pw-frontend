@@ -1,9 +1,11 @@
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
-import { ReactNode } from 'react'
 import '@rainbow-me/rainbowkit/styles.css'
+
+import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
+import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
+
+import { ReactNode } from 'react'
+import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   WEB3_CHAINS,
@@ -29,7 +31,9 @@ interface Web3ProviderProps {
 export function Web3Provider({ children }: Web3ProviderProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider chains={chains} modalSize="compact">
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   )
 }
