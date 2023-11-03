@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
 import { CollectionRanking, EditingCollectionRanking, ProjectRanking } from './edit'
 import { toFixedNumber } from '@/utils/helpers'
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 
 export function removeAdditionalProperties(
   input: EditingCollectionRanking
@@ -28,19 +29,40 @@ export function removeAdditionalProperties(
   return data as CollectionRanking
 }
 
+const shouldBeLocked = (row: {isTopLevel: boolean, locked?: boolean, progress: CollectionProgressStatus}) => {
+  if (row.isTopLevel) return false;
+
+  if ("locked" in row) return row.locked
+
+  const progress = row.progress
+
+  switch(progress) {
+    case "Attested":
+      return false;
+    case "Finished":
+      return false;
+    case 'WIP':
+      return true;
+    case 'Pending':
+      return true
+    default:
+      return false
+  }
+}
+
 export function addAdditionalProperties(
   input: CollectionRanking | EditingCollectionRanking
 ): EditingCollectionRanking {
   const data = cloneDeep(input)
 
   // @ts-ignore
-  data.locked = data.locked ?? false
+  data.locked = shouldBeLocked(data)
   // @ts-ignore
   data.error = data.error ?? false
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
     // @ts-ignore
-    row.locked = row.locked ?? false
+    row.locked = data.locked === true ? true : shouldBeLocked(row)
     if (!row.hasRanking) {
       // @ts-ignore
       row.error = row.error ?? false
@@ -131,7 +153,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
       return false;
 
     if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
-      console.log("Error parent", acc, "and max:", max)
+      console.log(row, "Error parent", acc, "and max:", max)
       return false;
     }
   }

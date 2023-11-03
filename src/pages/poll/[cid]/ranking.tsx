@@ -108,6 +108,7 @@ export default function RankingPage({
       />
       {isMoon && rankings && collection && (
         <AttestationModal
+          collectionId={collection.id}
           collectionName={collection.name}
           colletionDescription={collection.impactDescription}
           isOpen={open}

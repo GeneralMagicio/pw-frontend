@@ -1,8 +1,11 @@
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 import cloneDeep from 'lodash.clonedeep'
 
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
   hasRanking: true,
+  isTopLevel: boolean;
+  progress: CollectionProgressStatus,
   // isFinished: boolean
   id: number
   RPGF3Id?: string
