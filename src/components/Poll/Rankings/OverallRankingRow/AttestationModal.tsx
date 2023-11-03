@@ -12,8 +12,8 @@ import {
 } from '@ethereum-attestation-service/eas-sdk'
 import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
-import { convertRankingToAttestationFormat } from '@/utils/helpers'
 import Link from 'next/link'
+import { convertRankingToAttestationFormat } from './attest-utils'
 
 interface Props {
   isOpen: boolean
