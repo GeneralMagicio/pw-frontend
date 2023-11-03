@@ -1,13 +1,18 @@
 import { SVGProps } from 'react'
 
-export const Plus: React.FC<SVGProps<SVGSVGElement>> = ({
-  ...props
-}) => {
+export const Plus: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
   return (
-    <svg fill="none" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M16 7V25" stroke="white" strokeLinecap="square" strokeLinejoin="round" strokeWidth="2"/>
-    <path d="M25 16L7 16" stroke="white" strokeLinecap="square" strokeLinejoin="round" strokeWidth="2"/>
+    <svg
+      {...props}
+      fill="none"
+      height="1.5em"
+      viewBox="0 0 24 24"
+      width="1.5em"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12,20a1,1,0,0,1-1-1V13H5a1,1,0,0,1,0-2h6V5a1,1,0,0,1,2,0v6h6a1,1,0,0,1,0,2H13v6A1,1,0,0,1,12,20Z"
+        fill="currentColor"
+        id="primary"></path>
     </svg>
-     
   )
 }

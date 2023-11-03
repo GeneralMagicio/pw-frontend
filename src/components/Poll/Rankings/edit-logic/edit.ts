@@ -4,6 +4,7 @@ import cloneDeep from 'lodash.clonedeep'
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
   hasRanking: true
+  isTopLevel: boolean
   // isFinished: boolean
   id: number
   RPGF3Id?: string
