@@ -3,14 +3,12 @@ import { sanitize } from 'dompurify'
 import Image from 'next/image'
 import { Layers } from '@/components/Icon/Layers'
 import { PairType } from '@/types/Pairs/Pair'
-import { useRouter } from 'next/router'
 
 interface VoteModalProps {
   item: PairType
   handeClose: () => void
 }
 export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
-  const router = useRouter()
   return (
     <>
       <div className="relative flex  min-w-[700px] flex-col  gap-6">
