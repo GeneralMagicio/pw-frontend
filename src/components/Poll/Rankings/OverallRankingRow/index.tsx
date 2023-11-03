@@ -2,20 +2,17 @@ import {
   EditingCollectionRanking,
   EditingProjectRanking,
 } from '../edit-logic/edit'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { CaretDown } from '@/components/Icon/CaretDown'
 import { CaretUp } from '@/components/Icon/CaretUp'
 import { EditTextField } from '../EditTextField'
-import { Lock } from '@/components/Icon/Lock'
-import { Move } from '@/components/Icon/Move'
 import { toFixedNumber } from '@/utils/helpers'
 import { useCollapse } from 'react-collapsed'
-import { Dots } from '../../../Icon/Dots'
-import { fetchCollections } from '../../../../utils/flow'
 import { PairType } from '../../../../types/Pairs/Pair'
 import { HeaderLabels } from './HeaderLabels'
 import { PairsType } from '../../../../types/Pairs'
+import { CategoryContextMenu } from './CategoryContextMenu'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -79,6 +76,7 @@ interface HeaderProps extends Omit<RankingProps, 'data'> {
   data: EditingCollectionRanking
   children: React.ReactNode
   expanded?: boolean
+  level: number
   pairs?: PairsType
 }
 
@@ -91,6 +89,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   editMode,
   expanded = false,
   pairs,
+  level,
 }) => {
   const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
@@ -108,9 +107,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span className="grow">{data.name}</span>
         <span className="flex items-center justify-end w-36">
-          <span className="flex w-fit items-center rounded-3xl bg-gray-100 p-1 px-2 text-[#1C64F2]">
-            <HeaderLabels pairs={pairs} progress={collection?.progress} />
-          </span>
+          <HeaderLabels pairs={pairs} progress={collection?.progress} />
         </span>
         <span className="flex items-center justify-end w-36">
           <span className="">
@@ -145,8 +142,14 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             )}
           </div>
         </span>
-        <span className="flex justify-end w-20">
-          <Dots />
+        <span className="flex items-center justify-end w-20">
+          {level === 2 && (
+            <CategoryContextMenu
+              collection={collection}
+              pairs={pairs}
+              progress={collection?.progress}
+            />
+          )}
         </span>
       </div>
       <section

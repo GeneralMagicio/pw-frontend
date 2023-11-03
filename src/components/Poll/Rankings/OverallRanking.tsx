@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react'
-import {
-  EditingCollectionRanking,
-  EditingProjectRanking,
-} from './edit-logic/edit'
+import { EditingCollectionRanking } from './edit-logic/edit'
 import { OverallRankingHeader, OverallRankingRow } from './OverallRankingRow'
 import { fetchCollections } from '../../../utils/flow'
 import { PairType } from '../../../types/Pairs/Pair'
 import { fetchPairs } from '../../../utils/poll'
 import { PairsType } from '../../../types/Pairs'
-// import { isEditingProjectRanking } from './edit-logic/utils'
 
 interface RankingsProps {
   data: EditingCollectionRanking
@@ -59,14 +55,13 @@ const Rows: React.FC<Props> = ({
     return childCollections.find((collection) => collection.id === id)
   }
 
-  console.log(pairs)
-
   return (
     <OverallRankingHeader
       collection={collection}
       data={data}
       editMode={editMode}
       expanded={data.expanded || false}
+      level={level}
       onEditChange={onEditChange(data.id)}
       onLockClick={onLockClick(data.id)}
       pairs={pairs}>
