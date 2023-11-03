@@ -36,6 +36,10 @@ const InterFont = localFont({
       path: '../../public/fonts/Inter/Inter-Regular.ttf',
       weight: '400',
     },
+    {
+      path: '../../public/fonts/Inter/Inter-Medium.ttf',
+      weight: '500',
+    },
 
     {
       path: '../../public/fonts/Inter/Inter-SemiBold.ttf',
@@ -51,26 +55,27 @@ const InterFont = localFont({
 })
 
 export default function App({ Component, pageProps }: AppProps) {
-
   useLayoutEffect(() => {
     const token = window.localStorage.getItem('auth')
-    if(token) {
-      axiosInstance.defaults.headers.common['auth'] = `${token}`;
+    if (token) {
+      axiosInstance.defaults.headers.common['auth'] = `${token}`
     }
-  }, []);
+  }, [])
 
   return (
     <>
-    <div className={cn(IBMFont.variable, InterFont.variable)} id='font-container'>
-      <Seo />
-      <Web3Provider>
-        <SessionProvider>
-          <MainLayout className=''>
-            <Component {...pageProps} />
-          </MainLayout>
-        </SessionProvider>
-      </Web3Provider>
-    </div>
+      <div
+        className={cn(IBMFont.variable, InterFont.variable)}
+        id="font-container">
+        <Seo />
+        <Web3Provider>
+          <SessionProvider>
+            <MainLayout className="">
+              <Component {...pageProps} />
+            </MainLayout>
+          </SessionProvider>
+        </Web3Provider>
+      </div>
     </>
   )
 }

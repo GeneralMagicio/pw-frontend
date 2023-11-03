@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       button: {
-        fontWeight: '500', 
+        fontWeight: '500',
       },
       minHeight: {
         'screen-content': 'calc(100vh - 177.45px)',
@@ -31,6 +31,7 @@ module.exports = {
         'black-3': 'var(--black-3)',
         'black-30': 'var(--black-30)',
         screen: '#FFF',
+        grayish: '#F1F5FB',
       },
       fontFamily: {
         IBM: ['var(--font-IBM)'],

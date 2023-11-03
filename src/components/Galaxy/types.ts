@@ -1,1 +1,5 @@
-export type CollectionProgressStatus = 'Attested' | 'Finished' | 'WIP' | 'Pending';
+export type CollectionProgressStatus =
+  | 'Attested'
+  | 'Finished'
+  | 'WIP'
+  | 'Pending'

@@ -49,7 +49,7 @@ export async function getOverallRanking(): Promise<CollectionRanking> {
     name: 'root',
     ranking: data,
     isTopLevel: false,
-    progress: "Pending",
+    progress: 'Pending',
     share: 1,
     // isFinished: true,
     type: 'collection',

@@ -77,7 +77,7 @@ export default function RankingPage({
       if (router.query.cid) {
         const [data, collection] = await Promise.all([
           getRankings(String(router.query.cid)),
-          getCollection(Number(router.query.cid))
+          getCollection(Number(router.query.cid)),
         ])
         // console.log("data:", data)
         // console.log("data.ranking:", data.)
@@ -116,12 +116,14 @@ export default function RankingPage({
           ranking={rankings}
         />
       )}
-      {!isMoon && <Modal
-        className="mb-96 bg-white"
-        isOpen={open}
-        onClose={() => setOpen(false)}>
-        <FinishVoteModal />
-      </Modal>}
+      {!isMoon && (
+        <Modal
+          className="mb-96 bg-white"
+          isOpen={open}
+          onClose={() => setOpen(false)}>
+          <FinishVoteModal />
+        </Modal>
+      )}
 
       {rankings && tempRankings && (
         <OverallRanking
@@ -147,7 +149,7 @@ export const getServerSideProps = (async (context) => {
     },
   })
 
-  const isMoon = res.data
+  const isMoon = false
   return { props: { isMoon } }
 }) satisfies GetServerSideProps<{
   isMoon: boolean
