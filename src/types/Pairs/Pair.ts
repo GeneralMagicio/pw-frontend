@@ -6,7 +6,8 @@ export interface PairType {
   url: string
   image: string
   description: string
-  contributionDescription: string
+  impactDescription: string
+  contributionDescription?: string
   collection_id: number | null
   created_at: string
   numOfChildren: number

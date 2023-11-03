@@ -2,6 +2,7 @@ import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { ArrowForwardSharp } from '@/components/Icon/ArrowForwardSharp'
 import { Browser } from '@/components/Icon/Browser'
 import { Close } from '@/components/Icon/Close'
+import {sanitize} from 'dompurify';
 import Image from 'next/image'
 import { Layers } from '@/components/Icon/Layers'
 import { PairType } from '@/types/Pairs/Pair'
@@ -21,34 +22,51 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
             <h3 className="text-2xl font-bold ">{item.name}</h3>
             <Close className="cursor-pointer" onClick={handeClose} />
           </header>
-          <div className="self-start rounded-lg border border-black-3 p-1">
-            <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
-              {item.numOfChildren ? <Layers /> : <Browser />}
-              <span className="font-IBM text-sm">
-                {item.numOfChildren
-                  ? `${item.numOfChildren} + Projects`
-                  : 'Single project'}
-              </span>
+          {item.numOfChildren > 0 && (
+            <div className="self-start rounded-lg border border-black-3 p-1">
+              <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
+                <Layers />
+                <span className="font-IBM text-sm">
+                  {`${item.numOfChildren} + Projects`}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-        <div className="mb-[73px]  flex max-h-[500px] flex-col overflow-auto">
-          <div className="flex gap-7">
-            <img
-              alt={item.name}
-              className="h-[360px] w-[360px] shrink-0 rounded-2xl"
-              height={360}
-              src={item.image}
-              width={360}
-            />
-            <div className="flex grow flex-col gap-6 overflow-auto text-lg ">
+        <div className="mb-[45px]  flex max-h-[500px] flex-col overflow-auto">
+          <div className="flex justify-between">
+            <div className="flex min-w-[360px] flex-col gap-4">
+              <img
+                alt={item.name}
+                className="w-full shrink-0 rounded-2xl"
+                src={item.image || '/nip.png'}
+              />
+              <div>
+                <span className='font-medium'> Website: </span>
+                <a href={item.url} rel="noreferrer" target='_blank'>{item.url}</a>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6 overflow-auto px-4 font-Inter text-lg">
               <div className="flex flex-col gap-2">
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: item.description || item.name,
+                    __html:
+                    sanitize(`<b>Impact Description:</b> ${item.impactDescription}` ||
+                      item.name)
                   }}
-                />
+                  style={{whiteSpace: "break-spaces"}}
+                  />
               </div>
+              {item.contributionDescription && (
+                <div className="flex flex-col gap-2">
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: sanitize(`<b>Contribution Description:</b> ${item.contributionDescription}`),
+                    }}
+                    style={{whiteSpace: "break-spaces"}}
+                  />
+                </div>
+              )}
             </div>
           </div>
           {!item.childProjects?.length ? null : (
