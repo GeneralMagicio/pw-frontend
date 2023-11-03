@@ -13,13 +13,11 @@ import Modal from '@/components/Modal/Modal'
 
 type CategoryContextMenuProps = {
   collection?: PairType
-  pairs?: PairsType
   progress?: CollectionProgressStatus
 }
 
 export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
   collection,
-  pairs,
   progress,
 }) => {
   return (
@@ -30,7 +28,7 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
 
       <Popover.Panel className="absolute z-10 w-56 p-2 bg-white rounded-lg -left-48 drop-shadow-2xl">
         <div className="flex flex-col gap-2">
-          <Options collection={collection} pairs={pairs} progress={progress} />
+          <Options collection={collection} progress={progress} />
         </div>
       </Popover.Panel>
     </Popover>
@@ -39,22 +37,8 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
 
 const Options: React.FC<CategoryContextMenuProps> = ({
   collection,
-  pairs,
   progress,
 }) => {
-  if (!pairs)
-    return (
-      <div className="flex flex-col gap-2">
-        <DetailsOption collection={collection} />
-        <BeginRankingOption collection={collection} />
-        <div className="w-full h-1 border-b border-gray-200" />
-        <CreateListOption collection={collection} disabled />
-      </div>
-    )
-
-  const minVotesToUnlock = Math.ceil(pairs.totalPairs * pairs.threshold)
-  const voteCountsToUnklock = minVotesToUnlock - pairs.votedPairs
-
   return (
     <div className="flex flex-col gap-2">
       <DetailsOption collection={collection} />
@@ -66,7 +50,7 @@ const Options: React.FC<CategoryContextMenuProps> = ({
       <div className="w-full h-1 border-b border-gray-200" />
       <CreateListOption
         collection={collection}
-        disabled={pairs.votedPairs < voteCountsToUnklock}
+        disabled={progress !== 'Finished'}
       />
     </div>
   )

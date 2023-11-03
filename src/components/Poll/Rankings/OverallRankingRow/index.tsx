@@ -149,7 +149,6 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           {level === 2 && (
             <CategoryContextMenu
               collection={collection}
-              pairs={pairs}
               progress={collection?.progress}
             />
           )}
