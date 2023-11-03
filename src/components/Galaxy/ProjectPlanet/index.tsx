@@ -21,8 +21,25 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
   const { name, progress } = project
   const shapeID = useMemo(() => (name ? generateShapeID(name) : 1), [name])
 
-  const finished = progress === 'Finished'
-  const btnClassName = finished ? 'bg-white text-black' : 'text-white bg-black'
+  const finishedOrAttested = progress === 'Finished' || progress === 'Attested'
+
+  const statusText = () => {
+    switch (progress) {
+      case 'Pending':
+        return 'Not ranked'
+      case 'WIP':
+        return 'In progress'
+      case 'Finished':
+        return 'Ranked'
+      case 'Attested':
+        return 'List created'
+    }
+  }
+
+  const btnClassName = finishedOrAttested
+    ? 'bg-white text-black'
+    : 'text-white bg-black'
+
   return (
     <>
       <PlanetShape id={shapeID} />
@@ -33,24 +50,43 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
         })}>
         {isRight && <PlanetArrorw className="mr-2" />}
         <div className="flex flex-col gap-2">
-          <h4 className="flex items-center gap-2 font-IBM text-lg font-medium text-black">
+          <h4 className="flex items-center gap-2 text-lg font-medium text-black font-IBM">
             {name}
           </h4>
-          {finished && (
-            <span className="font-IBM text-sm font-medium text-black">
-              {finished ? '[Voted]' : '[Not finished]'}
-            </span>
-          )}
-          {finished && (
+          <span className="text-sm font-medium text-black font-IBM">
+            [{statusText()}]
+          </span>
+
+          {progress === 'Pending' && (
             <button
               className={cn(
                 btnClassName,
                 'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
               )}>
-              <span className="font-medium">
-                {finished ? 'Review' : 'Begin'}
-              </span>
-              {finished ? <PodiumSharp /> : <ArrowForward />}
+              <span className="font-medium">Begin</span>
+              <ArrowForward />
+            </button>
+          )}
+
+          {progress === 'WIP' && (
+            <button
+              className={cn(
+                btnClassName,
+                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
+              )}>
+              <span className="font-medium">Continue</span>
+              <ArrowForward />
+            </button>
+          )}
+
+          {finishedOrAttested && (
+            <button
+              className={cn(
+                btnClassName,
+                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
+              )}>
+              <span className="font-medium">Ranking</span>
+              <PodiumSharp />
             </button>
           )}
         </div>

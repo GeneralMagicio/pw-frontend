@@ -1,7 +1,5 @@
-import { ArrowForward } from '../Icon/ArrowForward'
 import { FC } from 'react'
 import { PodiumSharp } from '../Icon/PodiumSharp'
-import { Tick } from '../Icon/Tick'
 
 interface Props {
   name: string
@@ -13,17 +11,16 @@ export const GalaxyCenterPlanet: FC<Props> = ({ name, onClick }) => {
     <div className="flex flex-col items-center justify-center">
       <img
         alt="center planet"
-        className="mt-[-100px]"
-        src="/images/center-galaxy.png"
-        width={450}
+        className="w-[450px]"
+        src="/images/planets/S1-unlocked.svg"
       />
       <p className="mt-[-75px] text-2xl font-medium text-black"> {name} </p>
-      <button
-        className="mt-6 flex items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-white px-4 py-3  text-xl text-black "
+      {/* <button
+        className="flex items-center gap-2 px-4 py-3 mt-6 text-xl text-black bg-white border-gray-200 whitespace-nowrap rounded-3xl border-6 "
         onClick={onClick}>
         Review
         <PodiumSharp />
-      </button>
+      </button> */}
     </div>
   )
 }

@@ -128,20 +128,20 @@ export default function Galaxy() {
         <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
       )}
 
-      <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
+      <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
       <TransformWrapper centerOnInit initialScale={2.5}>
         <TransformComponent>
           <div
-            className="flex w-screen items-center justify-center overflow-hidden p-10"
+            className="flex items-center justify-center w-screen p-10 overflow-hidden"
             style={{ height: 'calc(100vh - 60px - 120px)' }}>
             <div
-              className="relative flex shrink-0 items-center justify-center"
+              className="relative flex items-center justify-center shrink-0"
               style={{
                 width: '200vw',
                 height: '200vh',
                 transform: 'scale(.3)',
               }}>
-              <div className="relative flex h-screen w-screen items-center justify-center ">
+              <div className="relative flex items-center justify-center w-screen h-screen ">
                 {cords.length &&
                   collections.map((collection, idx) => {
                     const { x, y } = cords[idx]
@@ -181,14 +181,13 @@ export default function Galaxy() {
       {/* <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} /> */}
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <button
-          className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+          className="flex items-center gap-2 px-6 py-2 text-lg whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
           onClick={() => setShowHelpModal(true)}>
           Help
           <Help />
         </button>
-        <h4 className="font-IBM text-2xl font-bold">Welcome to RetroPGF</h4>
         <button
-          className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
+          className="flex items-center gap-2 px-6 py-2 text-lg whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
           onClick={() => router.push('/ranking')}>
           Ranking
           <PodiumSharp />
