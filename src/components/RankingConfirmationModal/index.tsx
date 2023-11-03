@@ -11,12 +11,11 @@ import { Check } from '../Icon/Check'
 
 interface RankingConfirmationModalProps {
   collection: PairsType
-  handleFinish: () => void
 }
 
 export const RankingConfirmationModal: React.FC<
   RankingConfirmationModalProps
-> = ({ collection, handleFinish }) => {
+> = ({ collection }) => {
   const [rankings, setRankings] = useState<CollectionRanking>()
   const router = useRouter()
 
@@ -50,7 +49,7 @@ export const RankingConfirmationModal: React.FC<
             </p>
             <button
               className="flex items-center justify-center rounded-xl border border-black p-2 px-3 font-IBM text-base font-medium"
-              onClick={handleFinish}>
+              onClick={() => router.push('/ranking')}>
               Edit
               <Pencil className="ml-2" />
             </button>
