@@ -25,7 +25,6 @@
     "dompurify": "^3.0.6",
     "eslint-config-next": "13.4.2",
     "ethers": "^5.7.2",
-    "iron-session": "^6.3.1",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "lottie-react": "^2.4.0",
