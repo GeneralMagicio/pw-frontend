@@ -10,12 +10,14 @@ import { PairsType } from '@/types/Pairs'
 import { Question } from '@/components/Poll/Pair/Question'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
+import { RankingConfirmationModal } from '@/components/RankingConfirmationModal'
 
 export default function Poll() {
   const router = useRouter()
   const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   // const [showImpactModal, setShowImpactModal] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
@@ -83,15 +85,15 @@ export default function Poll() {
     await fetchData()
   }
 
+  const canFinish = pairs?.votedPairs
+    ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
+    : false
+
   return (
     <>
       <Header
-        canFinish={
-          pairs?.votedPairs
-            ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
-            : false
-        }
-        handleFinishVoting={goToRanking}
+        canFinish={canFinish}
+        handleFinishVoting={() => setIsConfirmOpen(true)}
         name={pairs?.name || ''}
         question={activeQuestion}
         threshold={pairs?.threshold || 0}
@@ -109,6 +111,14 @@ export default function Poll() {
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <Question onStart={() => setOpen(false)} question={activeQuestion} />
       </Modal>
+      {pairs && (
+        <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
+          <RankingConfirmationModal
+            collection={pairs}
+            handleFinish={goToRanking}
+          />
+        </Modal>
+      )}
 
       <Footer
         onBack={() => router.back()}

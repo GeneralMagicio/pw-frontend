@@ -1,19 +1,21 @@
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 import cloneDeep from 'lodash.clonedeep'
 
 export interface CollectionRanking {
   type: 'collection' | 'composite project'
-  hasRanking: true,
+  hasRanking: true
   // isFinished: boolean
   id: number
   RPGF3Id?: string
   name: string
   share: number
   ranking: (CollectionRanking | ProjectRanking)[]
+  progress: CollectionProgressStatus
 }
 
 export interface ProjectRanking {
   type: 'project' | 'collection' | 'composite project'
-  hasRanking: false,
+  hasRanking: false
   id: number
   RPGF3Id: string
   share: number
@@ -57,7 +59,8 @@ const ripplePercentage = (
     const shareOfDelta = deltaCalculator(row.share, totalShare, delta)
     if (!row.locked && row.id === changedId) {
       row.share += delta
-      if (row.hasRanking) row.ranking = ripplePercentage(row.ranking, changedId, -1 * delta)
+      if (row.hasRanking)
+        row.ranking = ripplePercentage(row.ranking, changedId, -1 * delta)
     } else if (!row.hasRanking && !row.locked && row.id !== changedId) {
       row.share -= shareOfDelta
     } else if (row.hasRanking && !row.locked && row.id !== changedId) {
@@ -83,7 +86,7 @@ export const editPercentage = (
       overallRanking.ranking = ripplePercentage(
         overallRanking.ranking,
         id,
-        delta,
+        delta
       )
       return overallRanking
     } else if (row.id === id && row.type !== 'project' && !row.locked) {
@@ -100,7 +103,6 @@ export const editPercentage = (
     } else if (row.type !== 'project' && row.hasRanking) {
       overallRanking.ranking[i] = editPercentage(row, id, newValue)
     }
-    
   }
   return overallRanking
 }
