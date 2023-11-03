@@ -105,9 +105,9 @@ export default function AGalaxy() {
 
   return (
     <div className="relative overflow-hidden">
-      <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
+      <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
       <button
-        className="absolute left-10 top-10 z-50 flex  items-center gap-2 whitespace-nowrap  rounded-xl border-6 border-gray-100 bg-white p-2 px-6 text-lg text-black"
+        className="absolute z-50 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
         onClick={() => {
           router.back()
         }}>
@@ -126,16 +126,16 @@ export default function AGalaxy() {
       <TransformWrapper centerOnInit centerZoomedOut initialScale={4}>
         <TransformComponent>
           <div
-            className=" flex w-screen items-center justify-center overflow-hidden"
+            className="flex items-center justify-center w-screen overflow-hidden "
             style={{ height: 'calc(100vh - 60px - 120px)' }}>
             <div
-              className="relative flex shrink-0 items-center justify-center"
+              className="relative flex items-center justify-center shrink-0"
               style={{
                 width: '200vw',
                 height: '200vh',
                 transform: 'scale(.2)',
               }}>
-              <div className="relative flex h-screen w-screen items-center justify-center ">
+              <div className="relative flex items-center justify-center w-screen h-screen ">
                 {cords.length &&
                   collections.map((collection, idx) => {
                     const { x, y } = cords[idx]
@@ -162,9 +162,7 @@ export default function AGalaxy() {
                 <GalaxyCenterPlanet
                   // progress={status.progress}
                   name={status.title}
-                  onClick={() =>
-                    router.push(`/poll/${router.query.planetID}/ranking`)
-                  }
+                  onClick={() => router.push(`/ranking`)}
                 />
               </div>
             </div>
