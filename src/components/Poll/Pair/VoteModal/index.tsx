@@ -2,6 +2,7 @@ import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { ArrowForwardSharp } from '@/components/Icon/ArrowForwardSharp'
 import { Browser } from '@/components/Icon/Browser'
 import { Close } from '@/components/Icon/Close'
+import {sanitize} from 'dompurify';
 import Image from 'next/image'
 import { Layers } from '@/components/Icon/Layers'
 import { PairType } from '@/types/Pairs/Pair'
@@ -50,17 +51,19 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                 <p
                   dangerouslySetInnerHTML={{
                     __html:
-                      `<b>Impact Description:</b> ${item.impactDescription}` ||
-                      item.name,
+                    sanitize(`<b>Impact Description:</b> ${item.impactDescription}` ||
+                      item.name)
                   }}
-                />
+                  style={{whiteSpace: "break-spaces"}}
+                  />
               </div>
               {item.contributionDescription && (
                 <div className="flex flex-col gap-2">
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: `<b>Contribution Description:</b> ${item.contributionDescription}`,
+                      __html: sanitize(`<b>Contribution Description:</b> ${item.contributionDescription}`),
                     }}
+                    style={{whiteSpace: "break-spaces"}}
                   />
                 </div>
               )}
