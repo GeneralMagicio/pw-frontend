@@ -2,7 +2,7 @@ import {
   EditingCollectionRanking,
   EditingProjectRanking,
 } from '../edit-logic/edit'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { CaretDown } from '@/components/Icon/CaretDown'
 import { CaretUp } from '@/components/Icon/CaretUp'
@@ -11,6 +11,11 @@ import { Lock } from '@/components/Icon/Lock'
 import { Move } from '@/components/Icon/Move'
 import { toFixedNumber } from '@/utils/helpers'
 import { useCollapse } from 'react-collapsed'
+import { Dots } from '../../../Icon/Dots'
+import { fetchCollections } from '../../../../utils/flow'
+import { PairType } from '../../../../types/Pairs/Pair'
+import { HeaderLabels } from './HeaderLabels'
+import { PairsType } from '../../../../types/Pairs'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -27,9 +32,20 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`mb-2 flex cursor-pointer items-center gap-6  rounded-lg bg-white/[.5] px-6 py-3  text-black`}>
+      className={`flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3  text-black`}>
       <span className="grow">{data.name}</span>
-      <span className="flex w-52 items-center justify-center">
+
+      <span className="flex items-center justify-end w-36">
+        <span className="">
+          {(toFixedNumber(data.share, 6) * 3e6).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </span>
+        <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
+      </span>
+
+      <span className="flex items-center justify-end w-44">
         <div className="flex h-[24px] items-center">
           {!editMode ? (
             <>
@@ -37,6 +53,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
               <span className="">
                 {(data.share * 100).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
+                  minimumFractionDigits: 2,
                 })}
               </span>
             </>
@@ -52,42 +69,59 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           )}
         </div>
       </span>
-      <span className="flex w-36 items-center">
-        <span className="">
-          {(toFixedNumber(data.share, 6) * 3e6).toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-          })}
-        </span>
-        <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
-      </span>
-      <span className="w-12"></span>
+      <span className="w-20"></span>
     </div>
   )
 }
 
 interface HeaderProps extends Omit<RankingProps, 'data'> {
+  collection?: PairType
   data: EditingCollectionRanking
   children: React.ReactNode
   expanded?: boolean
+  pairs?: PairsType
 }
 
 export const OverallRankingHeader: React.FC<HeaderProps> = ({
+  collection,
   data,
   children,
   onEditChange,
   onLockClick,
   editMode,
   expanded = false,
+  pairs,
 }) => {
   const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
   return (
-    <div className="flex w-full flex-col items-end text-black ">
+    <div className="flex flex-col items-end w-full gap-2 text-black">
       <div
-        className={`mb-2 flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
+        className={`flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
+        <span
+          {...getToggleProps({
+            onClick: () => setExpanded((prevExpanded) => !prevExpanded),
+          })}
+          className="flex items-center justify-center w-12 h-6">
+          {isExpanded ? <CaretUp /> : <CaretDown />}
+        </span>
         <span className="grow">{data.name}</span>
-        <span className="flex w-52 items-center justify-center">
+        <span className="flex items-center justify-end w-36">
+          <span className="flex w-fit items-center rounded-3xl bg-gray-100 p-1 px-2 text-[#1C64F2]">
+            <HeaderLabels pairs={pairs} progress={collection?.progress} />
+          </span>
+        </span>
+        <span className="flex items-center justify-end w-36">
+          <span className="">
+            {(data.share * 3e6).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </span>
+          <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
+        </span>{' '}
+        <span className="flex items-center justify-end w-44">
           <div className="flex h-[24px] items-center">
             {!editMode ? (
               <>
@@ -95,6 +129,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
                 <span className="">
                   {(data.share * 100).toLocaleString(undefined, {
                     maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
                   })}
                 </span>
               </>
@@ -110,23 +145,13 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             )}
           </div>
         </span>
-        <span className="flex w-36 items-center">
-          <span className="">
-            {(data.share * 3e6).toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}
-          </span>
-          <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
-        </span>
-        <span
-          {...getToggleProps({
-            onClick: () => setExpanded((prevExpanded) => !prevExpanded),
-          })}
-          className="flex h-6 w-12 items-center justify-center">
-          {isExpanded ? <CaretUp /> : <CaretDown />}
+        <span className="flex justify-end w-20">
+          <Dots />
         </span>
       </div>
-      <section className={`flex w-[97%] flex-col`} {...getCollapseProps()}>
+      <section
+        className={`flex w-[97%] flex-col gap-2`}
+        {...getCollapseProps()}>
         {children}
       </section>
     </div>
