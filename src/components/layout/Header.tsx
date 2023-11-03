@@ -4,6 +4,7 @@ import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { useSession } from '@/context/session'
 import cn from 'classnames'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export function Header() {
   const { user } = useSession()
@@ -16,7 +17,12 @@ export function Header() {
       onMouseLeave={() => setShowButton(false)}>
       <Link href="/">
         <div className="ml-20">
-          <Logo />
+          <Image
+            alt="Pairwise"
+            height={100}
+            src="/images/pairwise-logo.svg"
+            width={150}
+          />
         </div>
       </Link>
       <div className="relative">
@@ -26,7 +32,8 @@ export function Header() {
         {user && showButton && (
           <div
             className={cn(
-              'absolute right-0 top-12 whitespace-nowrap rounded-2xl bg-white px-10 py-6  text-black')}>
+              'absolute right-0 top-12 whitespace-nowrap rounded-2xl bg-white px-10 py-6  text-black'
+            )}>
             <Link href="/profile">
               <span className="cursor-pointer hover:underline">My account</span>
             </Link>
