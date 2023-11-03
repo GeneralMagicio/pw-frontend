@@ -14,6 +14,7 @@ import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
 import Link from 'next/link'
 import { convertRankingToAttestationFormat } from './attest-utils'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 interface Props {
   isOpen: boolean
@@ -21,6 +22,7 @@ interface Props {
   ranking: CollectionRanking,
   collectionName: string;
   colletionDescription: string;
+  collectionId: number;
 }
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
@@ -30,7 +32,8 @@ export const AttestationModal: React.FC<Props> = ({
   onClose,
   ranking,
   collectionName,
-  colletionDescription
+  colletionDescription,
+  collectionId
 }) => {
   const [step, setSteps] = useState<number>(1)
   const [loading, setLoading] = useState(false)
@@ -106,6 +109,9 @@ export const AttestationModal: React.FC<Props> = ({
       )
 
       const newAttestationUID = await tx.wait()
+      await axiosInstance.post('/flow/reportAttest', {
+        cid: collectionId,
+      })
       setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
       setSteps(3)
     } catch (e) {
