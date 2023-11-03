@@ -13,6 +13,7 @@ import { PairType } from '../../../../types/Pairs/Pair'
 import { HeaderLabels } from './HeaderLabels'
 import { PairsType } from '../../../../types/Pairs'
 import { CategoryContextMenu } from './CategoryContextMenu'
+import { ProjectContextMenu } from './ProjectContextMenu'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -66,7 +67,9 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           )}
         </div>
       </span>
-      <span className="w-20"></span>
+      <span className="flex justify-end w-20">
+        <ProjectContextMenu project={data.id} />
+      </span>
     </div>
   )
 }

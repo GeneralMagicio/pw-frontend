@@ -1,8 +1,7 @@
-import { axiosInstance } from './axiosInstance'
-import { PairsType } from '@/types/Pairs'
-import { RankingResponse } from '@/types/Ranking/index'
 import { CollectionRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 import { PairType } from '@/types/Pairs/Pair'
+import { PairsType } from '@/types/Pairs'
+import { axiosInstance } from './axiosInstance'
 
 export async function fetchPairs(cid?: string) {
   const url = '/flow/pairs'
@@ -41,23 +40,28 @@ export async function getRankings(cid?: string) {
     .then((res) => res.data)
 }
 
-export async function getOverallRanking() : Promise<CollectionRanking> {
-  const {data} = await axiosInstance.get<CollectionRanking[]>(
+export async function getOverallRanking(): Promise<CollectionRanking> {
+  const { data } = await axiosInstance.get<CollectionRanking[]>(
     `/flow/ranking/overall`
   )
   return {
     id: -1,
-    name: "root",
+    name: 'root',
     ranking: data,
     share: 1,
     // isFinished: true,
-    type: "collection",
+    type: 'collection',
     hasRanking: true,
   }
   // return data
 }
 
-export async function getCollection(id: number) : Promise<PairType> {
-  const {data} = await axiosInstance.get(`/collection/${id}`)
-  return data.collection;
+export async function getCollection(id: number): Promise<PairType> {
+  const { data } = await axiosInstance.get(`/collection/${id}`)
+  return data.collection
+}
+
+export async function getProject(id: number): Promise<PairType> {
+  const { data } = await axiosInstance.get(`/project/${id}`)
+  return data.project
 }
