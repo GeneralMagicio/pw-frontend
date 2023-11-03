@@ -29,7 +29,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3  text-black`}>
+      className={`mb-2 flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3 text-black`}>
       <span className="grow">{data.name}</span>
 
       <span className="flex items-center justify-end w-36">
@@ -95,7 +95,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
 
   return (
-    <div className="flex flex-col items-end w-full gap-2 text-black">
+    <div className="flex flex-col items-end w-full mb-2 text-black last:mb-0">
       <div
         className={`flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
         <span
@@ -152,9 +152,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           )}
         </span>
       </div>
-      <section
-        className={`flex w-[97%] flex-col gap-2`}
-        {...getCollapseProps()}>
+      <section className={`mt-2 flex w-[97%] flex-col`} {...getCollapseProps()}>
         {children}
       </section>
     </div>

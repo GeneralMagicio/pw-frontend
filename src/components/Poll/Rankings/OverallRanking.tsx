@@ -101,8 +101,8 @@ export const OverallRanking: React.FC<RankingsProps> = ({
   totalPercentage,
 }) => {
   return (
-    <div className="container relative mx-auto mb-32 mt-8 flex min-w-[1200px] grow flex-col items-end gap-2 px-16">
-      <div className="flex items-center w-full gap-6 px-6 py-4 text-black rounded-md ">
+    <div className="container relative mx-auto mb-32 mt-8 flex min-w-[1200px] grow flex-col items-end px-16">
+      <div className="flex items-center w-full gap-6 px-6 py-4 mb-2 text-black rounded-md ">
         <span className="text-sm grow" />
         <span className="flex justify-end w-64 text-sm ">OP Allocated</span>
         <span className="flex justify-end text-sm w-44">%</span>
