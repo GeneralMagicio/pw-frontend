@@ -97,14 +97,14 @@ export default function AGalaxy() {
       )
     }
 
-    return router.push(`/poll/${collection.id}/ranking`)
+    return router.push(`/ranking`)
   }
 
   return (
     <div className="relative overflow-hidden">
       <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
       <button
-        className="absolute z-50 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
+        className="absolute z-20 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
         onClick={() => {
           router.back()
         }}>
@@ -133,7 +133,7 @@ export default function AGalaxy() {
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen overflow-hidden "
-            style={{ height: 'calc(100vh - 60px - 120px)' }}>
+            style={{ height: 'calc(100vh - 60px)' }}>
             <div
               className="relative flex items-center justify-center shrink-0"
               style={{
