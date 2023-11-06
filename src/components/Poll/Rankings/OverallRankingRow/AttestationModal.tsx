@@ -10,19 +10,21 @@ import {
   SchemaEncoder,
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
+import cn from 'classnames'
 import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
 import Link from 'next/link'
 import { convertRankingToAttestationFormat } from './attest-utils'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { LinkSharp } from '@/components/Icon/LinkSharp'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: CollectionRanking,
-  collectionName: string;
-  colletionDescription: string;
-  collectionId: number;
+  ranking: CollectionRanking
+  collectionName: string
+  colletionDescription: string
+  collectionId: number
 }
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
@@ -33,9 +35,9 @@ export const AttestationModal: React.FC<Props> = ({
   ranking,
   collectionName,
   colletionDescription,
-  collectionId
+  collectionId,
 }) => {
-  const [step, setSteps] = useState<number>(1)
+  const [step, setSteps] = useState<number>(0)
   const [loading, setLoading] = useState(false)
   const [url, setUrl] = useState<string>()
 
@@ -52,14 +54,18 @@ export const AttestationModal: React.FC<Props> = ({
     setLoading(true)
     try {
       await attest()
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
     setLoading(false)
   }
 
   const attest = async () => {
-    const item = await convertRankingToAttestationFormat(ranking, collectionName, colletionDescription)
+    const item = await convertRankingToAttestationFormat(
+      ranking,
+      collectionName,
+      colletionDescription
+    )
 
     if (!isConnected) {
       try {
@@ -92,21 +98,23 @@ export const AttestationModal: React.FC<Props> = ({
     const schemaEncoder = new SchemaEncoder(schema.schema)
     const encodedData = schemaEncoder.encodeData([
       { name: 'listName', type: 'string', value: item.listName },
-      { name: 'listMetadataPtrType', type: 'uint256', value: item.listMetadataPtrType },
+      {
+        name: 'listMetadataPtrType',
+        type: 'uint256',
+        value: item.listMetadataPtrType,
+      },
       { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
     ])
-    
+
     try {
-      const tx = await eas.attest(
-        {
-          schema: SCHEMA_UID,
-          data: {
-            data: encodedData,
-            recipient: address,
-            revocable: false,
-          },
+      const tx = await eas.attest({
+        schema: SCHEMA_UID,
+        data: {
+          data: encodedData,
+          recipient: address,
+          revocable: false,
         },
-      )
+      })
 
       const newAttestationUID = await tx.wait()
       await axiosInstance.post('/flow/reportAttest', {
@@ -121,17 +129,60 @@ export const AttestationModal: React.FC<Props> = ({
       // )
     }
   }
-
+  const isLessThanLastStep = step < 4
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="relative flex min-h-[400px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM">
-        <header className="absolute top-0 mb-2 flex w-full justify-end">
+      <div
+        className={cn(
+          'relative flex min-h-[400px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM',
+          { 'min-h-[280px]': step === 4 }
+        )}>
+        <header className="absolute top-0 mb-2 flex w-full justify-between">
+          {step === 0 || step === 4 ? (
+            <h2 className="text-3xl font-bold">Create list</h2>
+          ) : (
+            <div />
+          )}
           <Close className="cursor-pointer" onClick={onClose} />
         </header>
-        <div className='mt-4'>
-          <LinearProgress progress={progress} />
-        </div>
-        {step > 0 && (
+        {step > 0 && isLessThanLastStep && (
+          <div className="mt-4">
+            <LinearProgress progress={progress} />
+          </div>
+        )}
+        {step === 0 && (
+          <div className="flex flex-col gap-10 mt-10">
+            <p className="text-xl">
+              Lists that you create here can be used for the RetroPGF voting
+              both in Agora and Supermodular.
+            </p>
+            <p className="text-xl font-medium">
+              Only lists created by RetroPGF 3 badge holders will be accessible
+              in the respective voting interfaces. Lists are created using the
+              Ethereum Attestation Service. You need to make a transaction on
+              Optimism to create the list.
+            </p>
+            <div className="flex text-sm justify-between py-3 px-4 rounded-2xl text-[#F36600] bg-[#F366001A]">
+              <p>Create list using EAS on Optimism.</p>
+              <p>{`Estimated cost < 0.000x$`}</p>
+            </div>
+            <div className="flex justify-between text-sm">
+              <button
+                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
+                onClick={onClose}>
+                Not yet
+              </button>
+              <button
+                className={
+                  'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
+                }
+                onClick={() => setSteps(1)}>
+                Create list
+              </button>
+            </div>
+          </div>
+        )}
+        {step > 0 && isLessThanLastStep && (
           <div className="flex w-[80%] items-center">
             <p className="w-16"> 1- </p>
             <p className="w-[75%]">
@@ -145,7 +196,7 @@ export const AttestationModal: React.FC<Props> = ({
             </button>
           </div>
         )}
-        {step > 1 && (
+        {step > 1 && isLessThanLastStep && (
           <div className="flex w-[80%] items-center">
             <p className="w-16"> 2- </p>
             <p className="w-[75%]"> Please sign the transaction.</p>
@@ -162,7 +213,7 @@ export const AttestationModal: React.FC<Props> = ({
             </button>
           </div>
         )}
-        {step > 2 && (
+        {step > 2 && isLessThanLastStep && (
           <div className="flex w-[80%] items-center">
             <p className="w-16"> 3- </p>
             <p className="w-[75%]"> Check out your attestations:</p>
@@ -172,28 +223,48 @@ export const AttestationModal: React.FC<Props> = ({
               onClick={() => setSteps(4)}
               rel="noreferrer"
               target="_blank">
-              <button>
-                View
-              </button>
+              <button>View</button>
             </a>
           </div>
         )}
-        {step > 3 && (
-            <Link
-              className="ml-8 flex w-32 justify-center self-center rounded-lg bg-gray-600 py-3 text-white"
-              href='/galaxy'>
-              <button>
-                Done
+        {step > 3 && isLessThanLastStep && (
+          <Link
+            className="ml-8 flex w-32 justify-center self-center rounded-lg bg-gray-600 py-3 text-white"
+            href="/galaxy">
+            <button>Done</button>
+          </Link>
+        )}
+        {step === 4 && (
+          <div className="flex flex-col gap-10 mt-10">
+            <p className="text-xl">
+              The list has been created, you can access it now on Agora or
+              Supermodular.
+            </p>
+            <div className="flex flex-col gap-4 justify-center items-center">
+              <button
+                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                onClick={() => {}}>
+                View list on Agora
+                <LinkSharp className="ml-4" />
               </button>
-            </Link>
+              <button
+                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                onClick={() => {}}>
+                View list on Supermodular
+                <LinkSharp className="ml-4" />
+              </button>
+            </div>
+          </div>
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt="diploma"
-          className="absolute right-[0px] top-[35%] opacity-[15%]"
-          src="/images/diploma.png"
-          width={100}
-        />
+        {step > 0 && isLessThanLastStep && (
+          <img
+            alt="diploma"
+            className="absolute right-[0px] top-[35%] opacity-[15%]"
+            src="/images/diploma.png"
+            width={100}
+          />
+        )}
       </div>
     </Modal>
   )
