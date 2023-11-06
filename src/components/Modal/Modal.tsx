@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({
   return mounted
     ? ReactDOM.createPortal(
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center ${
+          className={`fixed inset-0 z-30 flex items-center justify-center ${
             backdrop && 'bg-gray-800/30 backdrop-blur-sm'
           }`}
           onClick={handleOverlayClick}>

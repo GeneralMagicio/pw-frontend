@@ -104,7 +104,7 @@ export default function AGalaxy() {
     <div className="relative overflow-hidden">
       <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
       <button
-        className="absolute z-50 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
+        className="absolute z-20 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
         onClick={() => {
           router.back()
         }}>

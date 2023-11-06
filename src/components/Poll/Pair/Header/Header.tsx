@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
     <div
       className={cn(
         styles.Header,
-        'relative z-50  flex h-[93px] items-center justify-between gap-4 px-20 text-lg font-semibold text-black'
+        'relative z-30  flex h-[93px] items-center justify-between gap-4 px-20 text-lg font-semibold text-black'
       )}>
       <div className="flex justify-start w-44">
         <button
@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
           Back
         </button>
       </div>
-      <p className="max-w-xl font-bold text-xl text-center">{question}</p>
+      <p className="max-w-xl text-xl font-bold text-center">{question}</p>
       <div className="flex justify-end w-44">
         <button
           className={cn(
