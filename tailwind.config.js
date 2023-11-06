@@ -10,7 +10,7 @@ module.exports = {
         'screen-content': 'calc(100vh - 177.45px)',
       },
       maxHeight: {
-        'screen-content': 'calc(100vh - 60px - 120px)',
+        'screen-content': 'calc(100vh - 60px)',
       },
       borderWidth: {
         6: '6px',

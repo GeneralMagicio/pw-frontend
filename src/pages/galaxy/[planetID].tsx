@@ -133,7 +133,7 @@ export default function AGalaxy() {
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen overflow-hidden "
-            style={{ height: 'calc(100vh - 60px - 120px)' }}>
+            style={{ height: 'calc(100vh - 60px)' }}>
             <div
               className="relative flex items-center justify-center shrink-0"
               style={{
