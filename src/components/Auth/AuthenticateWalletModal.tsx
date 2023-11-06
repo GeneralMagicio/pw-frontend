@@ -13,13 +13,10 @@ export const AuthenticateWalletModal: React.FC<
   const router = useRouter()
   return (
     <>
-      <div className="relative flex   flex-col  gap-6 font-IBM">
+      <div className="relative flex flex-col gap-6 font-IBM">
         <div className="flex flex-col items-center justify-center gap-5">
-          <header className="mb-2 flex w-full justify-end">
-            <Close className="cursor-pointer" onClick={handleClose} />
-          </header>
           <div className="relative flex h-[220px] w-[340px] items-center justify-center">
-            <ColoredGrid className="absolute inset-0  text-black" />
+            <ColoredGrid className="absolute inset-0 text-black" />
             <SadSun height={225} width={240} />
           </div>
           <h3 className="text-lg font-bold">Authenticate wallet</h3>
@@ -27,9 +24,7 @@ export const AuthenticateWalletModal: React.FC<
             Please sign the login message with your wallet to continue.
           </p>
           <button
-            className={
-              'min-w-[120px] rounded-full bg-red px-4 py-2 text-white'
-            }
+            className={'min-w-[120px] rounded-full bg-red px-4 py-2 text-white'}
             onClick={handleLogin}>
             Authenticate wallet
           </button>
