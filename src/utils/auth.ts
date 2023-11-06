@@ -23,7 +23,7 @@ const fetchNonce = async () => {
 export const login = async (
   chainId: number,
   address: string,
-  signFunction: (args?: any) => Promise<`0x${string}`>
+  signFunction: (args?: any) => Promise<`0x${string}` | undefined>
 ) => {
   try {
     const nonce = await fetchNonce()
@@ -50,10 +50,9 @@ export const login = async (
     window.localStorage.setItem('auth', verifyRes.data)
     window.localStorage.setItem('loggedInAddress', address)
     axiosInstance.defaults.headers.common['auth'] = verifyRes.data
-    window.location.reload()
     return verifyRes
   } catch (error) {
-    console.error('ERROR', error)
+    throw error
   }
 }
 
