@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
@@ -27,6 +27,8 @@ export default function AGalaxy() {
     title: '',
   })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+
+  const isPanning = useRef(false)
 
   useEffect(() => {
     const main = async () => {
@@ -88,13 +90,14 @@ export default function AGalaxy() {
   // }, [collections])
 
   const handleClick = (collection: PairType) => () => {
+    if (isPanning.current) return
     if (collection.progress === 'Pending' || collection.progress === 'WIP') {
       return router.push(
         `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
       )
     }
 
-    return router.replace(`/ranking`)
+    return router.push(`/poll/${collection.id}/ranking`)
   }
 
   return (
@@ -117,7 +120,16 @@ export default function AGalaxy() {
         />
       )} */}
 
-      <TransformWrapper centerOnInit centerZoomedOut initialScale={4}>
+      <TransformWrapper
+        centerOnInit
+        centerZoomedOut
+        initialScale={4}
+        onPanning={() => (isPanning.current = true)}
+        onPanningStop={() => {
+          setTimeout(() => {
+            isPanning.current = false
+          }, 50)
+        }}>
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen overflow-hidden "

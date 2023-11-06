@@ -61,9 +61,7 @@ export default function Poll() {
     // if (pairs?.type === 'expertise') {
     //   setActiveQuestion('What area do you feel most confident discussing?')
     // }
-    setActiveQuestion(
-      'Which of these projects has had a greater positive impact on Optimism?'
-    )
+    setActiveQuestion('Which project should receive more RetroPGF funding?')
   }, [pairs])
 
   useEffect(() => {
