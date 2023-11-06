@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { login, logout } from '@/utils/auth'
+import { isLoggedIn, login, logout } from '@/utils/auth'
 import { useAccount, useNetwork, useSignMessage } from 'wagmi'
 
 import { AuthenticateWalletModal } from '@/components/Auth/AuthenticateWalletModal'
@@ -41,6 +41,17 @@ export const AuthGuard: React.FC<PropsWithChildren> = ({ children }) => {
       replace('/')
     }
   }, [address, pathname, replace])
+
+  useEffect(() => {
+    const main = async () => {
+      const res = await isLoggedIn()
+      if (res === false) {
+        await logout()
+        setIsLoginModalOpen(true)
+      }
+    }
+    main()
+  }, [])
 
   return (
     <>
