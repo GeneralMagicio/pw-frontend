@@ -12,16 +12,19 @@ interface StepTwoProps extends Props {
 export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
   return (
     <div className="flex flex-col justify-center gap-12 font-IBM">
-      <p className="self-start text-2xl font-bold"> Unlock, Engage, Impact </p>
+      <p className="self-start text-2xl font-bold">
+        Efficient Allocation - Simplified
+      </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          {`We've curated an exclusive collection for you to unlock, tailored to your expertise.
-          This personalized approach ensures a more targeted and effective voting experience right from the beginning.`}
+          Your category allocations of OP are initially set by the number of
+          projects in each area. You can edit category allocations at any time
+          by clicking the Ranking button. You can start ranking right away!
         </p>
         <img
           alt="start voting"
           className="mt-[-35px] self-start"
-          src="/images/help-one-start-voting.png"
+          src="/images/unlocked-planets.svg"
         />
       </div>
       <button
@@ -39,16 +42,19 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-center gap-12 font-IBM">
-      <p className="self-start text-2xl font-bold"> Vote, Unlock, Repeat </p>
+      <p className="self-start text-2xl font-bold"> Rank, Explore, Repeat </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-          {`By engaging with your initial collections, you have the ability to unlock additional ones.
-           Each ranked planet opens up new possibilities, allowing you to explore further areas tailored to your expertise.`}
+          Jump straight into ranking projects where you have expertise. Your
+          initial category allocations can be edited anytime before submitting
+          your list. The more project rankings you complete, the more fine-tuned
+          the project allocations. Leverage your expertise to shape impact in
+          the Optimism ecosystem!
         </p>
         <img
           alt="ethers"
           className="mt-[-35px] self-start"
-          src="/images/help-two-ethers.png"
+          src="/images/begin-ranking.svg"
         />
       </div>
       <div className="flex items-center justify-between">
@@ -73,15 +79,21 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-center gap-12 font-IBM">
-      <p className="self-start text-2xl font-bold"> Discover your impact </p>
+      <p className="self-start text-2xl font-bold">
+        {' '}
+        Adjust and Submit your List
+      </p>
       <div className="flex justify-between">
         <p className="max-w-[55%] text-xl font-semibold">
-        Navigate to the &apos;Check Votes&apos; section now! View all the allocations you have made to each area and get ready to attest your allocations!
+          {`When you are satisfied with your rankings on one planet, you can move
+          onto the next! You can make any manual adjustments you would like in
+          the "Ranking" section. This is where you can finalize your list and
+          submit to Agora and Supermodular for voting.`}
         </p>
         <img
           alt="ethers"
-          className="self-start"
-          src="/images/help-three-check-votes.png"
+          className="w-[250px] self-start"
+          src="/images/ranking-image.png"
         />
       </div>
       <div className="flex items-center justify-between">

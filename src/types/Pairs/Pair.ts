@@ -1,9 +1,13 @@
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
+
 export interface PairType {
   id: number
   name: string
   url: string
   image: string
   description: string
+  impactDescription: string
+  contributionDescription?: string
   collection_id: number | null
   created_at: string
   numOfChildren: number
@@ -11,9 +15,9 @@ export interface PairType {
   subProjects?: Array<PairType>
   parent_collection_id: number | null
   locked: boolean
-  hasSubcollections: boolean,
-  hasCompositeProjects: boolean,
-  finished: boolean,
-  started: boolean,
-  type: "collection" | "project" | "composite project"
+  hasSubcollections: boolean
+  hasCompositeProjects: boolean
+  progress: CollectionProgressStatus
+  started: boolean
+  type: 'collection' | 'project' | 'composite project'
 }

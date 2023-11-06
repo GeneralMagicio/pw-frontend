@@ -1,44 +1,32 @@
+import { fetchPairs, voteProjects } from '@/utils/poll'
 import { useEffect, useState } from 'react'
-import Modal from '@/components/Modal/Modal'
-import { Question } from '@/components/Poll/Pair/Question'
-import { Pairs } from '@/components/Poll/Pairs'
-import { Header } from '@/components/Poll/Pair/Header'
+
 import { Footer } from '@/components/Poll/Pair/Footer/Footer'
-import {
-  fetchPairs,
-  fetchSubProjectPairs,
-  voteExpertise,
-  voteProjects,
-} from '@/utils/poll'
+import { Header } from '@/components/Poll/Pair/Header'
+import Modal from '@/components/Modal/Modal'
+import { PairType } from '@/types/Pairs/Pair'
+import { Pairs } from '@/components/Poll/Pairs'
+import { PairsType } from '@/types/Pairs'
+import { Question } from '@/components/Poll/Pair/Question'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { PairsType, PollType } from '@/types/Pairs'
-import { ImpactModal } from '@/components/Journey/ImpactModal'
-import { PairType } from '@/types/Pairs/Pair'
+import { RankingConfirmationModal } from '@/components/RankingConfirmationModal'
 
 export default function Poll() {
   const router = useRouter()
   const cid = router.query.cid
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
-  const [showImpactModal, setShowImpactModal] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  // const [showImpactModal, setShowImpactModal] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
 
   const goToRanking = () => {
-    switch (cid) {
-      case PollType.EXPERTISE:
-        router.push('/poll/expertise/ranking')
-        return
-      case PollType.IMPACT:
-        router.push('/poll/root/ranking')
-        return
-      default:
-        router.push({
-          pathname: `${router.pathname}/ranking`,
-          query: router.query,
-        })
-    }
+    router.push({
+      pathname: `${router.pathname}/ranking`,
+      query: router.query,
+    })
   }
 
   const fetchData = async () => {
@@ -49,11 +37,11 @@ export default function Poll() {
     setPairs(data)
   }
 
-  useEffect(() => {
-    if (router.query.cid === 'root') {
-      setShowImpactModal(true)
-    }
-  }, [router.query.cid])
+  // useEffect(() => {
+  //   if (router.query.cid === 'root') {
+  //     setShowImpactModal(true)
+  //   }
+  // }, [router.query.cid])
 
   useEffect(() => {
     // if (pairs?.type === 'collection') {
@@ -70,12 +58,10 @@ export default function Poll() {
     //   setActiveQuestion(
     //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
     //   )
-    if (pairs?.type === 'expertise') {
-      setActiveQuestion('What area do you feel most confident discussing?')
-    }
-    else setActiveQuestion(
-      'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-    )
+    // if (pairs?.type === 'expertise') {
+    //   setActiveQuestion('What area do you feel most confident discussing?')
+    // }
+    setActiveQuestion('Which project should receive more RetroPGF funding?')
   }, [pairs])
 
   useEffect(() => {
@@ -85,11 +71,10 @@ export default function Poll() {
   }, [isConnected, router.query])
 
   const onVote = async (pair: PairType[], picked?: number | undefined) => {
-    if (!pairs) return 
+    if (!pairs) return
 
     const [a, b] = pair
-    const voteRequest = pairs?.type === "expertise" ? voteExpertise : voteProjects
-    await voteRequest({
+    await voteProjects({
       id1: a.id,
       id2: b.id,
       pickedId: picked || null,
@@ -98,15 +83,15 @@ export default function Poll() {
     await fetchData()
   }
 
+  const canFinish = pairs?.votedPairs
+    ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
+    : false
+
   return (
     <>
       <Header
-        canFinish={
-          pairs?.votedPairs
-            ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
-            : false
-        }
-        handleFinishVoting={goToRanking}
+        canFinish={canFinish}
+        handleFinishVoting={() => setIsConfirmOpen(true)}
         name={pairs?.name || ''}
         question={activeQuestion}
         threshold={pairs?.threshold || 0}
@@ -121,11 +106,12 @@ export default function Poll() {
           pairs={pairs.pairs}
         />
       )}
-      {showImpactModal ? (
-        <ImpactModal isOpen={showImpactModal} onClose={() => {setShowImpactModal(false); setOpen(false)}} />
-      ) : (
-        <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <Question onStart={() => setOpen(false)} question={activeQuestion} />
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <Question onStart={() => setOpen(false)} question={activeQuestion} />
+      </Modal>
+      {pairs && (
+        <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
+          <RankingConfirmationModal />
         </Modal>
       )}
 
@@ -134,7 +120,7 @@ export default function Poll() {
         // The condition checks for top-level collections pairwises
         text={
           pairs?.pairs[0][0].collection_id !== null && pairs?.name
-            ? `Evaluating ${pairs.name}`
+            ? pairs.name
             : ''
         }
       />

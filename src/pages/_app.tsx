@@ -1,13 +1,14 @@
 import '@/styles/globals.css'
+
 import type { AppProps } from 'next/app'
+import { AuthGuard } from '@/components/Auth/AuthGuard'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { Seo } from '@/components/layout/Seo'
 import { Web3Provider } from '@/providers/Web3'
-import localFont from 'next/font/local'
-import cn from 'classnames'
-import { SessionProvider } from '@/context/session'
-import { useLayoutEffect } from 'react'
 import { axiosInstance } from '@/utils/axiosInstance'
+import cn from 'classnames'
+import localFont from 'next/font/local'
+import { useLayoutEffect } from 'react'
 
 const IBMFont = localFont({
   src: [
@@ -36,6 +37,10 @@ const InterFont = localFont({
       path: '../../public/fonts/Inter/Inter-Regular.ttf',
       weight: '400',
     },
+    {
+      path: '../../public/fonts/Inter/Inter-Medium.ttf',
+      weight: '500',
+    },
 
     {
       path: '../../public/fonts/Inter/Inter-SemiBold.ttf',
@@ -51,26 +56,27 @@ const InterFont = localFont({
 })
 
 export default function App({ Component, pageProps }: AppProps) {
-
   useLayoutEffect(() => {
     const token = window.localStorage.getItem('auth')
-    if(token) {
-      axiosInstance.defaults.headers.common['auth'] = `${token}`;
+    if (token) {
+      axiosInstance.defaults.headers.common['auth'] = `${token}`
     }
-  }, []);
+  }, [])
 
   return (
     <>
-    <div className={cn(IBMFont.variable, InterFont.variable)} id='font-container'>
-      <Seo />
-      <Web3Provider>
-        <SessionProvider>
-          <MainLayout className=''>
-            <Component {...pageProps} />
-          </MainLayout>
-        </SessionProvider>
-      </Web3Provider>
-    </div>
+      <div
+        className={cn(IBMFont.variable, InterFont.variable)}
+        id="font-container">
+        <Seo />
+        <Web3Provider>
+          <AuthGuard>
+            <MainLayout className="">
+              <Component {...pageProps} />
+            </MainLayout>
+          </AuthGuard>
+        </Web3Provider>
+      </div>
     </>
   )
 }

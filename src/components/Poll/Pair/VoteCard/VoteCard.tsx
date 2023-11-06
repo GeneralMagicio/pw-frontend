@@ -2,13 +2,11 @@
 import React from 'react'
 import styles from './VoteCard.module.scss'
 import cn from 'classnames'
-import { Expand } from '@/components/Icon/Expand'
-import Image from 'next/image'
+import { Eye } from '@/components/Icon/Eye'
 import { PairType } from '@/types/Pairs/Pair'
-import { Layers } from '@/components/Icon/Layers'
-import { Browser } from '@/components/Icon/Browser'
 import { CardBorderLeft } from '@/components/Icon/CardBorderLeft'
 import { CardBorderRight } from '@/components/Icon/CardBorderRight'
+import Image from 'next/image'
 
 interface VoteCardProps {
   placement: 'left' | 'right'
@@ -20,9 +18,10 @@ interface VoteCardProps {
 
 const isSingleProject = (item: PairType) => {
   const subProjects = item.subProjects
-  if (item.numOfChildren || (subProjects && subProjects.length > 0)) return false
+  if (item.numOfChildren || (subProjects && subProjects.length > 0))
+    return false
 
-  return true;
+  return true
 }
 
 export const VoteCard: React.FC<
@@ -39,6 +38,7 @@ export const VoteCard: React.FC<
   const isRight = placement === 'right'
   const isLeft = placement === 'left'
   const isSkew = varient === 'skew'
+
   return (
     <div className={cn(styles.voteCardWrapper, 'flex flex-col')} {...props}>
       {isRight ? (
@@ -77,7 +77,7 @@ export const VoteCard: React.FC<
                   '-right-8': isRight,
                   '-left-8': isLeft,
                 },
-                'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+                'rounded-2xl bg-[#FFFFFF80]  backdrop-blur-xl'
               )}></div>
             <div
               className={cn(
@@ -87,7 +87,7 @@ export const VoteCard: React.FC<
                   '-right-6': isRight,
                   '-left-6': isLeft,
                 },
-                'rounded-2xl backdrop-blur-xl  bg-[#FFFFFF80]'
+                'rounded-2xl bg-[#FFFFFF80]  backdrop-blur-xl'
               )}></div>
             <div
               className={cn(
@@ -113,7 +113,7 @@ export const VoteCard: React.FC<
           className={cn(
             styles['voteCard__body'],
             { 'outline outline-4 outline-black': selected },
-            'relative flex flex-col justify-between h-full w-full rounded-2xl bg-white p-6 text-black'
+            'relative flex h-full w-full flex-col justify-between rounded-2xl bg-white p-6 text-black'
           )}
           style={{
             transformOrigin: placement,
@@ -121,43 +121,48 @@ export const VoteCard: React.FC<
               !isSkew ? '0deg' : isRight ? '-33deg' : '33deg'
             })`,
           }}>
-          <div className="flex h-full grow flex-col  gap-2" onClick={onClick}>
-            <img
+          <div className="flex flex-col h-full gap-2 grow" onClick={onClick}>
+            <Image
               alt={item.name}
-              className="h-[170px] w-full rounded-2xl border-0 object-cover"
-              src={item.image}></img>
-            <h3 className="font-Inter text-2xl font-bold">{item.name}</h3>
-            <p className={cn(styles['line-clamp-4'], 'font-Inter')}>
-              {item.description}
-            </p>
-            <div className="mb-3 flex grow flex-col justify-end">
-              <div className="self-start rounded-lg border border-black-3 p-1">
-                <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
+              className="h-[170px] w-full rounded-2xl border-0 object-cover pb-2"
+              height="300"
+              src={item.image || '/nip.png'}
+              width="300"
+            />
+            <div className="text-2xl font-bold">{item.name}</div>
+            <div className={cn(styles['line-clamp-4'])}>
+              {item.contributionDescription}
+            </div>
+            <div
+              className={cn('pt-5 text-center transition-colors', {
+                '': !selected,
+                'text-red': selected,
+              })}>
+              {selected ? 'Voted' : 'Vote'}
+            </div>
+            {/* <div className="flex flex-col justify-end mb-3 grow">
+              <div className="self-start p-1 border rounded-lg border-black-3">
+                <div className="flex items-center gap-2 px-3 py-1 border rounded-lg border-gray-10">
                   {isSingleProject(item) ? <Browser /> : <Layers />}
-                  <span className="font-IBM text-sm">
+                  <span className="text-sm font-IBM">
                     {isSingleProject(item)
                       ? 'Single project'
                       : `${item.numOfChildren || item.subProjects?.length}+ Projects`}
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
-          <p
-            className={cn('text-center transition-colors', {
-              'opacity-20': !selected,
-              'text-red': selected,
-            })}>
-            {selected ? 'Voted' : 'Vote'}
-          </p>
         </div>
       </div>
-      <button
-        className="mt-10 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity"
-        onClick={onQuickView}>
-        <span>Quick view</span>
-        <Expand />
-      </button>
+      <div className="flex justify-center w-full pt-5">
+        <button
+          className="flex gap-4 px-4 py-3 mt-10 text-black transition-opacity bg-white opacity-0 w-max rounded-2xl"
+          onClick={onQuickView}>
+          <span>Details</span>
+          <Eye />
+        </button>
+      </div>
 
       {isRight ? (
         <CardBorderLeft

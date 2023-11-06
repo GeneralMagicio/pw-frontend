@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep'
 import { CollectionRanking, EditingCollectionRanking, ProjectRanking } from './edit'
 import { toFixedNumber } from '@/utils/helpers'
+import { CollectionProgressStatus } from '@/components/Galaxy/types'
 
 export function removeAdditionalProperties(
   input: EditingCollectionRanking
@@ -14,7 +15,7 @@ export function removeAdditionalProperties(
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
-    if (row.type === "project") {
+    if (!row.hasRanking) {
       // @ts-ignore
       delete row.locked
       // @ts-ignore
@@ -28,23 +29,44 @@ export function removeAdditionalProperties(
   return data as CollectionRanking
 }
 
-export function addAdditionalProperties<T extends CollectionRanking>(
-  input: T
+const shouldBeLocked = (row: {isTopLevel: boolean, locked?: boolean, progress: CollectionProgressStatus}) => {
+  if (row.isTopLevel) return false;
+
+  if ("locked" in row) return row.locked
+
+  const progress = row.progress
+
+  switch(progress) {
+    case "Attested":
+      return false;
+    case "Finished":
+      return false;
+    case 'WIP':
+      return true;
+    case 'Pending':
+      return true
+    default:
+      return false
+  }
+}
+
+export function addAdditionalProperties(
+  input: CollectionRanking | EditingCollectionRanking
 ): EditingCollectionRanking {
   const data = cloneDeep(input)
 
   // @ts-ignore
-  data.locked = data.locked ?? false
+  data.locked = shouldBeLocked(data)
   // @ts-ignore
   data.error = data.error ?? false
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
     // @ts-ignore
-    row.locked = (row.locked || !data.isFinished) ?? false
-    if (row.type === "project") {
+    row.locked = data.locked === true ? true : shouldBeLocked(row)
+    if (!row.hasRanking) {
       // @ts-ignore
       row.error = row.error ?? false
-    } else if (row.hasRanking) {
+    } else {
       data.ranking[i] = addAdditionalProperties(row)
     }
   }
@@ -60,9 +82,9 @@ export function resetErrorProperty(
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
-    if (row.type === "project") {
+    if (!row.hasRanking) {
       row.error = false
-    } else if (row.hasRanking) {
+    } else {
       data.ranking[i] = resetErrorProperty(row)
     }
   }
@@ -84,7 +106,6 @@ export function setErrorProperty(
     let row = data.ranking[i]
 
     if (row.id === id) {
-      // row.locked = false
       row.error = value
     } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setErrorProperty(row, id, value)
@@ -109,8 +130,6 @@ export function setLockProperty(
     let row = data.ranking[i]
 
     if (row.id === id) {
-      console.log
-      // row.locked = false
       row.locked = !row.locked
     } else if (row.type !== "project" && row.hasRanking) {
       data.ranking[i] = setLockProperty(row, id)
@@ -126,6 +145,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
   for (let i = 0; i < data.ranking.length; i++) {
     const row = data.ranking[i];
     if (toFixedNumber(row.share, 5) < 0 || toFixedNumber(row.share, 5) > 1) {
+      console.log("Error neg or 1", row)
       return false;
     } else acc += row.share;
 
@@ -133,6 +153,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
       return false;
 
     if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
+      console.log(row, "Error parent", acc, "and max:", max)
       return false;
     }
   }

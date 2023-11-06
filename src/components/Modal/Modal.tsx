@@ -8,7 +8,7 @@ interface ModalProps {
   children: React.ReactElement
   className?: string
   backdrop?: boolean
-  closeOnOutsideClick?: boolean,
+  closeOnOutsideClick?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -65,13 +65,15 @@ const Modal: React.FC<ModalProps> = ({
   return mounted
     ? ReactDOM.createPortal(
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center ${backdrop && 'bg-gray-800/30 backdrop-blur-sm'}`}
+          className={`fixed inset-0 z-30 flex items-center justify-center ${
+            backdrop && 'bg-gray-800/30 backdrop-blur-sm'
+          }`}
           onClick={handleOverlayClick}>
           <div
             className={cn(
-              'p-6 rounded-2xl max-h-[704px] overflow-hidden max-w-[1024px]',
+              'max-h-[704px] max-w-[1024px] overflow-hidden rounded-2xl p-6',
               !className ? 'bg-white' : className,
-              'mx-24 backdrop-blur-sm border-4 border-gray-30'
+              'mx-24 border-4 border-gray-30 backdrop-blur-sm'
             )}
             ref={modalRef}>
             {children}

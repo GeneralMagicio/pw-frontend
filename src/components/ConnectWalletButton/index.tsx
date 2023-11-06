@@ -1,7 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
-import { useSwitchNetwork } from 'wagmi'
+import { useAccount, useSwitchNetwork } from 'wagmi'
 
 export const ConnectWalletButton: React.FC<{
   className?: string
@@ -12,8 +12,8 @@ export const ConnectWalletButton: React.FC<{
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
-        const connected = mounted && account && chain
-        if (!connected) {
+        if (!mounted) return null
+        if (!account || !chain) {
           return (
             <button
               className={cn(className, 'min-w-[120px] rounded-full  px-4 ')}
@@ -25,7 +25,7 @@ export const ConnectWalletButton: React.FC<{
         return (
           <button
             className={cn(
-              'min-w-[120px] flex items-center justify-center rounded-full border border-black bg-transparent px-4  text-black',
+              'flex min-w-[120px] items-center justify-center rounded-full border border-black bg-transparent px-4  text-black',
               className
             )}
             onClick={
@@ -36,7 +36,7 @@ export const ConnectWalletButton: React.FC<{
                     }
                     openAccountModal && openAccountModal()
                   }
-                : () => router.push('/galaxy')
+                : () => router.push('/galaxy?welcome=yes')
             }>
             <span className="font-bold">
               {alternativeText || account.displayName}

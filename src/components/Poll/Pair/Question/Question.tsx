@@ -6,10 +6,7 @@ interface QuestionProps {
   onStart: () => void
 }
 
-export const Question: React.FC<QuestionProps> = ({
-  question,
-  onStart,
-}) => {
+export const Question: React.FC<QuestionProps> = ({ question, onStart }) => {
   const [seconds, setSeconds] = useState(3)
   const isStarted = seconds === 0
   useEffect(() => {

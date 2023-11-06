@@ -10,14 +10,21 @@ import {
   SchemaEncoder,
   AttestationRequestData,
 } from '@ethereum-attestation-service/eas-sdk'
+import cn from 'classnames'
 import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
-import { convertRankingToAttestationFormat } from '@/utils/helpers'
+import Link from 'next/link'
+import { convertRankingToAttestationFormat } from './attest-utils'
+import { axiosInstance } from '@/utils/axiosInstance'
+import { LinkSharp } from '@/components/Icon/LinkSharp'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
   ranking: CollectionRanking
+  collectionName: string
+  colletionDescription: string
+  collectionId: number
 }
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
@@ -26,10 +33,15 @@ export const AttestationModal: React.FC<Props> = ({
   isOpen,
   onClose,
   ranking,
+  collectionName,
+  colletionDescription,
+  collectionId,
 }) => {
-  const [step, setSteps] = useState<number>(1)
+  const [step, setSteps] = useState<number>(0)
   const [loading, setLoading] = useState(false)
   const [url, setUrl] = useState<string>()
+  const [agoraUrl, setAgoraUrl] = useState('')
+  const [smUrl, setSmUrl] = useState('')
 
   const progress = Math.ceil(((step - 1) / 3) * 100)
 
@@ -40,18 +52,22 @@ export const AttestationModal: React.FC<Props> = ({
 
   const signer = useSigner()
 
-  const handleSignClick = async () => {
+  const handleCreate = async () => {
     setLoading(true)
     try {
       await attest()
-    } catch(e) {
+    } catch (e) {
       console.error(e)
     }
     setLoading(false)
   }
 
   const attest = async () => {
-    const item = convertRankingToAttestationFormat(ranking)
+    const item = await convertRankingToAttestationFormat(
+      ranking,
+      collectionName,
+      colletionDescription
+    )
 
     if (!isConnected) {
       try {
@@ -71,6 +87,10 @@ export const AttestationModal: React.FC<Props> = ({
       console.log('no signer')
       return
     }
+    if (!address) {
+      console.log('no address')
+      return
+    }
 
     const eas = new EAS(easConfig.EASDeployment)
     const schemaRegistry = new SchemaRegistry(easConfig.SchemaRegistry)
@@ -80,25 +100,38 @@ export const AttestationModal: React.FC<Props> = ({
     const schemaEncoder = new SchemaEncoder(schema.schema)
     const encodedData = schemaEncoder.encodeData([
       { name: 'listName', type: 'string', value: item.listName },
-      { name: 'listMetadataPtrType', type: 'uint256', value: item.listMetadataPtrType },
+      {
+        name: 'listMetadataPtrType',
+        type: 'uint256',
+        value: item.listMetadataPtrType,
+      },
       { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
     ])
-    
-    try {
-      const tx = await eas.attest(
-        {
-          schema: SCHEMA_UID,
-          data: {
-            data: encodedData,
-            recipient: '0x0000000000000000000000000000000000000000',
-            revocable: false,
-          },
-        },
-      )
 
+    try {
+
+      const tx = await eas.attest({
+        schema: SCHEMA_UID,
+        data: {
+          data: encodedData,
+          recipient: address,
+          revocable: true,
+        },
+      })
+
+      // const newAttestationUID = ""
       const newAttestationUID = await tx.wait()
-      setUrl(`${easConfig.explorer}/address/${address}`)
-      setSteps(3)
+      await axiosInstance.post('/flow/reportAttest', {
+        cid: collectionId,
+      })
+      setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
+      setAgoraUrl(
+        `https://optimism-agora-dev.agora-dev.workers.dev/retropgf/3/list/${newAttestationUID}`
+      )
+      setSmUrl(
+        `https://retro-pgf-staging.vercel.app/lists/${newAttestationUID}`
+      )
+      setSteps(1)
     } catch (e) {
       console.error('error on sending tx:', e)
       // setUrl(
@@ -106,70 +139,72 @@ export const AttestationModal: React.FC<Props> = ({
       // )
     }
   }
-
+  const isLessThanLastStep = step < 4
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="relative flex min-h-[400px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM">
-        <header className="absolute top-0 mb-2 flex w-full justify-end">
-          <Close className="cursor-pointer" onClick={onClose} />
-        </header>
-        <div className='mt-4'>
-          <LinearProgress progress={progress} />
-        </div>
-        {step > 0 && (
-          <div className="flex w-[80%] items-center">
-            <p className="w-16"> 1- </p>
-            <p className="w-[75%]">
-              Are you sure you want to attest to the ranking result available in
-              this page?
+      <div
+        className={cn(
+          'relative flex min-h-[250px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM',
+        )}>
+        {step === 0 && (
+          <div className="mt-10 flex flex-col gap-10">
+            <p className="text-xl">
+              Lists that you create here can be used for the RetroPGF voting
+              both in Agora and Supermodular.
             </p>
-            <button
-              className="ml-8 h-12 w-32 rounded-lg bg-gray-600 text-white"
-              onClick={() => setSteps(2)}>
-              {step > 1 ? 'Confirmed' : 'Confirm'}
-            </button>
-          </div>
-        )}
-        {step > 1 && (
-          <div className="flex w-[80%] items-center">
-            <p className="w-16"> 2- </p>
-            <p className="w-[75%]"> Please sign the transaction.</p>
-            <button
-              className="ml-8 h-12 w-32 rounded-lg bg-gray-600 text-white"
-              onClick={handleSignClick}>
-              {loading ? (
-                <CircularProgress color="#4b5563" isIndeterminate size={28} />
-              ) : step > 2 ? (
-                'Signed'
-              ) : (
-                'Sign'
-              )}
-            </button>
-          </div>
-        )}
-        {step > 2 && (
-          <div className="flex w-[80%] items-center">
-            <p className="w-16"> 3- </p>
-            <p className="w-[75%]"> Check out your attestations:</p>
-            <a
-              className="ml-8 flex w-32 justify-center rounded-lg bg-gray-600 py-3 text-white"
-              href={url}
-              onClick={() => setSteps(4)}
-              rel="noreferrer"
-              target="_blank">
-              <button>
-                View
+            <p className="text-xl font-medium">
+              Only lists created by RetroPGF 3 badge holders will be accessible
+              in the respective voting interfaces. Lists are created using the
+              Ethereum Attestation Service. You need to make a transaction on
+              Optimism to create the list.
+            </p>
+            <div className="flex justify-between rounded-2xl bg-[#F366001A] py-3 px-4 text-sm text-[#F36600]">
+              <p>Create list using EAS on Optimism.</p>
+              <p>{`Estimated cost < 0.000x$`}</p>
+            </div>
+            <div className="flex justify-between text-sm">
+              <button
+                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
+                onClick={onClose}>
+                Not yet
               </button>
-            </a>
+              <button
+                className={
+                  'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
+                }
+                onClick={handleCreate}>
+                {loading ? "Loading..." : "Create list"}
+              </button>
+            </div>
           </div>
         )}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          alt="diploma"
-          className="absolute right-[0px] top-[35%] opacity-[15%]"
-          src="/images/diploma.png"
-          width={100}
-        />
+        
+        {step === 1 && (
+          <div className="mt-10 flex flex-col gap-10">
+            <p className="text-xl">
+              The list has been created, you can access it shortly on Agora or
+              Supermodular.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-4">
+              <a href={agoraUrl} rel="noreferrer" target='_blank'>
+                <button
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  onClick={() => {}}>
+                  View list on Agora
+                  <LinkSharp className="ml-4" />
+                </button>
+              </a>
+              <a href={smUrl} rel="noreferrer" target='_blank'>
+                <button
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  onClick={() => {}}>
+                  View list on Supermodular
+                  <LinkSharp className="ml-4" />
+                </button>
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </Modal>
   )
