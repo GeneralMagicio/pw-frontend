@@ -111,7 +111,7 @@ export default function Poll() {
       </Modal>
       {pairs && (
         <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
-          <RankingConfirmationModal collection={pairs} />
+          <RankingConfirmationModal />
         </Modal>
       )}
 

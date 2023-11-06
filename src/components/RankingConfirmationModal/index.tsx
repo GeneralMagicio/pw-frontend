@@ -6,41 +6,51 @@ import { Plus } from '../Icon/Plus'
 import { ArrowBackward } from '../Icon/ArrowBackward'
 import { useEffect, useState } from 'react'
 import { CollectionRanking } from '../Poll/Rankings/edit-logic/edit'
-import { getRankings } from '@/utils/poll'
+import { getCollection, getRankings } from '@/utils/poll'
 import { Check } from '../Icon/Check'
+import { AttestationModal } from '../Poll/Rankings/OverallRankingRow/AttestationModal'
+import { PairType } from '@/types/Pairs/Pair'
 
-interface RankingConfirmationModalProps {
-  collection: PairsType
-}
-
-export const RankingConfirmationModal: React.FC<
-  RankingConfirmationModalProps
-> = ({ collection }) => {
+export const RankingConfirmationModal: React.FC = () => {
+  const [open, setOpen] = useState(false)
   const [rankings, setRankings] = useState<CollectionRanking>()
+  const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
 
   useEffect(() => {
     const main = async () => {
       if (router.query.cid) {
-        const data = await getRankings(String(router.query.cid))
+        const [data, collection] = await Promise.all([
+          getRankings(String(router.query.cid)),
+          getCollection(Number(router.query.cid)),
+        ])
+        setCollection(collection)
         setRankings(data)
       }
     }
     main()
-  }, [router.query.cid])
+  }, [setRankings, router.query.cid])
   return (
     <>
       <div className="flex max-w-[800px]  flex-col justify-center gap-10 font-IBM">
+        {open && rankings && collection && (
+          <AttestationModal
+            collectionId={collection.id}
+            collectionName={collection.name}
+            colletionDescription={collection.impactDescription}
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            ranking={rankings}
+          />
+        )}
         <header className="mb-2 flex w-full ">
           <h3 className="text-2xl font-bold">Well done</h3>
         </header>
 
         <p className="text-xl font-normal">
           you have finished ranking of{' '}
-          <span className="font-medium">
-            {collection.name || 'DeFi, Decentralized Finance'}
-          </span>
-          , now you can create list or continue ranking other projects.
+          <span className="font-medium">{collection?.name || ''}</span>, now you
+          can create list or continue ranking other projects.
         </p>
         <div className="rounded-xl bg-grayish py-4 px-6 min-h-[270px]">
           <header className="flex items-center justify-between border-b pb-4 border-gray-10">
@@ -125,7 +135,8 @@ export const RankingConfirmationModal: React.FC<
           <button
             className={
               'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
-            }>
+            }
+            onClick={() => setOpen(true)}>
             Create list <Plus className="ml-2" />
           </button>
         </footer>
