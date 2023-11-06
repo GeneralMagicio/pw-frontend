@@ -97,7 +97,7 @@ export default function AGalaxy() {
       )
     }
 
-    return router.push(`/poll/${collection.id}/ranking`)
+    return router.push(`/ranking`)
   }
 
   return (
