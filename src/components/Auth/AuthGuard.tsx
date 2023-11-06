@@ -46,17 +46,6 @@ export const AuthGuard: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }, [address, pathname, replace])
 
-  useEffect(() => {
-    const main = async () => {
-      const res = await isLoggedIn()
-      if (res === false) {
-        await logout()
-        setIsLoginModalOpen(true)
-      }
-    }
-    main()
-  }, [])
-
   return (
     <>
       {children}
