@@ -11,6 +11,7 @@ import { PairType } from '@/types/Pairs/Pair'
 import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { CollectionProgressStatus } from '@/components/Galaxy/types'
+import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
 
@@ -27,6 +28,7 @@ export default function AGalaxy() {
     title: '',
   })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+  const width = useWindowWidth()
 
   const isPanning = useRef(false)
 
@@ -67,17 +69,15 @@ export default function AGalaxy() {
   }, [router.query.planetID])
 
   useEffect(() => {
-    const handleResize = () => {
-      setCords(
-        generateNonOverlappingOrbitCoordinates(6, 3)
-          .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
-          .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
+    setCords(
+      generateNonOverlappingOrbitCoordinates(
+        collections?.length || 6,
+        width < 1600 ? 1.8 : 2.5
       )
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+        .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
+        .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
+    )
+  }, [collections, width])
 
   // useEffect(() => {
   //   const allCollectionsUnlockedUnstarted = collections.every(
