@@ -18,7 +18,10 @@ export default function Galaxy() {
   // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
-  const [showHelpModal, setShowHelpModal] = useState(false)
+  const [showHelpModal, setShowHelpModal] = useState(() =>
+    Boolean(router.query.welcome)
+  )
+  console.log({ q: Boolean(router.query.welcome), showHelpModal })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   // const [showCustomizeModal, setShowCustomizeModal] = useState(true)
   // const { flowStatus, updateFlowStatus } = useSession()
@@ -124,8 +127,14 @@ export default function Galaxy() {
           }}
         />
       )} */}
-      {showHelpModal && (
-        <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
+      {(showHelpModal || router.query.welcome) && (
+        <HelpModal
+          isOpen={true}
+          onClose={() => {
+            setShowHelpModal(false)
+            if (router.query.welcome) router.replace('', { query: {} })
+          }}
+        />
       )}
 
       <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
