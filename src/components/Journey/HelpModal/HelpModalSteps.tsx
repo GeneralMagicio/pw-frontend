@@ -24,7 +24,7 @@ export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
         <img
           alt="start voting"
           className="mt-[-35px] self-start"
-          src="/images/help-one-start-voting.png"
+          src="/images/unlocked-planets.svg"
         />
       </div>
       <button
@@ -54,7 +54,7 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         <img
           alt="ethers"
           className="mt-[-35px] self-start"
-          src="/images/help-two-ethers.png"
+          src="/images/begin-ranking.svg"
         />
       </div>
       <div className="flex items-center justify-between">
