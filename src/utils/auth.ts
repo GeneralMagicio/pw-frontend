@@ -1,6 +1,6 @@
+import { SiweMessage } from 'siwe'
 import { User } from '@/types/user/User'
 import { axiosInstance } from './axiosInstance'
-import { SiweMessage } from 'siwe'
 
 export const isLoggedIn = async () => {
   try {
@@ -37,6 +37,7 @@ export const login = async (
       chainId,
       nonce,
     })
+
     const signature = await signFunction({
       message: message.prepareMessage(),
     })
@@ -47,6 +48,7 @@ export const login = async (
     })
 
     window.localStorage.setItem('auth', verifyRes.data)
+    window.localStorage.setItem('loggedInAddress', address)
     axiosInstance.defaults.headers.common['auth'] = verifyRes.data
     window.location.reload()
     return verifyRes
@@ -58,8 +60,9 @@ export const login = async (
 export const logout = async () => {
   try {
     window.localStorage.removeItem('auth')
-    if(axiosInstance.defaults.headers.common['auth']) {
-      delete axiosInstance.defaults.headers.common['auth'];
+    window.localStorage.removeItem('loggedInAddress')
+    if (axiosInstance.defaults.headers.common['auth']) {
+      delete axiosInstance.defaults.headers.common['auth']
     }
     await axiosInstance.post('/auth/logout')
   } catch (err) {

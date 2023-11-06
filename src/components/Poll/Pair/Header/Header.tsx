@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
           Back
         </button>
       </div>
-      <p className="max-w-xl text-center">{question}</p>
+      <p className="max-w-xl font-bold text-xl text-center">{question}</p>
       <div className="flex justify-end w-44">
         <button
           className={cn(

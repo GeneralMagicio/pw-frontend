@@ -1,5 +1,5 @@
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
 import { useRouter } from 'next/router'
@@ -10,6 +10,7 @@ import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { HelpModal } from '@/components/Journey/HelpModal'
 import { Help } from '@/components/Icon/Help'
+import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
 
@@ -18,10 +19,14 @@ export default function Galaxy() {
   // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
-  const [showHelpModal, setShowHelpModal] = useState(false)
+  const isPanning = useRef(false)
+  const [showHelpModal, setShowHelpModal] = useState(() =>
+    Boolean(router.query.welcome)
+  )
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   // const [showCustomizeModal, setShowCustomizeModal] = useState(true)
   // const { flowStatus, updateFlowStatus } = useSession()
+  const width = useWindowWidth()
 
   // useEffect(() => {
   //   const func = async () => {
@@ -44,22 +49,17 @@ export default function Galaxy() {
   }, [])
 
   useEffect(() => {
-    const width = window.innerWidth
-    const handleResize = () => {
-      setCords(
-        generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2.5 : 2.3)
-          .concat(
-            generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4)
-          )
-          .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
-      )
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    setCords(
+      generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2 : 2.5)
+        .concat(
+          generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4)
+        )
+        .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
+    )
+  }, [width])
 
   const handlePlanetClick = (collection: PairType) => () => {
+    if (isPanning.current) return
     if (
       collection.progress === 'Finished' &&
       !collection.hasSubcollections &&
@@ -124,12 +124,26 @@ export default function Galaxy() {
           }}
         />
       )} */}
-      {showHelpModal && (
-        <HelpModal isOpen={true} onClose={() => setShowHelpModal(false)} />
+      {(showHelpModal || router.query.welcome) && (
+        <HelpModal
+          isOpen={true}
+          onClose={() => {
+            setShowHelpModal(false)
+            if (router.query.welcome) router.replace('', { query: {} })
+          }}
+        />
       )}
 
       <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
-      <TransformWrapper centerOnInit initialScale={2.5}>
+      <TransformWrapper
+        centerOnInit
+        initialScale={2.5}
+        onPanning={() => (isPanning.current = true)}
+        onPanningStop={() => {
+          setTimeout(() => {
+            isPanning.current = false
+          }, 50)
+        }}>
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen p-10 overflow-hidden"
