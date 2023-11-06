@@ -36,7 +36,7 @@ export const ConnectWalletButton: React.FC<{
                     }
                     openAccountModal && openAccountModal()
                   }
-                : () => router.push('/galaxy')
+                : () => router.push('/galaxy?welcome=yes')
             }>
             <span className="font-bold">
               {alternativeText || account.displayName}
