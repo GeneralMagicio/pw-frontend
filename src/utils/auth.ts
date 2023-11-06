@@ -2,6 +2,22 @@ import { SiweMessage } from 'siwe'
 import { User } from '@/types/user/User'
 import { axiosInstance } from './axiosInstance'
 
+axiosInstance.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  function (error) {
+    if (error.response && error.response.status === 401) {
+      window.localStorage.removeItem('auth')
+      window.localStorage.removeItem('loggedInAddress')
+      if (axiosInstance.defaults.headers.common['auth']) {
+        delete axiosInstance.defaults.headers.common['auth']
+      }
+    }
+    return Promise.reject(error)
+  }
+)
+
 export const isLoggedIn = async () => {
   try {
     const { data } = await axiosInstance.get<User>('/auth/isloggedin')
