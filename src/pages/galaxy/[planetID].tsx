@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import cn from 'classnames'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
@@ -11,9 +11,7 @@ import { PairType } from '@/types/Pairs/Pair'
 import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { CollectionProgressStatus } from '@/components/Galaxy/types'
-import {
-  useWindowWidth,
-} from '@react-hook/window-size/throttled'
+import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
 
@@ -31,6 +29,8 @@ export default function AGalaxy() {
   })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   const width = useWindowWidth()
+
+  const isPanning = useRef(false)
 
   useEffect(() => {
     const main = async () => {
@@ -70,7 +70,10 @@ export default function AGalaxy() {
 
   useEffect(() => {
     setCords(
-      generateNonOverlappingOrbitCoordinates(collections?.length || 6, width < 1600 ? 1.8 : 2.5)
+      generateNonOverlappingOrbitCoordinates(
+        collections?.length || 6,
+        width < 1600 ? 1.8 : 2.5
+      )
         .concat(generateNonOverlappingOrbitCoordinates(10, 1.2))
         .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
     )
@@ -87,13 +90,14 @@ export default function AGalaxy() {
   // }, [collections])
 
   const handleClick = (collection: PairType) => () => {
+    if (isPanning.current) return
     if (collection.progress === 'Pending' || collection.progress === 'WIP') {
       return router.push(
         `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
       )
     }
 
-    return router.replace(`/ranking`)
+    return router.push(`/poll/${collection.id}/ranking`)
   }
 
   return (
@@ -116,7 +120,16 @@ export default function AGalaxy() {
         />
       )} */}
 
-      <TransformWrapper centerOnInit centerZoomedOut initialScale={width < 1600 ? 2.75 : 4}>
+      <TransformWrapper
+        centerOnInit
+        centerZoomedOut
+        initialScale={4}
+        onPanning={() => (isPanning.current = true)}
+        onPanningStop={() => {
+          setTimeout(() => {
+            isPanning.current = false
+          }, 50)
+        }}>
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen overflow-hidden "

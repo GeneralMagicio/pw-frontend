@@ -1,5 +1,5 @@
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
 import { useRouter } from 'next/router'
@@ -10,9 +10,7 @@ import { fetchCollections } from '@/utils/flow'
 import { PairType } from '@/types/Pairs/Pair'
 import { HelpModal } from '@/components/Journey/HelpModal'
 import { Help } from '@/components/Icon/Help'
-import {
-  useWindowWidth,
-} from '@react-hook/window-size/throttled'
+import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
 
@@ -21,10 +19,10 @@ export default function Galaxy() {
   // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
+  const isPanning = useRef(false)
   const [showHelpModal, setShowHelpModal] = useState(() =>
     Boolean(router.query.welcome)
   )
-  console.log({ q: Boolean(router.query.welcome), showHelpModal })
   // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
   // const [showCustomizeModal, setShowCustomizeModal] = useState(true)
   // const { flowStatus, updateFlowStatus } = useSession()
@@ -61,6 +59,7 @@ export default function Galaxy() {
   }, [width])
 
   const handlePlanetClick = (collection: PairType) => () => {
+    if (isPanning.current) return
     if (
       collection.progress === 'Finished' &&
       !collection.hasSubcollections &&
@@ -136,7 +135,15 @@ export default function Galaxy() {
       )}
 
       <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
-      <TransformWrapper centerOnInit initialScale={width < 1600 ? 1.8 : 2.5}>
+      <TransformWrapper
+        centerOnInit
+        initialScale={2.5}
+        onPanning={() => (isPanning.current = true)}
+        onPanningStop={() => {
+          setTimeout(() => {
+            isPanning.current = false
+          }, 50)
+        }}>
         <TransformComponent>
           <div
             className="flex items-center justify-center w-screen p-10 overflow-hidden"
