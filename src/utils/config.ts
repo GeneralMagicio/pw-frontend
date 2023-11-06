@@ -1,4 +1,4 @@
-import { optimism, optimismGoerli } from '@wagmi/chains'
+import { optimism, optimismGoerli } from 'wagmi/chains'
 
 export const SITE_NAME = 'Pairwise'
 export const SITE_DESCRIPTION = 'Pairwise by General Magic.'
