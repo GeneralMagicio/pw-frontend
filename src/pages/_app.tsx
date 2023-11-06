@@ -1,13 +1,14 @@
 import '@/styles/globals.css'
+
 import type { AppProps } from 'next/app'
+import { AuthGuard } from '@/components/Auth/AuthGuard'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { Seo } from '@/components/layout/Seo'
 import { Web3Provider } from '@/providers/Web3'
-import localFont from 'next/font/local'
-import cn from 'classnames'
-import { SessionProvider } from '@/context/session'
-import { useLayoutEffect } from 'react'
 import { axiosInstance } from '@/utils/axiosInstance'
+import cn from 'classnames'
+import localFont from 'next/font/local'
+import { useLayoutEffect } from 'react'
 
 const IBMFont = localFont({
   src: [
@@ -69,11 +70,11 @@ export default function App({ Component, pageProps }: AppProps) {
         id="font-container">
         <Seo />
         <Web3Provider>
-          <SessionProvider>
+          <AuthGuard>
             <MainLayout className="">
               <Component {...pageProps} />
             </MainLayout>
-          </SessionProvider>
+          </AuthGuard>
         </Web3Provider>
       </div>
     </>
