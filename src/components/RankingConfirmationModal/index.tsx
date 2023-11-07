@@ -81,7 +81,7 @@ export const RankingConfirmationModal: React.FC = () => {
                 </span>
                 <span className="relative flex w-20 items-center text-right font-medium">
                   <span className="">
-                    {(rankings?.share * 3e6).toLocaleString(undefined, {
+                    {(rankings?.share * 3e7).toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}
                   </span>
@@ -106,7 +106,7 @@ export const RankingConfirmationModal: React.FC = () => {
                 <span className="grow">{ranking.name} </span>
                 <span className="flex w-20 items-center text-right">
                   <span className="">
-                    {(ranking.share * 3e6).toLocaleString(undefined, {
+                    {(ranking.share * 3e7).toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}
                   </span>

@@ -36,7 +36,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 
       <span className="flex w-36 items-center justify-end">
         <span className="">
-          {(toFixedNumber(data.share, 6) * 3e6).toLocaleString(undefined, {
+          {(toFixedNumber(data.share, 6) * 3e7).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
@@ -116,7 +116,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>
         <span className="flex w-36 items-center justify-end">
           <span className="">
-            {(data.share * 3e6).toLocaleString(undefined, {
+            {(data.share * 3e7).toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             })}
