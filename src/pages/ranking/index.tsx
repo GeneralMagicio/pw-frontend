@@ -1,6 +1,3 @@
-import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
-import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
-import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 import {
   CollectionRanking,
   EditingCollectionRanking,
@@ -8,17 +5,22 @@ import {
   editPercentage,
 } from '@/components/Poll/Rankings/edit-logic/edit'
 import {
-  validateRanking,
+  addAdditionalProperties,
+  removeAdditionalProperties,
   resetErrorProperty,
   setErrorProperty,
-  addAdditionalProperties,
   setLockProperty,
-  removeAdditionalProperties,
+  validateRanking,
 } from '@/components/Poll/Rankings/edit-logic/utils'
+import { useEffect, useState } from 'react'
+
+import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner'
+import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
+import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { getOverallRanking } from '@/utils/poll'
 import router from 'next/router'
-import { useEffect, useState } from 'react'
 
 export const flattenRankingData = (
   input: CollectionRanking
@@ -47,16 +49,16 @@ export default function RankingPage() {
   const handleUpdateVotes = async () => {
     if (!rankings || !tempRankings) return
     setEditMode(false)
-    setRankings(addAdditionalProperties(removeAdditionalProperties(tempRankings)))
+    setRankings(
+      addAdditionalProperties(removeAdditionalProperties(tempRankings))
+    )
     await axiosInstance.post('/flow/ranking', {
       shares: removeAdditionalProperties(tempRankings),
     })
   }
 
   const edit =
-    (data: EditingCollectionRanking) =>
-    (id: number) =>
-    (newValue: number) => {
+    (data: EditingCollectionRanking) => (id: number) => (newValue: number) => {
       const newRanking = editPercentage(data, id, newValue)
       if (validateRanking(newRanking)) {
         setError(false)
@@ -69,9 +71,9 @@ export default function RankingPage() {
 
   const changeLockStatus =
     (data: EditingCollectionRanking) => (id: number) => () => {
-        setTempRankings(setLockProperty(data, id))
+      setTempRankings(setLockProperty(data, id))
     }
-  
+
   useEffect(() => {
     const main = async () => {
       const data = await getOverallRanking()
@@ -84,6 +86,16 @@ export default function RankingPage() {
   useEffect(() => {
     setTempRankings(rankings)
   }, [rankings])
+
+  if (!rankings || !tempRankings) {
+    return (
+      <div
+        className="flex w-full items-center justify-center"
+        style={{ height: 'calc(100vh - 60px)' }}>
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   return (
     <>
