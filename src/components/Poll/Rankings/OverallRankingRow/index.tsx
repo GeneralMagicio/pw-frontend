@@ -4,16 +4,17 @@ import {
 } from '../edit-logic/edit'
 import React, { useState } from 'react'
 
+import { AttestationModal } from './AttestationModal'
 import { CaretDown } from '@/components/Icon/CaretDown'
 import { CaretUp } from '@/components/Icon/CaretUp'
+import { CategoryContextMenu } from './CategoryContextMenu'
 import { EditTextField } from '../EditTextField'
+import { HeaderLabels } from './HeaderLabels'
+import { PairType } from '../../../../types/Pairs/Pair'
+import { PairsType } from '../../../../types/Pairs'
+import { ProjectContextMenu } from './ProjectContextMenu'
 import { toFixedNumber } from '@/utils/helpers'
 import { useCollapse } from 'react-collapsed'
-import { PairType } from '../../../../types/Pairs/Pair'
-import { HeaderLabels } from './HeaderLabels'
-import { PairsType } from '../../../../types/Pairs'
-import { CategoryContextMenu } from './CategoryContextMenu'
-import { ProjectContextMenu } from './ProjectContextMenu'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -33,7 +34,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
       className={`mb-2 flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3 text-black`}>
       <span className="grow">{data.name}</span>
 
-      <span className="flex items-center justify-end w-36">
+      <span className="flex w-36 items-center justify-end">
         <span className="">
           {(toFixedNumber(data.share, 6) * 3e6).toLocaleString(undefined, {
             minimumFractionDigits: 2,
@@ -43,7 +44,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
 
-      <span className="flex items-center justify-end w-44">
+      <span className="flex w-44 items-center justify-end">
         <div className="flex h-[24px] items-center">
           {!editMode ? (
             <>
@@ -67,7 +68,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           )}
         </div>
       </span>
-      <span className="flex justify-end w-20">
+      <span className="flex w-20 justify-end">
         <ProjectContextMenu project={data.id} />
       </span>
     </div>
@@ -96,23 +97,24 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
 }) => {
   const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
+  const [isAttestationModalOpen, setIsAttestationModalOpen] = useState(false)
 
   return (
-    <div className="flex flex-col items-end w-full mb-2 text-black last:mb-0">
+    <div className="mb-2 flex w-full flex-col items-end text-black last:mb-0">
       <div
         className={`flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
         <span
           {...getToggleProps({
             onClick: () => setExpanded((prevExpanded) => !prevExpanded),
           })}
-          className="flex items-center justify-center w-12 h-6">
+          className="flex h-6 w-12 items-center justify-center">
           {isExpanded ? <CaretUp /> : <CaretDown />}
         </span>
         <span className="grow">{data.name}</span>
-        <span className="flex items-center justify-end w-36">
+        <span className="flex w-36 items-center justify-end">
           <HeaderLabels pairs={pairs} progress={collection?.progress} />
         </span>
-        <span className="flex items-center justify-end w-36">
+        <span className="flex w-36 items-center justify-end">
           <span className="">
             {(data.share * 3e6).toLocaleString(undefined, {
               maximumFractionDigits: 2,
@@ -121,7 +123,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
           </span>
           <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
         </span>{' '}
-        <span className="flex items-center justify-end w-44">
+        <span className="flex w-44 items-center justify-end">
           <div className="flex h-[24px] items-center">
             {!editMode ? (
               <>
@@ -145,11 +147,21 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             )}
           </div>
         </span>
-        <span className="flex items-center justify-end w-20">
+        <span className="flex w-20 items-center justify-end">
           {level === 2 && (
             <CategoryContextMenu
               collection={collection}
+              openAttestationModal={() => setIsAttestationModalOpen(true)}
               progress={collection?.progress}
+            />
+          )}
+          {isAttestationModalOpen && collection && (
+            <AttestationModal
+              collectionId={collection?.id}
+              collectionName={collection?.name}
+              colletionDescription={collection?.description}
+              isOpen={isAttestationModalOpen}
+              onClose={() => setIsAttestationModalOpen(false)}
             />
           )}
         </span>
