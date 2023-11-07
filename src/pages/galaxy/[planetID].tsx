@@ -1,16 +1,18 @@
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { useEffect, useRef, useState } from 'react'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import cn from 'classnames'
-import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
+
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
-import { useRouter } from 'next/router'
-import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
-import { ColoredGrid } from '@/components/Icon/ColoredGrid'
-import { fetchCollections } from '@/utils/flow'
-import { PairType } from '@/types/Pairs/Pair'
-import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
-import { axiosInstance } from '@/utils/axiosInstance'
 import { CollectionProgressStatus } from '@/components/Galaxy/types'
+import { ColoredGrid } from '@/components/Icon/ColoredGrid'
+import { GalaxyCenterPlanet } from '@/components/Galaxy/GalaxyCenterPlanet'
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner'
+import { PairType } from '@/types/Pairs/Pair'
+import { ProjectPlanet } from '@/components/Galaxy/ProjectPlanet'
+import { axiosInstance } from '@/utils/axiosInstance'
+import cn from 'classnames'
+import { fetchCollections } from '@/utils/flow'
+import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
+import { useRouter } from 'next/router'
 import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
@@ -100,11 +102,21 @@ export default function AGalaxy() {
     return router.push(`/ranking`)
   }
 
+  if (collections.length === 0) {
+    return (
+      <div
+        className="flex w-full items-center justify-center"
+        style={{ height: 'calc(100vh - 60px)' }}>
+        <LoadingSpinner />
+      </div>
+    )
+  }
+
   return (
     <div className="relative overflow-hidden">
-      <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
+      <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <button
-        className="absolute z-20 flex items-center gap-2 p-2 px-6 text-lg text-black bg-white border-gray-100 left-10 top-10 whitespace-nowrap rounded-xl border-6"
+        className="absolute left-10 top-10 z-20 flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white p-2 px-6 text-lg text-black"
         onClick={() => {
           router.back()
         }}>
@@ -132,16 +144,16 @@ export default function AGalaxy() {
         }}>
         <TransformComponent>
           <div
-            className="flex items-center justify-center w-screen overflow-hidden "
+            className="flex w-screen items-center justify-center overflow-hidden "
             style={{ height: 'calc(100vh - 60px)' }}>
             <div
-              className="relative flex items-center justify-center shrink-0"
+              className="relative flex shrink-0 items-center justify-center"
               style={{
                 width: '200vw',
                 height: '200vh',
                 transform: 'scale(.2)',
               }}>
-              <div className="relative flex items-center justify-center w-screen h-screen ">
+              <div className="relative flex h-screen w-screen items-center justify-center ">
                 {cords.length &&
                   collections.map((collection, idx) => {
                     const { x, y } = cords[idx]

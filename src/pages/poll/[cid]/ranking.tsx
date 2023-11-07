@@ -113,7 +113,6 @@ export default function RankingPage({
           colletionDescription={collection.impactDescription}
           isOpen={open}
           onClose={() => setOpen(false)}
-          ranking={rankings}
         />
       )}
       {!isMoon && (
