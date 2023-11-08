@@ -28,23 +28,29 @@ export default function Home() {
           src="/images/right-side-planet.svg"
           width="686"
         />
-        <Image
-          alt="Galaxy"
-          className=" mx-auto h-full w-full  max-w-[1041px]"
-          height="1016"
-          src="/images/center-universe.svg"
-          width="1289"
-        />
-        <Star className="absolute right-80    top-40" />
-        <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
-          <h2 className="text-[64px] font-bold text-red">
-            Curate RetroPGF 3 Voting Lists with Pairwise
-          </h2>
-          <p className="text-2xl ">Impact = Profit</p>
-          <ConnectWalletButton
-            alternativeText="Start"
-            className="flex h-12 items-center bg-black"
+        <div className="absolute z-0 w-full">
+          <Image
+            alt="Galaxy"
+            className="mx-auto h-full w-full max-w-[1041px]"
+            height="1016"
+            src="/images/center-universe.svg"
+            width="1289"
           />
+        </div>
+        <Star className="absolute right-80 top-40" />
+        <div
+          className="relative z-10 m-auto flex w-[739px] flex-col items-center justify-center"
+          style={{ height: 'calc(100vh - 60px)' }}>
+          <div className="flex flex-col items-center justify-center gap-6 text-center font-IBM leading-[63px] text-black">
+            <h2 className="text-[64px] font-bold text-red">
+              Curate RetroPGF 3 Voting Lists with Pairwise
+            </h2>
+            <p className="text-2xl ">Making OP Allocations Easy!</p>
+            <ConnectWalletButton
+              alternativeText="Start"
+              className="flex h-12 items-center bg-black"
+            />
+          </div>
         </div>
         <Image
           alt="Galaxy"
@@ -65,21 +71,16 @@ export default function Home() {
           src="/images/happy-sun.svg"
           width="290"
         />
-        <Star className="absolute right-16    top-28" />
+        <Star className="absolute right-16 top-28" />
         <h2 className="relative w-[899px] text-[44px] font-bold">
           Empowering BadgeHolders
         </h2>
         <p className="relative text-center text-[24px]">
-          Welcome to Pairwise, your go-to platform for curating project lists
-          for RetroPGF 3! Immerse yourself in a streamlined experience, tailored
-          to empower you, the badgeholder, in creating a meaningful impact.
-          Start shaping your influence in the Optimism ecosystem and have fun
-          doing it!
+          Pairwise is a platform for quickly curating project lists for RetroPGF
+          3 voting! Contribute to allocating funding in the Optimism ecosystem
+          and have fun doing it!
         </p>
-        <a
-          href="https://community.optimism.io/docs/governance/retropgf-3/"
-          rel="noreferrer"
-          target="_blank">
+        <a href="#section1">
           <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
             Learn more
             <ArrowDown className="ml-2" />
@@ -99,6 +100,7 @@ export default function Home() {
         <h2 className="text-center text-[52px] font-bold text-red">
           Beginning Your Journey
         </h2>
+        <a id="section1" />
         <VectorHorizontal className="mx-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
           <h3 className="text-[32px] font-bold">Simplifying Project Review</h3>
@@ -131,7 +133,7 @@ export default function Home() {
           </p>
           <CollectionsRight className="absolute -right-[320px] -mt-[40%]" />
         </div>
-        <VectorHorizontal4 className="ml-28 mr-auto" />
+        <VectorHorizontal4 className="mr-auto ml-28" />
         <div className="my-6 -mr-32 ml-auto  flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
           <h3 className="text-[32px] font-bold">Fostering Collective Impact</h3>
           <p className="text-lg font-medium">
@@ -140,12 +142,15 @@ export default function Home() {
             in making a lasting impact, guaranteeing that projects with proven
             impact and value receive the recognition and resources they deserve.
           </p>
-          <Votes className="absolute -left-[300px] -mt-[98px]" />
+          <img
+            src="/images/voted-projects.png"
+            className="absolute -left-[350px] -mt-[98px]"
+          />
         </div>
       </div>
 
       <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
-        <Star className="absolute -top-40    right-0" height={35} width={35} />
+        <Star className="absolute right-0 -top-40" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
           Ready to Shape the Galaxy?
         </h2>
@@ -156,11 +161,7 @@ export default function Home() {
           alternativeText="Start"
           className="flex h-12 items-center bg-black"
         />
-        <Star
-          className="absolute -bottom-20    -left-20"
-          height={35}
-          width={35}
-        />
+        <Star className="absolute -bottom-20 -left-20" height={35} width={35} />
       </div>
       <footer className="flex w-full justify-between px-20 py-8">
         <div className="flex gap-6">
@@ -170,7 +171,7 @@ export default function Home() {
           <Discord />
           <Medium />
         </div>
-        <div className="flex items-center gap-2  text-lg text-black">
+        <div className="flex items-center gap-2 text-lg text-black">
           Magically crafted by <GMIcon />
         </div>
       </footer>

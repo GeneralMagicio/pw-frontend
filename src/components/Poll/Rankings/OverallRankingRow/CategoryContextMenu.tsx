@@ -47,7 +47,6 @@ const Options: React.FC<CategoryContextMenuProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <DetailsOption collection={collection} />
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
       ) : (
@@ -60,29 +59,6 @@ const Options: React.FC<CategoryContextMenuProps> = ({
         openAttestationModal={openAttestationModal}
       />
     </div>
-  )
-}
-
-const DetailsOption: React.FC<CategoryContextMenuProps> = ({ collection }) => {
-  const [showDetails, setShowDetails] = React.useState(false)
-
-  if (!collection) return null
-  return (
-    <>
-      <div
-        className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
-        onClick={() => setShowDetails(true)}>
-        Details <Eye className="h-5 w-5" />
-      </div>
-      {showDetails && (
-        <Modal isOpen={showDetails} onClose={() => setShowDetails(false)}>
-          <VoteModal
-            handeClose={() => setShowDetails(false)}
-            item={collection}
-          />
-        </Modal>
-      )}
-    </>
   )
 }
 

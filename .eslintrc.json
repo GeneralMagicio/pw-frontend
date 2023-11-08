@@ -13,7 +13,7 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/jsx-sort-props": "error",
+    "react/jsx-sort-props": "off",
     "react/prop-types": "off",
     "tailwindcss/classnames-order": "off"
   }
