@@ -49,9 +49,13 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                 src={item.image || '/nip.png'}
                 width={360}
               />
-              <div>
+              <div className="max-w-[360px] overflow-hidden whitespace-nowrap text-ellipsis ">
                 <span className="font-medium"> Website: </span>
-                <a href={item.url} rel="noreferrer" target="_blank">
+                <a
+                  className="text-blue-400"
+                  href={item.url}
+                  rel="noreferrer"
+                  target="_blank">
                   {item.url}
                 </a>
               </div>
@@ -80,7 +84,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                   />
                 </div>
               )}
-              {metadata?.contributionLinks && (
+              {Boolean(metadata?.contributionLinks?.length) && (
                 <div className="flex flex-col gap-2">
                   <b>Contribution Links:</b>
                   <ul className="list-disc pl-8">
@@ -99,7 +103,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                   </ul>
                 </div>
               )}
-              {metadata?.impactMetrics && (
+              {Boolean(metadata?.impactMetrics?.length) && (
                 <div className="flex flex-col gap-2">
                   <b>Impact Metrics:</b>
                   <ul className="list-disc pl-8">
@@ -112,13 +116,13 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                           target="_blank">
                           {metric.description}
                         </a>
-                        : ${metric.number}
+                        : {metric.number}
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
-              {metadata?.fundingSources && (
+              {Boolean(metadata?.fundingSources?.length) && (
                 <div className="flex flex-col gap-2">
                   <b>Funding Sources:</b>
                   <ul className="list-disc pl-8">
