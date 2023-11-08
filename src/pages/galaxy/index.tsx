@@ -208,6 +208,9 @@ export default function Galaxy() {
           Help
           <Help />
         </button>
+        <p>
+          <strong>Click a planet to begin ranking</strong>
+        </p>
         <button
           className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => router.push('/ranking')}>
