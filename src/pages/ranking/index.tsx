@@ -9,7 +9,7 @@ import {
   removeAdditionalProperties,
   resetErrorProperty,
   setErrorProperty,
-  setLockProperty,
+  setLock,
   validateRanking,
 } from '@/components/Poll/Rankings/edit-logic/utils'
 import { useEffect, useState } from 'react'
@@ -77,7 +77,7 @@ export default function RankingPage() {
 
   const changeLockStatus =
     (data: EditingCollectionRanking) => (id: number) => () => {
-      setTempRankings(setLockProperty(data, id))
+      setTempRankings(setLock(data, id))
     }
 
   useEffect(() => {

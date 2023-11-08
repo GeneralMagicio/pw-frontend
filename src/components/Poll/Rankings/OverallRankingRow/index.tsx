@@ -60,7 +60,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
             <EditTextField
               error={data.error}
               focus={false}
-              locked={data.locked}
+              state={data.state}
               onChange={onEditChange}
               onLockClick={onLockClick}
               value={toFixedNumber(data.share * 100, 4)}
@@ -139,7 +139,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               <EditTextField
                 error={data.error}
                 focus={false}
-                locked={data.locked}
+                state={data.state}
                 onChange={onEditChange}
                 onLockClick={onLockClick}
                 value={toFixedNumber(data.share * 100, 4)}
