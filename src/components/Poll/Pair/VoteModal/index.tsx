@@ -2,13 +2,24 @@ import { Close } from '@/components/Icon/Close'
 import { sanitize } from 'dompurify'
 import Image from 'next/image'
 import { Layers } from '@/components/Icon/Layers'
-import { PairType } from '@/types/Pairs/Pair'
+import { PairType, PairTypeMetaData } from '@/types/Pairs/Pair'
+import { useEffect, useState } from 'react'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 interface VoteModalProps {
   item: PairType
   handeClose: () => void
 }
+
 export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
+  const [metadata, setMetadata] = useState<PairTypeMetaData | null>(null)
+
+  useEffect(() => {
+    axiosInstance
+      .get<PairTypeMetaData>(item.metadataUrl)
+      .then((res) => setMetadata(res.data))
+  }, [item])
+
   return (
     <>
       <div className="relative flex  min-w-[700px] flex-col  gap-6">
@@ -67,6 +78,57 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                     }}
                     style={{ whiteSpace: 'break-spaces' }}
                   />
+                </div>
+              )}
+              {metadata?.contributionLinks && (
+                <div className="flex flex-col gap-2">
+                  <b>Contribution Links:</b>
+                  <ul className="list-disc pl-8">
+                    {metadata?.contributionLinks.map((cLink) => (
+                      <li key={cLink.url}>
+                        <a
+                          className="text-blue-400"
+                          href={cLink.url}
+                          rel="noreferrer"
+                          target="_blank">
+                          {cLink.type}
+                        </a>{' '}
+                        - {cLink.description}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {metadata?.impactMetrics && (
+                <div className="flex flex-col gap-2">
+                  <b>Impact Metrics:</b>
+                  <ul className="list-disc pl-8">
+                    {metadata?.impactMetrics.map((metric) => (
+                      <li key={metric.url}>
+                        <a
+                          className="text-blue-400"
+                          href={metric.url}
+                          rel="noreferrer"
+                          target="_blank">
+                          {metric.description}
+                        </a>
+                        : ${metric.number}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {metadata?.fundingSources && (
+                <div className="flex flex-col gap-2">
+                  <b>Funding Sources:</b>
+                  <ul className="list-disc pl-8">
+                    {metadata?.fundingSources.map((fund) => (
+                      <li key={fund.type}>
+                        {fund.type}, {fund.amount} {fund.currency}
+                        {fund.description ? `, ${fund.description}` : ''}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
