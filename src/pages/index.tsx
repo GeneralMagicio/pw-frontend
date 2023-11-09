@@ -143,8 +143,9 @@ export default function Home() {
             impact and value receive the recognition and resources they deserve.
           </p>
           <img
+            alt="Voted Projects"
+            className="w-3/4 absolute -left-[160px] -mt-[98px]"
             src="/images/voted-projects.png"
-            className="absolute -left-[350px] -mt-[98px]"
           />
         </div>
       </div>
