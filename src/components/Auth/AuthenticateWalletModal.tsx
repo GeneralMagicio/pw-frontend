@@ -1,7 +1,9 @@
+import { useNetwork, useSwitchNetwork } from 'wagmi'
+
 import { Close } from '@/components/Icon/Close'
-import { useRouter } from 'next/router'
 import { ColoredGrid } from '../Icon/ColoredGrid'
 import { SadSun } from '../Icon/SadSun'
+import { useRouter } from 'next/router'
 
 interface AuthenticateWalletModalProps {
   handleClose: () => void
@@ -10,7 +12,19 @@ interface AuthenticateWalletModalProps {
 export const AuthenticateWalletModal: React.FC<
   AuthenticateWalletModalProps
 > = ({ handleClose, handleLogin }) => {
-  const router = useRouter()
+  const { chain } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork()
+
+  const wrongChain = chain?.id !== 10 // Optimism
+
+  const handleClick = () => {
+    if (wrongChain) {
+      switchNetwork?.(10)
+    } else {
+      handleLogin()
+    }
+  }
+
   return (
     <>
       <div className="relative flex flex-col gap-6 font-IBM">
@@ -25,8 +39,10 @@ export const AuthenticateWalletModal: React.FC<
           </p>
           <button
             className={'min-w-[120px] rounded-full bg-red px-4 py-2 text-white'}
-            onClick={handleLogin}>
-            Authenticate wallet
+            onClick={handleClick}>
+            {wrongChain
+              ? 'Wrong chain, connect to Optimism'
+              : 'Authenticate wallet'}
           </button>
         </div>
       </div>
