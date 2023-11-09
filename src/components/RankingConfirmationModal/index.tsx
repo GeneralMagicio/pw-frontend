@@ -42,11 +42,11 @@ export const RankingConfirmationModal: React.FC = () => {
           />
         )}
         <header className="mb-2 flex w-full ">
-          <h3 className="text-2xl font-bold">Well done</h3>
+          <h3 className="text-2xl font-bold">Well done!</h3>
         </header>
 
         <p className="text-xl font-normal">
-          you have finished ranking of{' '}
+          You have finished ranking of{' '}
           <span className="font-medium">{collection?.name || ''}</span>, now you
           can create list or continue ranking other projects.
         </p>
