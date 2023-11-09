@@ -65,7 +65,8 @@ export default function RankingPage() {
 
   const edit =
     (data: EditingCollectionRanking) => (id: number) => (newValue: number) => {
-      const newRanking = editPercentage(data, id, newValue)
+      const newPercentage = newValue / 3e7
+      const newRanking = editPercentage(data, id, newPercentage)
       if (validateRanking(newRanking)) {
         setError(false)
         setTempRankings(resetErrorProperty(newRanking))

@@ -156,7 +156,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
     if (row.type !== 'project' && row.hasRanking && !validateRanking(row))
       return false;
 
-    if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
+    if (acc - max > 0.001) {
       console.log(row, "Error parent", acc, "and max:", max)
       return false;
     }

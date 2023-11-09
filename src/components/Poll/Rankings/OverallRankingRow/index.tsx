@@ -34,38 +34,40 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
       className={`mb-2 flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3 text-black`}>
       <span className="grow">{data.name}</span>
 
-      <span className="flex w-36 items-center justify-end">
-        <span className="">
-          {(toFixedNumber(data.share, 6) * 3e7).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </span>
-        <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
+      <span className="flex w-48 items-center justify-end">
+        {!editMode ? (
+          <>
+            <span className="">
+              {(toFixedNumber(data.share, 6) * 3e7).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+            <span className="mb-1 ml-1 align-super text-[8px] text-red">
+              OP
+            </span>
+          </>
+        ) : (
+          <EditTextField
+            error={data.error}
+            focus={false}
+            state={data.state}
+            onChange={onEditChange}
+            onLockClick={onLockClick}
+            value={Math.round(data.share * 3e7)}
+          />
+        )}
       </span>
 
-      <span className="flex w-44 items-center justify-end">
+      <span className="flex w-36 items-center justify-end">
         <div className="flex h-[24px] items-center">
-          {!editMode ? (
-            <>
-              <span className="mr-1 text-[8px] text-red">%</span>
-              <span className="">
-                {(data.share * 100).toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
-              </span>
-            </>
-          ) : (
-            <EditTextField
-              error={data.error}
-              focus={false}
-              state={data.state}
-              onChange={onEditChange}
-              onLockClick={onLockClick}
-              value={toFixedNumber(data.share * 100, 4)}
-            />
-          )}
+          <span className="mr-1 text-[8px] text-red">%</span>
+          <span className="">
+            {(data.share * 100).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </span>
         </div>
       </span>
       <span className="flex w-20 justify-end">
@@ -114,37 +116,39 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         <span className="flex w-36 items-center justify-end">
           <HeaderLabels pairs={pairs} progress={collection?.progress} />
         </span>
-        <span className="flex w-36 items-center justify-end">
-          <span className="">
-            {(data.share * 3e7).toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-              minimumFractionDigits: 2,
-            })}
-          </span>
-          <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
+        <span className="flex w-48 items-center justify-end">
+          {!editMode ? (
+            <>
+              <span className="">
+                {(data.share * 3e7).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                  minimumFractionDigits: 2,
+                })}
+              </span>
+              <span className="mb-1 ml-1 align-super text-[8px] text-red">
+                OP
+              </span>
+            </>
+          ) : (
+            <EditTextField
+              error={data.error}
+              focus={false}
+              state={data.state}
+              onChange={onEditChange}
+              onLockClick={onLockClick}
+              value={Math.round(data.share * 3e7)}
+            />
+          )}
         </span>{' '}
-        <span className="flex w-44 items-center justify-end">
+        <span className="flex w-36 items-center justify-end">
           <div className="flex h-[24px] items-center">
-            {!editMode ? (
-              <>
-                <span className="mr-1 text-[8px] text-red">%</span>
-                <span className="">
-                  {(data.share * 100).toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                    minimumFractionDigits: 2,
-                  })}
-                </span>
-              </>
-            ) : (
-              <EditTextField
-                error={data.error}
-                focus={false}
-                state={data.state}
-                onChange={onEditChange}
-                onLockClick={onLockClick}
-                value={toFixedNumber(data.share * 100, 4)}
-              />
-            )}
+            <span className="mr-1 text-[8px] text-red">%</span>
+            <span className="">
+              {(data.share * 100).toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
+            </span>
           </div>
         </span>
         <span className="flex w-20 items-center justify-end">
