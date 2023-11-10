@@ -166,11 +166,15 @@ export default function Home() {
       </div>
       <footer className="flex w-full justify-between px-20 py-8">
         <div className="flex gap-6">
-          <Twitter />
-          <Linkedin />
-          <Github />
-          <Discord />
-          <Medium />
+          <a href="https://twitter.com/generalmagicio">
+            <Twitter />
+          </a>
+          <a href="https://github.com/GeneralMagicio/pw-frontend">
+            <Github />
+          </a>
+          <a href="https://discord.gg/72HUmabwEs">
+            <Discord />
+          </a>
         </div>
         <div className="flex items-center gap-2 text-lg text-black">
           Magically crafted by <GMIcon />
