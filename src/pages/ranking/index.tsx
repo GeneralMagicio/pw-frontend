@@ -43,7 +43,7 @@ export default function RankingPage() {
       setEditMode(false)
       setError(false)
       setTempRankings(rankings)
-    } else router.back()
+    } else router.push('/galaxy')
   }
 
   const handleUpdateVotes = async () => {
