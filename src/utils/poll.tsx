@@ -67,3 +67,8 @@ export async function getProject(id: number): Promise<PairType> {
   const { data } = await axiosInstance.get(`/project/${id}`)
   return data.project
 }
+
+export async function finishCollections(id: number) {
+  const { data } = await axiosInstance.post(`/flow/finish`, {cid: id})
+  return data
+}

@@ -48,7 +48,7 @@ export const PlanetStatus: React.FC<Props> = ({
       <p className="overflow-hidden text-ellipsis text-base font-medium ">
         {title}
       </p>
-      {progress === 'Finished' ? (
+      {progress === 'Finished' || progress === 'Attested' ? (
         <Finished />
       ) : progress === 'WIP' ? (
         <WIP />
