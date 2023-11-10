@@ -43,7 +43,13 @@ export default function RankingPage() {
       setEditMode(false)
       setError(false)
       setTempRankings(rankings)
-    } else router.push('/galaxy')
+    } else {
+      if (router.query.from === 'planet-screen') {
+        router.back()
+      } else {
+        router.push('/galaxy')
+      }
+    }
   }
 
   const handleUpdateVotes = async () => {

@@ -98,8 +98,7 @@ export default function AGalaxy() {
         `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
       )
     }
-
-    return router.push(`/ranking`)
+    return router.push(`/ranking?c=${collection?.id}&from=planet-screen`)
   }
 
   if (collections.length === 0) {
