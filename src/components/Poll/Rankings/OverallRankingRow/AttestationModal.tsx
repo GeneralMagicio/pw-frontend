@@ -190,7 +190,10 @@ export const AttestationModal: React.FC<Props> = ({
         )}
 
         {step === 1 && (
-          <div className="mt-10 flex flex-col gap-10">
+          <div className="flex flex-col gap-10">
+            <header className="flex justify-end mb-2">
+              <Close className="cursor-pointer" onClick={onClose} />
+            </header>
             <p className="text-xl">
               The list has been created, you can access it shortly on Agora or
               Supermodular.
