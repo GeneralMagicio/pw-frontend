@@ -14,7 +14,7 @@ export interface PairType {
   numOfChildren: number
   childProjects?: Array<PairType>
   subProjects?: Array<PairType>
-  parent_collection_id: number | null
+  parentId: number | null
   locked: boolean
   hasSubcollections: boolean
   hasCompositeProjects: boolean

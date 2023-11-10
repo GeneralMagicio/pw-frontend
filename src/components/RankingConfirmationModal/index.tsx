@@ -29,6 +29,7 @@ export const RankingConfirmationModal: React.FC = () => {
     }
     main()
   }, [setRankings, router.query.cid])
+  console.log({ collection })
   return (
     <>
       <div className="flex max-w-[800px]  flex-col justify-center gap-10 font-IBM">
@@ -56,8 +57,9 @@ export const RankingConfirmationModal: React.FC = () => {
               Review your ranking
             </p>
             <button
+              disabled={!Boolean(collection)}
               className="flex items-center justify-center rounded-xl border border-black p-2 px-3 font-IBM text-base font-medium"
-              onClick={() => router.push('/ranking')}>
+              onClick={() => router.push(`/ranking?c=${collection?.id}`)}>
               Edit
               <Pencil className="ml-2" />
             </button>

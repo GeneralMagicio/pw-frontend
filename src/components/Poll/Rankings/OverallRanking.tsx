@@ -5,6 +5,7 @@ import { fetchCollections } from '../../../utils/flow'
 import { PairType } from '../../../types/Pairs/Pair'
 import { fetchPairs } from '../../../utils/poll'
 import { PairsType } from '../../../types/Pairs'
+import { useRouter } from 'next/router'
 
 interface RankingsProps {
   data: EditingCollectionRanking
@@ -32,6 +33,7 @@ const Rows: React.FC<Props> = ({
   onLockClick,
   editMode,
 }) => {
+  const router = useRouter()
   const [childCollections, setChildCollections] = useState<PairType[]>()
   const [pairs, setPairs] = useState<PairsType>()
 
@@ -54,13 +56,16 @@ const Rows: React.FC<Props> = ({
     if (!childCollections) return
     return childCollections.find((collection) => collection.id === id)
   }
+  const expanded =
+    data.id === Number(router.query.c) ||
+    data.ranking.some((r) => r.id === Number(router.query.c))
 
   return (
     <OverallRankingHeader
       collection={collection}
       data={data}
       editMode={editMode}
-      expanded={data.expanded || false}
+      expanded={expanded || data.expanded || false}
       level={level}
       onEditChange={onEditChange(data.id)}
       onLockClick={onLockClick(data.id)}
