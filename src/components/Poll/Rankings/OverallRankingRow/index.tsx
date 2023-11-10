@@ -61,13 +61,13 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 
       <span className="flex w-36 items-center justify-end">
         <div className="flex h-[24px] items-center">
-          <span className="mr-1 text-[8px] text-red">%</span>
           <span className="">
             {(data.share * 100).toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             })}
           </span>
+          <span className="ml-1 text-[8px] text-red">%</span>
         </div>
       </span>
       <span className="flex w-20 justify-end">
@@ -142,17 +142,17 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         </span>{' '}
         <span className="flex w-36 items-center justify-end">
           <div className="flex h-[24px] items-center">
-            <span className="mr-1 text-[8px] text-red">%</span>
             <span className="">
               {(data.share * 100).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2,
               })}
             </span>
+            <span className="ml-1 text-[8px] text-red">%</span>
           </div>
         </span>
         <span className="flex w-20 items-center justify-end">
-          {level === 2 && (
+          {level === 2 && collection && (
             <CategoryContextMenu
               collection={collection}
               openAttestationModal={() => setIsAttestationModalOpen(true)}

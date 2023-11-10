@@ -16,9 +16,10 @@ import { LinkSharp } from '@/components/Icon/LinkSharp'
 import Modal from '@/components/Modal/Modal'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
-import { convertRankingToAttestationFormat } from './attest-utils'
+import { convertRankingToAttestationFormat, getPrevAttestationIds } from './attest-utils'
 import { getRankings } from '../../../../utils/poll'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { Warning } from '@/components/Icon/Warning'
 
 interface Props {
   isOpen: boolean
@@ -39,12 +40,10 @@ export const AttestationModal: React.FC<Props> = ({
 }) => {
   const [step, setSteps] = useState<number>(0)
   const [loading, setLoading] = useState(false)
-  const [url, setUrl] = useState<string>()
   const [agoraUrl, setAgoraUrl] = useState('')
   const [smUrl, setSmUrl] = useState('')
   const [ranking, setRanking] = useState<CollectionRanking>()
 
-  const progress = Math.ceil(((step - 1) / 3) * 100)
 
   const chainId = useChainId()
   const { isConnected, address } = useAccount()
@@ -117,7 +116,14 @@ export const AttestationModal: React.FC<Props> = ({
       { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
     ])
 
+    const prevAttestations = await getPrevAttestationIds(address, SCHEMA_UID, easConfig.gqlUrl, collectionName)
+
     try {
+
+      for (const attestation of prevAttestations) {
+        await eas.revoke({schema: SCHEMA_UID, data: {uid: attestation}})
+      }
+
       const tx = await eas.attest({
         schema: SCHEMA_UID,
         data: {
@@ -132,7 +138,7 @@ export const AttestationModal: React.FC<Props> = ({
       await axiosInstance.post('/flow/reportAttest', {
         cid: collectionId,
       })
-      setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
+      // setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
       setAgoraUrl(
         `https://optimism-agora-dev.agora-dev.workers.dev/retropgf/3/list/${newAttestationUID}`
       )
@@ -155,8 +161,16 @@ export const AttestationModal: React.FC<Props> = ({
           'relative flex min-h-[250px] w-[600px] flex-col gap-10 px-2 font-IBM'
         )}>
         {step === 0 && (
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-6">
             <p className="text-2xl font-bold">Create list</p>
+            <p className="flex bg-[#FF0420]/[.1] gap-4 text-base px-4 py-1 rounded-lg text-[#FF0420]">
+              <Warning width={40} height={40}/>
+              {`After creating lists, you can no longer do any more pairwise rankings in ${collectionName}.`}
+            </p>
+            <p className="flex bg-[#FF0420]/[.1] gap-4 text-base px-4 py-1 rounded-lg text-[#FF0420]">
+              <Warning width={40} height={40}/>
+              {`If You have already created a list for this category, creating a new list will revoke the old list.`}
+            </p>
             <p className="text-xl">
               Lists that you create here can be used for the RetroPGF voting
               both in Agora and Supermodular.
@@ -170,7 +184,7 @@ export const AttestationModal: React.FC<Props> = ({
             </p>
             <div className="flex justify-between rounded-2xl bg-[#F366001A] py-3 px-4 text-sm text-[#F36600]">
               <p>Create list using EAS on Optimism.</p>
-              <p>{`Estimated cost < 0.05$`}</p>
+              <p>{`Estimated cost < $0.05`}</p>
             </div>
             <div className="flex justify-between text-sm">
               <button

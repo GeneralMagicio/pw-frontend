@@ -12,7 +12,7 @@ import { VoteModal } from '../../Pair/VoteModal'
 
 type CategoryContextMenuProps = {
   collection?: PairType
-  progress?: CollectionProgressStatus
+  progress: CollectionProgressStatus
   openAttestationModal?: () => void
 }
 
@@ -50,43 +50,37 @@ const Options: React.FC<CategoryContextMenuProps> = ({
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
       ) : progress === 'WIP' ? (
-        <ContinueRankingOption collection={collection} openAttestationModal={openAttestationModal} />
+        <ContinueRankingOption
+          collection={collection}
+        />
       ) : null}
       {['Pending', 'WIP'].includes(progress || '') ? (
         <div className="h-1 w-full border-b border-gray-200" />
       ) : null}
       <CreateListOption
         collection={collection}
-        disabled={progress !== 'Finished' && progress !== 'Attested'}
+        progress={progress}
         openAttestationModal={openAttestationModal}
       />
     </div>
   )
 }
 
-const ContinueRankingOption: React.FC<CategoryContextMenuProps> = ({
-  collection,
-  openAttestationModal,
-}) => {
+const ContinueRankingOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection'>
+> = ({ collection }) => {
   return (
-    <>
-      <Link href={`/poll/${collection?.id}`}>
-        <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
-          Continue ranking <ArrowForward className="h-5 w-5" />
-        </div>
-      </Link>
-      <div
-        onClick={openAttestationModal}
-        className="flex w-full items-center cursor-pointer justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
-        Finish ranking <ArrowForward className="h-5 w-5" />
+    <Link href={`/poll/${collection?.id}`}>
+      <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+        Continue ranking <ArrowForward className="h-5 w-5" />
       </div>
-    </>
+    </Link>
   )
 }
 
-const BeginRankingOption: React.FC<CategoryContextMenuProps> = ({
-  collection,
-}) => {
+const BeginRankingOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection'>
+> = ({ collection }) => {
   return (
     <Link href={`/poll/${collection?.id}`}>
       <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
@@ -98,26 +92,28 @@ const BeginRankingOption: React.FC<CategoryContextMenuProps> = ({
 
 type CreateListOptionProps = {
   collection?: PairType
-  disabled?: boolean
   openAttestationModal?: () => void
+  progress: CollectionProgressStatus
 }
 const CreateListOption: React.FC<CreateListOptionProps> = ({
   collection,
-  disabled,
+  progress,
   openAttestationModal,
 }) => {
+  const title = 'Create list'
+  const disabled = progress === 'Pending'
   if (disabled || !collection) {
     return (
       <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 text-gray-200">
-        Create list <Plus className="h-5 w-5" />
+        {title} <Plus className="h-5 w-5" />
       </div>
     )
   }
   return (
     <div
-      className="flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
+      className="flex w-full cursor-pointer items-center text-sm justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
       onClick={openAttestationModal}>
-      Create list <Plus className="h-5 w-5" />
+      {title} <Plus className="h-5 w-5" />
     </div>
   )
 }

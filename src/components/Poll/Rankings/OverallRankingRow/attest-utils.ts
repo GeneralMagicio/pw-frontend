@@ -27,17 +27,15 @@ export const pinFileToIPFS = async (list: object) => {
 export const convertRankingToAttestationFormat = async (
   ranking: CollectionRanking,
   collectionName: string,
-  collectionDescription: string,
+  collectionDescription: string
 ) => {
   const totalOp = 3e7
 
   const obj = {
-    listDescription:
-      `${collectionDescription} Submitted by Pairwise.`,
+    listDescription: `${collectionDescription} Submitted by Pairwise.`,
     impactEvaluationLink: 'https://pairwise.vote',
     impactCategory: ['PAIRWISE'],
-    impactEvaluationDescription:
-      `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
+    impactEvaluationDescription: `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
     listContent: flattenRanking(ranking)
       .map((item) => ({
         RPGF3_Application_UID: item.RPGF3Id,
@@ -56,4 +54,43 @@ export const convertRankingToAttestationFormat = async (
     listMetadataPtrType,
     listMetadataPtr: `https://ipfs.io/ipfs/${url}`,
   }
+}
+
+export const getPrevAttestationIds = async (
+  address: string,
+  schemaId: string,
+  gqlUrl: string,
+  category: string,
+): Promise<string[]> => {
+  const query = `
+  query ExampleQuery($where: AttestationWhereInput) {
+    groupByAttestation(
+      where: $where,
+      by: [id, decodedDataJson]
+    ) {
+      id
+      decodedDataJson
+    }
+  }
+`
+
+  const res = await axiosInstance.post(gqlUrl, {
+    query: query,
+    operationName: 'ExampleQuery',
+    variables: {
+      where: {
+        revocable: { equals: true },
+        schemaId: {
+          equals: schemaId,
+        },
+        attester: { equals: address },
+        
+      },
+      by: null,
+    },
+  })
+
+  const temp = res.data.data.groupByAttestation.map((item: any) => ({...item, data: JSON.parse(item.decodedDataJson)}))
+
+  return temp.filter((item: any) => item.data[0].value.value === category).map((item: any) => item.id)
 }
