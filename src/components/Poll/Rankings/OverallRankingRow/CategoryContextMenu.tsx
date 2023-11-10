@@ -14,12 +14,14 @@ type CategoryContextMenuProps = {
   collection?: PairType
   progress: CollectionProgressStatus
   openAttestationModal?: () => void
+  isEditing: boolean
 }
 
 export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
   openAttestationModal,
+  isEditing,
 }) => {
   return (
     <Popover className="relative">
@@ -33,6 +35,7 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
             collection={collection}
             openAttestationModal={openAttestationModal}
             progress={progress}
+            isEditing={isEditing}
           />
         </div>
       </Popover.Panel>
@@ -44,15 +47,14 @@ const Options: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
   openAttestationModal,
+  isEditing,
 }) => {
   return (
     <div className="flex flex-col gap-2">
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
       ) : progress === 'WIP' ? (
-        <ContinueRankingOption
-          collection={collection}
-        />
+        <ContinueRankingOption collection={collection} />
       ) : null}
       {['Pending', 'WIP'].includes(progress || '') ? (
         <div className="h-1 w-full border-b border-gray-200" />
@@ -61,6 +63,7 @@ const Options: React.FC<CategoryContextMenuProps> = ({
         collection={collection}
         progress={progress}
         openAttestationModal={openAttestationModal}
+        isEditing={isEditing}
       />
     </div>
   )
@@ -94,17 +97,21 @@ type CreateListOptionProps = {
   collection?: PairType
   openAttestationModal?: () => void
   progress: CollectionProgressStatus
+  isEditing: boolean
 }
 const CreateListOption: React.FC<CreateListOptionProps> = ({
   collection,
   progress,
   openAttestationModal,
+  isEditing,
 }) => {
   const title = 'Create list'
   const disabled = progress === 'Pending'
-  if (disabled || !collection) {
+  if (isEditing || disabled || !collection) {
     return (
-      <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 text-gray-200">
+      <div
+        title={'You need to first save your changes.'}
+        className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 text-gray-200">
         {title} <Plus className="h-5 w-5" />
       </div>
     )

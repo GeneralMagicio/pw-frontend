@@ -13,7 +13,6 @@ import { HeaderLabels } from './HeaderLabels'
 import { PairType } from '../../../../types/Pairs/Pair'
 import { PairsType } from '../../../../types/Pairs'
 import { ProjectContextMenu } from './ProjectContextMenu'
-import { toFixedNumber } from '@/utils/helpers'
 import { useCollapse } from 'react-collapsed'
 
 interface RankingProps {
@@ -38,7 +37,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         {!editMode ? (
           <>
             <span className="">
-              {(toFixedNumber(data.share, 6) * 3e7).toLocaleString(undefined, {
+              {(data.share * 3e7).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -157,6 +156,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               collection={collection}
               openAttestationModal={() => setIsAttestationModalOpen(true)}
               progress={collection?.progress}
+              isEditing={editMode}
             />
           )}
           {isAttestationModalOpen && collection && (

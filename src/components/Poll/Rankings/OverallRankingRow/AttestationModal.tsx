@@ -17,7 +17,7 @@ import Modal from '@/components/Modal/Modal'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
 import { convertRankingToAttestationFormat, getPrevAttestationIds } from './attest-utils'
-import { getRankings } from '../../../../utils/poll'
+import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Warning } from '@/components/Icon/Warning'
 
@@ -135,6 +135,7 @@ export const AttestationModal: React.FC<Props> = ({
 
       // const newAttestationUID = ""
       const newAttestationUID = await tx.wait()
+      await finishCollections(collectionId)
       await axiosInstance.post('/flow/reportAttest', {
         cid: collectionId,
       })
