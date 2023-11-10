@@ -61,7 +61,7 @@ export const EditTextField: FC<Props> = ({
         `flex w-48 items-center gap-2 rounded-lg border ${
           error ? 'border-[#ff0000]' : 'border-gray-300'
         } px-4 py-[2px]`,
-        { 'bg-[#1B1E23]/[.1]': state === 'locked' },
+        { 'bg-[#1B1E23]/[.1]': state === 'locked' || state === 'disabled' },
         { 'border-gray-500': isFocused && !error }
       )}>
       <div
@@ -72,7 +72,7 @@ export const EditTextField: FC<Props> = ({
         {state === 'locked' ? (
           <PadlockLocked height={25} width={25} />
         ) : state === 'disabled' ? (
-          <Disabled fill="blue" height={25} width={25} />
+          <PadlockUnlocked fill="blue" height={25} width={25} />
         ) : (
           <PadlockUnlocked fill="blue" height={25} width={25} />
         )}

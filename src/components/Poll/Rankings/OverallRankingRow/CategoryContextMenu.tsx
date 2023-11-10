@@ -49,10 +49,12 @@ const Options: React.FC<CategoryContextMenuProps> = ({
     <div className="flex flex-col gap-2">
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
-      ) : (
-        <ContinueRankingOption collection={collection} />
-      )}
-      <div className="h-1 w-full border-b border-gray-200" />
+      ) : progress === 'WIP' ? (
+        <ContinueRankingOption collection={collection} openAttestationModal={openAttestationModal} />
+      ) : null}
+      {['Pending', 'WIP'].includes(progress || '') ? (
+        <div className="h-1 w-full border-b border-gray-200" />
+      ) : null}
       <CreateListOption
         collection={collection}
         disabled={progress !== 'Finished' && progress !== 'Attested'}
@@ -64,13 +66,21 @@ const Options: React.FC<CategoryContextMenuProps> = ({
 
 const ContinueRankingOption: React.FC<CategoryContextMenuProps> = ({
   collection,
+  openAttestationModal,
 }) => {
   return (
-    <Link href={`/poll/${collection?.id}`}>
-      <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
-        Continue ranking <ArrowForward className="h-5 w-5" />
+    <>
+      <Link href={`/poll/${collection?.id}`}>
+        <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+          Continue ranking <ArrowForward className="h-5 w-5" />
+        </div>
+      </Link>
+      <div
+        onClick={openAttestationModal}
+        className="flex w-full items-center cursor-pointer justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+        Finish ranking <ArrowForward className="h-5 w-5" />
       </div>
-    </Link>
+    </>
   )
 }
 

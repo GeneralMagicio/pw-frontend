@@ -1,6 +1,7 @@
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { Close } from '@/components/Icon/Close'
 import { Shuffle } from '@/components/Icon/Shuffle'
+import cn from 'classnames'
 import { Star } from '@/components/Icon/Star'
 import { Tick } from '@/components/Icon/Tick'
 import router from 'next/router'
@@ -28,9 +29,9 @@ export const OverallRankingHeader: React.FC<Props> = ({
 }) => {
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
-      <div className="flex justify-start w-64">
+      <div className="flex w-64 justify-start">
         <button
-          className="flex items-center justify-center gap-2 px-5 py-2 text-black bg-white border-gray-100 whitespace-nowrap rounded-xl border-6"
+          className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white px-5 py-2 text-black"
           onClick={onBack}>
           {!editMode ? (
             <>
@@ -45,32 +46,28 @@ export const OverallRankingHeader: React.FC<Props> = ({
           )}
         </button>
       </div>
-      <h4 className="text-2xl font-bold font-IBM">
+      <h4 className="font-IBM text-2xl font-bold">
         {editMode
           ? 'Editing…'
           : isOverallRanking
           ? 'Ranking'
           : 'Adjust Project Percentages'}
       </h4>
-      <div className="flex justify-end w-64">
+      <div className="flex w-64 justify-end">
         <div className="flex items-center gap-2">
-          {error ? (
+          {editMode ? (
             <button
-              className="flex h-14 items-center  justify-center gap-2 whitespace-nowrap rounded-xl border-2 border-[#ff0000] bg-gray-50 px-5 text-xl"
-              id="invalid-value-overall-ranking"
-              onClick={() => {}}>
-              Invalid value!
-            </button>
-          ) : editMode ? (
-            <button
-              className="flex items-center justify-center gap-2 px-5 text-lg h-14 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
-              onClick={onUpdate}>
+              className={`flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 bg-gray-50 border-gray-30 px-5 text-lg ${
+                error ? 'opacity-50' : ''
+              }`}
+              onClick={onUpdate}
+              disabled={error}>
               Save
               <Tick color="black" />
             </button>
           ) : (
             <button
-              className="flex items-center justify-center gap-2 px-5 text-lg h-14 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
+              className="flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-5 text-lg"
               onClick={onEdit}>
               Edit
               <Shuffle />
@@ -78,13 +75,13 @@ export const OverallRankingHeader: React.FC<Props> = ({
           )}
           {onDone ? (
             <button
-              className="flex items-center gap-2 px-6 py-2 text-lg text-white bg-black whitespace-nowrap rounded-xl border-6 border-gray-4"
+              className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-4 bg-black px-6 py-2 text-lg text-white"
               onClick={onDone}>
               Done
             </button>
           ) : onAttest ? (
             <button
-              className="flex items-center gap-2 px-6 py-2 text-lg text-white bg-black whitespace-nowrap rounded-xl border-6 border-gray-4"
+              className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-4 bg-black px-6 py-2 text-lg text-white"
               onClick={onAttest}>
               Attest
             </button>

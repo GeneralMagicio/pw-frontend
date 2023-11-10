@@ -31,7 +31,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
 }) => {
   return (
     <div
-      className={`mb-2 flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.5] px-6 py-3 text-black`}>
+      className={`mb-2 flex cursor-pointer items-center gap-6 rounded-lg bg-white/[.4] px-6 py-3 text-black`}>
       <span className="grow">{data.name}</span>
 
       <span className="flex w-48 items-center justify-end">
@@ -104,7 +104,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   return (
     <div className="mb-2 flex w-full flex-col items-end text-black last:mb-0">
       <div
-        className={`flex w-full items-center gap-6 rounded-lg bg-white/[.8] px-6 py-3`}>
+        className={`flex w-full items-center gap-6 rounded-lg ${level === 1 ? 'bg-white/[.9]' : level === 2 ? 'bg-white/[.7]' : 'bg-white/[.6]'}  px-6 py-3`}>
         <span
           {...getToggleProps({
             onClick: () => setExpanded((prevExpanded) => !prevExpanded),
