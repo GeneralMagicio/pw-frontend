@@ -1,10 +1,19 @@
-import { ChangeEvent, ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { PadlockLocked } from '@/components/Icon/Padlock-Locked'
 import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
 import debounce from 'lodash.debounce'
 import cn from 'classnames'
 import { EditingCollectionRanking } from './edit-logic/edit'
 import { Disabled } from '@/components/Icon/Disabled'
+import { Warning } from '../../Icon/Warning'
 
 interface Props {
   value: number
@@ -33,9 +42,8 @@ export const EditTextField: FC<Props> = ({
       minimumFractionDigits: 0,
     })
   }, [value])
-  
+
   const debounceChange = useCallback(
-    
     debounce((newValue: number) => {
       if (newValue) onChange(+newValue)
       else {
@@ -43,11 +51,17 @@ export const EditTextField: FC<Props> = ({
         // @ts-ignore
         inputRef.current!.value = 0
       }
-    }, 1000)
-  , [onChange])
+    }, 1000),
+    [onChange]
+  )
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(event.target.value.split('').filter((char) => char !== ',').join(''))
+    const newValue = Number(
+      event.target.value
+        .split('')
+        .filter((char) => char !== ',')
+        .join('')
+    )
     inputRef.current!.value = newValue.toLocaleString(undefined, {
       maximumFractionDigits: 0,
       minimumFractionDigits: 0,
@@ -55,41 +69,69 @@ export const EditTextField: FC<Props> = ({
     debounceChange(newValue)
   }
 
+  const bgMap: { [key: string]: string } = {
+    disabled: 'bg-[#1B1E23]/[.1]',
+    locked: 'bg-[#1B1E23]/[.1]',
+    normal: 'bg-white/[.7]',
+  }
+
+  const titleMap: { [key: string]: string } = {
+    disabled: 'Rank more projects in this category to unlock.',
+    locked: 'Category is locked, click padlock to unlock.',
+  }
+
   return (
-    <div
-      className={cn(
-        `flex w-48 items-center gap-2 rounded-lg border ${
-          error ? 'border-[#ff0000]' : 'border-gray-300'
-        } px-4 py-[2px]`,
-        { 'bg-[#1B1E23]/[.1]': state === 'locked' || state === 'disabled' },
-        { 'border-gray-500': isFocused && !error }
-      )}>
+    <>
       <div
-        className="border-r border-[#1B1E23]/[.2] pr-1"
-        onClick={() => {
-          if (!error && state !== 'disabled') onLockClick()
-        }}>
-        {state === 'locked' ? (
-          <PadlockLocked height={25} width={25} />
-        ) : state === 'disabled' ? (
-          <PadlockUnlocked fill="blue" height={25} width={25} />
-        ) : (
-          <PadlockUnlocked fill="blue" height={25} width={25} />
-        )}
+        title={titleMap[state]}
+        className={cn(
+          `flex items-center gap-1 rounded-lg border ${
+            error ? 'border-[#ff0000]' : 'border-gray-300'
+          } py-1 px-2`,
+          bgMap[state],
+          { 'border-gray-500': isFocused && !error }
+        )}>
+        <div
+          className="border-r border-[#1B1E23]/[.2] pr-1"
+          onClick={() => {
+            if (!error && state !== 'disabled') onLockClick()
+          }}>
+          {state === 'locked' ? (
+            <PadlockLocked height={25} width={25} />
+          ) : state === 'disabled' ? (
+            <div title="Rank more projects in this category to unlock.">
+              <PadlockLocked
+                height={25}
+                width={25}
+                className="text-[#9e9d9d]"
+              />
+            </div>
+          ) : (
+            <PadlockUnlocked fill="blue" height={25} width={25} />
+          )}
+        </div>
+        <input
+          className={`w-24 bg-transparent text-right outline-0 ${
+            error ? 'text-red' : 'text-black'
+          }`}
+          disabled={state !== 'normal'}
+          id="edit-input"
+          onBlur={() => setFocus(false)}
+          onChange={handleChange}
+          onFocus={() => setFocus(true)}
+          ref={inputRef}
+          // pattern="[0-9]+([,][0-9]{1,2})?"
+          step={1}
+          type="text"
+        />
       </div>
-      <input
-        className="w-24 bg-transparent outline-0"
-        disabled={state !== 'normal'}
-        id="edit-input"
-        onBlur={() => setFocus(false)}
-        onChange={handleChange}
-        onFocus={() => setFocus(true)}
-        ref={inputRef}
-        // pattern="[0-9]+([,][0-9]{1,2})?"
-        step={1}
-        type="text"
-      />
-      <span className="ml-1 text-sm text-red">OP</span>
-    </div>
+      {error ? (
+        <div className="flex w-8 items-center" title="Invalid value">
+          <Warning className="ml-1 h-4 w-4" />
+        </div>
+      ) : (
+        <div className="w-8"></div>
+      )}
+    </>
   )
 }
