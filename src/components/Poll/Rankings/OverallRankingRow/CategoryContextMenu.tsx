@@ -90,7 +90,7 @@ const ContinueRankingThresholdOption: React.FC<
   const finishCategory = async () => {
     if (!collection?.id) return
     await finishCollections(collection.id)
-    window.location.href = `/ranking?cid=${collection.id}`
+    window.location.href = `/ranking?c=${collection.id}`
   }
   return (
     <>
