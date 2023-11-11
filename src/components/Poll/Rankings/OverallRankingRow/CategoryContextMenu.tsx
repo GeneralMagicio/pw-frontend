@@ -9,6 +9,7 @@ import { Plus } from '../../../Icon/Plus'
 import { Popover } from '@headlessui/react'
 import React from 'react'
 import { VoteModal } from '../../Pair/VoteModal'
+import { finishCollections } from '@/utils/poll'
 
 type CategoryContextMenuProps = {
   collection?: PairType
@@ -53,8 +54,10 @@ const Options: React.FC<CategoryContextMenuProps> = ({
     <div className="flex flex-col gap-2">
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
-      ) : progress === 'WIP' || progress === 'WIP - Threshold' ? (
+      ) : progress === 'WIP' ? (
         <ContinueRankingOption collection={collection} />
+      ) : progress === 'WIP - Threshold' ? (
+        <ContinueRankingThresholdOption collection={collection} />
       ) : null}
       {['Pending', 'WIP', 'WIP - Threshold'].includes(progress || '') ? (
         <div className="h-1 w-full border-b border-gray-200" />
@@ -78,6 +81,30 @@ const ContinueRankingOption: React.FC<
         Continue ranking <ArrowForward className="h-5 w-5" />
       </div>
     </Link>
+  )
+}
+
+const ContinueRankingThresholdOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection'>
+> = ({ collection }) => {
+  const finishCategory = async () => {
+    if (!collection?.id) return
+    await finishCollections(collection.id)
+    window.location.href = `/ranking?cid=${collection.id}`
+  }
+  return (
+    <>
+      <Link href={`/poll/${collection?.id}`}>
+        <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+          Continue ranking <ArrowForward className="h-5 w-5" />
+        </div>
+      </Link>
+      <div
+        onClick={finishCategory}
+        className="flex w-full items-center justify-between whitespace-nowrap cursor-pointer rounded-lg px-2 py-1 hover:bg-gray-100">
+        Edit manually <ArrowForward className="h-5 w-5" />
+      </div>
+    </>
   )
 }
 
@@ -106,7 +133,7 @@ const CreateListOption: React.FC<CreateListOptionProps> = ({
   isEditing,
 }) => {
   const title = 'Create list'
-  const disabled = progress === 'Pending' || progress === "WIP"
+  const disabled = progress === 'Pending' || progress === 'WIP'
   if (isEditing || disabled || !collection) {
     return (
       <div
