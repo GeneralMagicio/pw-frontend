@@ -53,10 +53,10 @@ const Options: React.FC<CategoryContextMenuProps> = ({
     <div className="flex flex-col gap-2">
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
-      ) : progress === 'WIP' ? (
+      ) : progress === 'WIP' || progress === 'WIP - Threshold' ? (
         <ContinueRankingOption collection={collection} />
       ) : null}
-      {['Pending', 'WIP'].includes(progress || '') ? (
+      {['Pending', 'WIP', 'WIP - Threshold'].includes(progress || '') ? (
         <div className="h-1 w-full border-b border-gray-200" />
       ) : null}
       <CreateListOption
@@ -106,7 +106,7 @@ const CreateListOption: React.FC<CreateListOptionProps> = ({
   isEditing,
 }) => {
   const title = 'Create list'
-  const disabled = progress === 'Pending'
+  const disabled = progress === 'Pending' || progress === "WIP"
   if (isEditing || disabled || !collection) {
     return (
       <div
@@ -118,7 +118,7 @@ const CreateListOption: React.FC<CreateListOptionProps> = ({
   }
   return (
     <div
-      className="flex w-full cursor-pointer items-center text-sm justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
+      className="flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
       onClick={openAttestationModal}>
       {title} <Plus className="h-5 w-5" />
     </div>

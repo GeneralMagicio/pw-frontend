@@ -45,6 +45,8 @@ const determineState = (row: CollectionRanking | ProjectRanking, parent?: Editin
       return "normal";
     case "Finished":
       return "normal";
+    case 'WIP - Threshold':
+      return "disabled";
     case 'WIP':
       return "disabled";
     case 'Pending':

@@ -46,7 +46,7 @@ const Rows: React.FC<Props> = ({
   }, [data, level])
 
   useEffect(() => {
-    if (collection?.progress !== 'WIP') return
+    if (collection?.progress !== 'WIP' && collection?.progress !== 'WIP - Threshold') return
     ;(async () => {
       setPairs(await fetchPairs(collection?.id.toString()))
     })()
