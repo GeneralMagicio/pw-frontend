@@ -9,7 +9,7 @@ export function removeAdditionalProperties(
   const data = cloneDeep(input)
 
   // @ts-ignore
-  delete data.locked
+  delete data.state
   // @ts-ignore
   delete data.error
   for (let i = 0; i < data.ranking.length; i++) {
@@ -17,7 +17,7 @@ export function removeAdditionalProperties(
 
     if (!row.hasRanking) {
       // @ts-ignore
-      delete row.locked
+      delete row.state
       // @ts-ignore
       delete row.error
     } else {
@@ -29,40 +29,46 @@ export function removeAdditionalProperties(
   return data as CollectionRanking
 }
 
-const shouldBeLocked = (row: {isTopLevel: boolean, locked?: boolean, progress: CollectionProgressStatus}) => {
-  if (row.isTopLevel) return false;
+const determineState = (row: CollectionRanking | ProjectRanking, parent?: EditingCollectionRanking) : EditingCollectionRanking['state'] => {
 
-  if ("locked" in row) return row.locked
+  if (row.hasRanking === false) {
+    if (parent && parent.state === "disabled") return "disabled"
+    else return "normal"
+  }
+
+  if (row.isTopLevel) return "normal";
 
   const progress = row.progress
 
   switch(progress) {
     case "Attested":
-      return false;
+      return "normal";
     case "Finished":
-      return false;
+      return "normal";
+    case 'WIP - Threshold':
+      return "disabled";
     case 'WIP':
-      return true;
+      return "disabled";
     case 'Pending':
-      return true
+      return "disabled"
     default:
-      return false
+      return "disabled"
   }
 }
 
 export function addAdditionalProperties(
-  input: CollectionRanking | EditingCollectionRanking
+  input: CollectionRanking
 ): EditingCollectionRanking {
   const data = cloneDeep(input)
 
   // @ts-ignore
-  data.locked = shouldBeLocked(data)
+  data.state = determineState(data)
   // @ts-ignore
   data.error = data.error ?? false
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
     // @ts-ignore
-    row.locked = data.locked === true ? true : shouldBeLocked(row)
+    row.state = determineState(row, data)
     if (!row.hasRanking) {
       // @ts-ignore
       row.error = row.error ?? false
@@ -115,24 +121,24 @@ export function setErrorProperty(
   return data
 }
 
-export function setLockProperty(
+export function setLock(
   input: EditingCollectionRanking,
   id: number
   ): EditingCollectionRanking {
-  console.log("calling?")
+  console.log("Here")
   const data = cloneDeep(input)
 
   if (data.id === id) {
-    data.locked = !data.locked
+    data.state = data.state === "locked" ? "normal" : "locked"
   }
 
   for (let i = 0; i < data.ranking.length; i++) {
     let row = data.ranking[i]
 
     if (row.id === id) {
-      row.locked = !row.locked
+      row.state = row.state === "locked" ? "normal" : "locked"
     } else if (row.type !== "project" && row.hasRanking) {
-      data.ranking[i] = setLockProperty(row, id)
+      data.ranking[i] = setLock(row, id)
     }
   }
 
@@ -152,7 +158,7 @@ export const validateRanking = (data: EditingCollectionRanking) => {
     if (row.type !== 'project' && row.hasRanking && !validateRanking(row))
       return false;
 
-    if (toFixedNumber(acc, 5) > toFixedNumber(max, 5)) {
+    if (acc - max > 0.001) {
       console.log(row, "Error parent", acc, "and max:", max)
       return false;
     }

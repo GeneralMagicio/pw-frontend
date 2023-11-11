@@ -23,15 +23,17 @@ export interface ProjectRanking {
   name: string
 }
 
+type EditStates = "locked" | "disabled" | "normal"
+
 export interface EditingCollectionRanking extends CollectionRanking {
-  locked: boolean
+  state: EditStates
   error: boolean
   expanded: boolean
   ranking: (EditingCollectionRanking | EditingProjectRanking)[]
 }
 
 export interface EditingProjectRanking extends ProjectRanking {
-  locked: boolean
+  state: EditStates
   error: boolean
 }
 
@@ -51,20 +53,20 @@ const ripplePercentage = (
   const data = cloneDeep(input)
   const totalShare = data.reduce(
     (acc, curr) =>
-      curr.id !== changedId && !curr.locked ? (acc += curr.share) : (acc += 0),
+      curr.id !== changedId && curr.state !== "locked" ? (acc += curr.share) : (acc += 0),
     0
   )
 
   for (let i = 0; i < data.length; i++) {
     let row = data[i]
     const shareOfDelta = deltaCalculator(row.share, totalShare, delta)
-    if (!row.locked && row.id === changedId) {
+    if (row.state !== "locked" && row.id === changedId) {
       row.share += delta
       if (row.hasRanking)
         row.ranking = ripplePercentage(row.ranking, changedId, -1 * delta)
-    } else if (!row.hasRanking && !row.locked && row.id !== changedId) {
+    } else if (!row.hasRanking && row.state !== "locked" && row.id !== changedId) {
       row.share -= shareOfDelta
-    } else if (row.hasRanking && !row.locked && row.id !== changedId) {
+    } else if (row.hasRanking && row.state !== "locked" && row.id !== changedId) {
       row.share -= shareOfDelta
       row.ranking = ripplePercentage(row.ranking, changedId, shareOfDelta)
     }
@@ -82,7 +84,7 @@ export const editPercentage = (
 
   for (let i = 0; i < overallRanking.ranking.length; i++) {
     let row = overallRanking.ranking[i]
-    if (row.type === 'project' && row.id === id && !row.locked) {
+    if (row.type === 'project' && row.id === id && row.state !== "locked") {
       const delta = newValue - row.share
       overallRanking.ranking = ripplePercentage(
         overallRanking.ranking,
@@ -90,7 +92,7 @@ export const editPercentage = (
         delta
       )
       return overallRanking
-    } else if (row.id === id && row.type !== 'project' && !row.locked) {
+    } else if (row.id === id && row.type !== 'project' && row.state !== "locked") {
       const delta = newValue - row.share
       // console.log("Here we are")
       // console.log(overallRanking.ranking[i])

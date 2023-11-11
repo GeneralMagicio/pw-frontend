@@ -63,11 +63,11 @@ export default function Galaxy() {
   const handlePlanetClick = (collection: PairType) => () => {
     if (isPanning.current) return
     if (
-      collection.progress === 'Finished' &&
+      (collection.progress === 'Finished' || collection.progress === 'Attested') &&
       !collection.hasSubcollections &&
       !collection.hasCompositeProjects
     )
-      return router.push(`/poll/${collection.id}/ranking`)
+      return router.push(`/ranking`)
     if (collection.hasSubcollections || collection.hasCompositeProjects) {
       return router.push(`/galaxy/${collection.id}`)
     }

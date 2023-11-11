@@ -71,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({
           onClick={handleOverlayClick}>
           <div
             className={cn(
-              'max-h-[704px] max-w-[1024px] overflow-hidden rounded-2xl p-6',
+              'max-h-[800px] max-w-[1024px] overflow-hidden rounded-2xl p-6',
               !className ? 'bg-white' : className,
               'mx-24 border-4 border-gray-30 backdrop-blur-sm'
             )}

@@ -51,7 +51,7 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
     ? Math.max((pairs.votedPairs / pairs.totalPairs) * 100, 4)
     : 4
 
-  if (progress === 'WIP') {
+  if (progress === 'WIP' || progress === 'WIP - Threshold') {
     return (
       <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-gray-100 p-1 px-2 text-xs text-[#1C64F2]">
         In progress {progressPercentage.toFixed(0)}%

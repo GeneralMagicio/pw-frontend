@@ -93,7 +93,7 @@ export default function AGalaxy() {
 
   const handleClick = (collection: PairType) => () => {
     if (isPanning.current) return
-    if (collection.progress === 'Pending' || collection.progress === 'WIP') {
+    if (collection.progress === 'Pending' || collection.progress === 'WIP' || collection.progress === 'WIP - Threshold') {
       return router.push(
         `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
       )

@@ -39,7 +39,7 @@ export const PlanetStatus: React.FC<Props> = ({
   const action =
     progress === 'Pending'
       ? 'Begin ranking'
-      : progress === 'WIP'
+      : progress === 'WIP' || progress === 'WIP - Threshold'
       ? 'Continue'
       : 'See results'
   return (
@@ -48,9 +48,9 @@ export const PlanetStatus: React.FC<Props> = ({
       <p className="overflow-hidden text-ellipsis text-base font-medium ">
         {title}
       </p>
-      {progress === 'Finished' ? (
+      {progress === 'Finished' || progress === 'Attested' ? (
         <Finished />
-      ) : progress === 'WIP' ? (
+      ) : progress === 'WIP' || progress === 'WIP - Threshold' ? (
         <WIP />
       ) : (
         <Pending />
@@ -75,7 +75,7 @@ export const PlanetUnlocked: React.FC<Omit<Props, 'hasSubcollections'>> = ({
       </p>
       {progress === 'Finished' || progress === 'Attested' ? (
         <Finished />
-      ) : progress === 'WIP' ? (
+      ) : progress === 'WIP' || progress === 'WIP - Threshold' ? (
         <WIP />
       ) : (
         <Pending />
