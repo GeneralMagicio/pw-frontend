@@ -29,10 +29,9 @@ export const RankingConfirmationModal: React.FC = () => {
     }
     main()
   }, [setRankings, router.query.cid])
-  console.log({ collection })
   return (
     <>
-      <div className="flex max-w-[800px]  flex-col justify-center gap-10 font-IBM">
+      <div className="flex max-w-[800px]  flex-col justify-center gap-5 font-IBM">
         {open && rankings && collection && (
           <AttestationModal
             collectionId={collection.id}
@@ -69,17 +68,6 @@ export const RankingConfirmationModal: React.FC = () => {
               <div className="flex items-center gap-6 rounded-xl text-black">
                 <span className="flex grow items-center gap-4 font-medium ">
                   {rankings.name}
-                  {rankings.hasRanking && (
-                    <span className="flex items-center whitespace-nowrap rounded-lg bg-[#22B7A01A] px-2 py-1  text-xs text-[#22B7A0]">
-                      Ranked
-                      <Check className="ml-2" color="#22B7A0" width={14} />
-                    </span>
-                  )}
-                  {rankings.progress !== 'Attested' && (
-                    <span className="flex items-center whitespace-nowrap rounded-lg bg-[#F366001A] px-2 py-1  text-xs text-[#F36600]">
-                      Not listed
-                    </span>
-                  )}
                 </span>
                 <span className="relative flex w-20 items-center text-right font-medium">
                   <span className="">
@@ -127,7 +115,7 @@ export const RankingConfirmationModal: React.FC = () => {
         </div>
         <footer className="flex items-center justify-between">
           <button
-            className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+            className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
             onClick={() => router.back()}>
             {'Rank other projects'}
             <ArrowForward className="ml-4" />
