@@ -121,7 +121,9 @@ export const VoteCard: React.FC<
               !isSkew ? '0deg' : isRight ? '-33deg' : '33deg'
             })`,
           }}>
-          <div className="flex flex-col h-full gap-2 grow" onClick={onClick}>
+          <div
+            className="flex h-full grow select-none flex-col gap-2"
+            onClick={onClick}>
             <Image
               alt={item.name}
               className="h-[170px] w-full rounded-2xl border-0 object-cover pb-2"
@@ -155,9 +157,9 @@ export const VoteCard: React.FC<
           </div>
         </div>
       </div>
-      <div className="flex justify-center w-full pt-5">
+      <div className="flex w-full justify-center pt-5">
         <button
-          className="flex gap-4 px-4 py-3 mt-10 text-black transition-opacity bg-white opacity-0 w-max rounded-2xl"
+          className="mt-10 flex w-max gap-4 rounded-2xl bg-white px-4 py-3 text-black opacity-0 transition-opacity"
           onClick={onQuickView}>
           <span>Details</span>
           <Eye />

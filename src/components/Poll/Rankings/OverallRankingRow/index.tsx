@@ -14,6 +14,7 @@ import { PairType } from '../../../../types/Pairs/Pair'
 import { PairsType } from '../../../../types/Pairs'
 import { ProjectContextMenu } from './ProjectContextMenu'
 import { useCollapse } from 'react-collapsed'
+import { EditManualModal } from './EditManualModal'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -58,7 +59,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
         )}
       </span>
 
-      <span className="flex w-36 items-center justify-end">
+      <span className="flex w-20 items-center justify-end">
         <div className="flex h-[24px] items-center">
           <span className="">
             {(data.share * 100).toLocaleString(undefined, {
@@ -69,7 +70,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           <span className="ml-1 text-[8px] text-red">%</span>
         </div>
       </span>
-      <span className="flex w-20 justify-end">
+      <span className="flex w-8 justify-end">
         <ProjectContextMenu project={data.id} />
       </span>
     </div>
@@ -99,11 +100,12 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
   const [isExpanded, setExpanded] = useState(expanded || false)
   const { getCollapseProps, getToggleProps } = useCollapse({ isExpanded })
   const [isAttestationModalOpen, setIsAttestationModalOpen] = useState(false)
+  const [isEditManualModalOpen, setIsEditManualModalOpen] = useState(false)
 
   return (
     <div className="mb-2 flex w-full flex-col items-end text-black last:mb-0">
       <div
-        className={`flex w-full items-center gap-6 rounded-lg ${level === 1 ? 'bg-white/[.9]' : level === 2 ? 'bg-white/[.7]' : 'bg-white/[.6]'}  px-6 py-3`}>
+        className={`flex w-full items-center gap-6 rounded-lg bg-white/[.9] px-6 py-3`}>
         <span
           {...getToggleProps({
             onClick: () => setExpanded((prevExpanded) => !prevExpanded),
@@ -139,7 +141,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             />
           )}
         </span>{' '}
-        <span className="flex w-36 items-center justify-end">
+        <span className="flex w-20 items-center justify-end">
           <div className="flex h-[24px] items-center">
             <span className="">
               {(data.share * 100).toLocaleString(undefined, {
@@ -150,11 +152,12 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
             <span className="ml-1 text-[8px] text-red">%</span>
           </div>
         </span>
-        <span className="flex w-20 items-center justify-end">
+        <span className="flex w-8 items-center justify-end">
           {level === 2 && collection && (
             <CategoryContextMenu
               collection={collection}
               openAttestationModal={() => setIsAttestationModalOpen(true)}
+              openEditManualModal={() => setIsEditManualModalOpen(true)}
               progress={collection?.progress}
               isEditing={editMode}
             />
@@ -166,6 +169,13 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               colletionDescription={collection?.description}
               isOpen={isAttestationModalOpen}
               onClose={() => setIsAttestationModalOpen(false)}
+            />
+          )}
+          {isEditManualModalOpen && (
+            <EditManualModal
+              collectionId={collection?.id}
+              isOpen={isEditManualModalOpen}
+              onClose={() => setIsEditManualModalOpen(false)}
             />
           )}
         </span>

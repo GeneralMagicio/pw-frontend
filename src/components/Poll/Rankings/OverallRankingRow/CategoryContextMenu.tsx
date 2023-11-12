@@ -1,20 +1,17 @@
 import { ArrowForward } from '../../../Icon/ArrowForward'
 import { CollectionProgressStatus } from '../../../Galaxy/types'
 import { Dots } from '../../../Icon/Dots'
-import { Eye } from '../../../Icon/Eye'
 import Link from 'next/link'
-import Modal from '@/components/Modal/Modal'
 import { PairType } from '../../../../types/Pairs/Pair'
 import { Plus } from '../../../Icon/Plus'
 import { Popover } from '@headlessui/react'
 import React from 'react'
-import { VoteModal } from '../../Pair/VoteModal'
-import { finishCollections } from '@/utils/poll'
 
 type CategoryContextMenuProps = {
   collection?: PairType
   progress: CollectionProgressStatus
   openAttestationModal?: () => void
+  openEditManualModal?: () => void
   isEditing: boolean
 }
 
@@ -22,6 +19,7 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
   openAttestationModal,
+  openEditManualModal,
   isEditing,
 }) => {
   return (
@@ -35,6 +33,7 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
           <Options
             collection={collection}
             openAttestationModal={openAttestationModal}
+            openEditManualModal={openEditManualModal}
             progress={progress}
             isEditing={isEditing}
           />
@@ -48,6 +47,7 @@ const Options: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
   openAttestationModal,
+  openEditManualModal,
   isEditing,
 }) => {
   return (
@@ -57,7 +57,10 @@ const Options: React.FC<CategoryContextMenuProps> = ({
       ) : progress === 'WIP' ? (
         <ContinueRankingOption collection={collection} />
       ) : progress === 'WIP - Threshold' ? (
-        <ContinueRankingThresholdOption collection={collection} />
+        <ContinueRankingThresholdOption
+          collection={collection}
+          openEditManualModal={openEditManualModal}
+        />
       ) : null}
       {['Pending', 'WIP', 'WIP - Threshold'].includes(progress || '') ? (
         <div className="h-1 w-full border-b border-gray-200" />
@@ -85,12 +88,11 @@ const ContinueRankingOption: React.FC<
 }
 
 const ContinueRankingThresholdOption: React.FC<
-  Pick<CategoryContextMenuProps, 'collection'>
-> = ({ collection }) => {
+  Pick<CategoryContextMenuProps, 'collection' | 'openEditManualModal'>
+> = ({ collection, openEditManualModal }) => {
   const finishCategory = async () => {
     if (!collection?.id) return
-    await finishCollections(collection.id)
-    window.location.href = `/ranking?c=${collection.id}`
+    openEditManualModal?.()
   }
   return (
     <>
@@ -101,7 +103,7 @@ const ContinueRankingThresholdOption: React.FC<
       </Link>
       <div
         onClick={finishCategory}
-        className="flex w-full items-center justify-between whitespace-nowrap cursor-pointer rounded-lg px-2 py-1 hover:bg-gray-100">
+        className="flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
         Edit manually <ArrowForward className="h-5 w-5" />
       </div>
     </>

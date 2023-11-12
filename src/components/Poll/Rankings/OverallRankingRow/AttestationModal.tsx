@@ -16,7 +16,10 @@ import { LinkSharp } from '@/components/Icon/LinkSharp'
 import Modal from '@/components/Modal/Modal'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
-import { convertRankingToAttestationFormat, getPrevAttestationIds } from './attest-utils'
+import {
+  convertRankingToAttestationFormat,
+  getPrevAttestationIds,
+} from './attest-utils'
 import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Warning } from '@/components/Icon/Warning'
@@ -43,7 +46,6 @@ export const AttestationModal: React.FC<Props> = ({
   const [agoraUrl, setAgoraUrl] = useState('')
   const [smUrl, setSmUrl] = useState('')
   const [ranking, setRanking] = useState<CollectionRanking>()
-
 
   const chainId = useChainId()
   const { isConnected, address } = useAccount()
@@ -116,12 +118,16 @@ export const AttestationModal: React.FC<Props> = ({
       { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
     ])
 
-    const prevAttestations = await getPrevAttestationIds(address, SCHEMA_UID, easConfig.gqlUrl, collectionName)
+    const prevAttestations = await getPrevAttestationIds(
+      address,
+      SCHEMA_UID,
+      easConfig.gqlUrl,
+      collectionName
+    )
 
     try {
-
       for (const attestation of prevAttestations) {
-        await eas.revoke({schema: SCHEMA_UID, data: {uid: attestation}})
+        await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
       }
 
       const tx = await eas.attest({
@@ -164,30 +170,27 @@ export const AttestationModal: React.FC<Props> = ({
         {step === 0 && (
           <div className="flex flex-col gap-6">
             <p className="text-2xl font-bold">Create list</p>
-            <p className="flex bg-[#FF0420]/[.1] gap-4 text-base px-4 py-1 rounded-lg text-[#FF0420]">
-              <Warning width={40} height={40}/>
-              {`After creating lists, you can no longer do any more pairwise rankings in ${collectionName}.`}
-            </p>
-            <p className="flex bg-[#FF0420]/[.1] gap-4 text-base px-4 py-1 rounded-lg text-[#FF0420]">
-              <Warning width={40} height={40}/>
-              {`If You have already created a list for this category, creating a new list will revoke the old list.`}
-            </p>
             <p className="text-xl">
               Lists that you create here can be used for the RetroPGF voting
               both in Agora and Supermodular.
             </p>
-            <p className="text-xl font-medium">
-              * Only lists created by RetroPGF 3 badge holders will be
-              accessible in the respective voting interfaces.
-              <br />
-              <br />* Lists are created using the Ethereum Attestation Service.
-              You need to make a transaction on Optimism to create the list.
+            <p className="text-xl">
+              Lists are created using the Ethereum Attestation Service. You need
+              to make a transaction on Optimism to create the list.
             </p>
+            <div className="rounded-2xl bg-[#1C64F21A] py-3 px-4 text-sm text-[#1C64F2]">
+              After creating this list, you can no longer do any more pairwise
+              rankings in <b>{collectionName}</b>
+            </div>
+            <div className="rounded-2xl bg-[#1C64F21A] py-3 px-4 text-sm text-[#1C64F2]">
+              Only lists created by RetroPGF 3 badge holders will be accessible
+              in the respective voting interfaces.
+            </div>
             <div className="flex justify-between rounded-2xl bg-[#F366001A] py-3 px-4 text-sm text-[#F36600]">
               <p>Create list using EAS on Optimism.</p>
               <p>{`Estimated cost < $0.05`}</p>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between ">
               <button
                 className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
                 onClick={onClose}>
@@ -206,7 +209,7 @@ export const AttestationModal: React.FC<Props> = ({
 
         {step === 1 && (
           <div className="flex flex-col gap-10">
-            <header className="flex justify-end mb-2">
+            <header className="mb-2 flex justify-end">
               <Close className="cursor-pointer" onClick={onClose} />
             </header>
             <p className="text-xl">
@@ -216,7 +219,7 @@ export const AttestationModal: React.FC<Props> = ({
             <div className="flex flex-col items-center justify-center gap-4">
               <a href={agoraUrl} rel="noreferrer" target="_blank">
                 <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
                   onClick={() => {}}>
                   View list on Agora
                   <LinkSharp className="ml-4" />
@@ -224,7 +227,7 @@ export const AttestationModal: React.FC<Props> = ({
               </a>
               <a href={smUrl} rel="noreferrer" target="_blank">
                 <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8"
                   onClick={() => {}}>
                   View list on Supermodular
                   <LinkSharp className="ml-4" />
