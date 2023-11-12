@@ -23,8 +23,8 @@ export const EditManualModal: React.FC<Props> = ({
       <div className="flex w-96 flex-col gap-5 font-IBM">
         <p className="text-2xl font-bold">Please note</p>
         <p>
-          After making manual edits to a category you can't do any more pairwise
-          rankings for that category.
+          After making manual edits to a category you can&apos;t do any more
+          pairwise rankings for that category.
         </p>
         <div className="flex w-full justify-center gap-5">
           <button
