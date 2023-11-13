@@ -158,15 +158,15 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               collection={collection}
               openAttestationModal={() => setIsAttestationModalOpen(true)}
               openEditManualModal={() => setIsEditManualModalOpen(true)}
-              progress={collection?.progress}
+              progress={collection.progress}
               isEditing={editMode}
             />
           )}
           {isAttestationModalOpen && collection && (
             <AttestationModal
-              collectionId={collection?.id}
-              collectionName={collection?.name}
-              colletionDescription={collection?.description}
+              collectionId={collection.id}
+              collectionName={collection.name}
+              colletionDescription={collection.impactDescription}
               isOpen={isAttestationModalOpen}
               onClose={() => setIsAttestationModalOpen(false)}
             />
