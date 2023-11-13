@@ -5,7 +5,6 @@ export interface PairType {
   name: string
   url: string
   image: string
-  description: string
   impactDescription: string
   contributionDescription?: string
   metadataUrl: string
