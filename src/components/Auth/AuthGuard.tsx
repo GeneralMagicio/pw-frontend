@@ -1,6 +1,5 @@
 import React, {
   PropsWithChildren,
-  use,
   useCallback,
   useEffect,
   useState,
@@ -21,8 +20,13 @@ export const AuthGuard: React.FC<PropsWithChildren> = ({ children }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
   const handleLogin = useCallback(async () => {
-    await login(chain!.id, address!, signMessageAsync)
-    setIsLoginModalOpen(false)
+    try {
+      await login(chain!.id, address!, signMessageAsync)
+      setIsLoginModalOpen(false)
+      window.location.reload()
+    } catch (e) {
+      console.error(e)
+    }
   }, [address, chain, signMessageAsync])
 
   useEffect(() => {
@@ -34,6 +38,15 @@ export const AuthGuard: React.FC<PropsWithChildren> = ({ children }) => {
       setIsLoginModalOpen(true)
     })()
   }, [address])
+
+  useEffect(() => {
+    // Logout on chain change
+    if (!chain || chain.id === 10) return
+    ;(async () => {
+      await logout()
+      setIsLoginModalOpen(true)
+    })()
+  }, [chain])
 
   useEffect(() => {
     // Redirect to homepage if not logged in

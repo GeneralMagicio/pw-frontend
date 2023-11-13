@@ -1,15 +1,17 @@
-import { PodiumSharp } from '@/components/Icon/PodiumSharp'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
-import { useRouter } from 'next/router'
+
 import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
-import { fetchCollections } from '@/utils/flow'
-import { PairType } from '@/types/Pairs/Pair'
-import { HelpModal } from '@/components/Journey/HelpModal'
 import { Help } from '@/components/Icon/Help'
+import { HelpModal } from '@/components/Journey/HelpModal'
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner'
+import { PairType } from '@/types/Pairs/Pair'
+import { PodiumSharp } from '@/components/Icon/PodiumSharp'
+import { fetchCollections } from '@/utils/flow'
+import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
+import { useRouter } from 'next/router'
 import { useWindowWidth } from '@react-hook/window-size/throttled'
 
 const PLANET_SIZE = 150
@@ -61,11 +63,11 @@ export default function Galaxy() {
   const handlePlanetClick = (collection: PairType) => () => {
     if (isPanning.current) return
     if (
-      collection.progress === 'Finished' &&
+      (collection.progress === 'Finished' || collection.progress === 'Attested') &&
       !collection.hasSubcollections &&
       !collection.hasCompositeProjects
     )
-      return router.push(`/poll/${collection.id}/ranking`)
+      return router.push(`/ranking`)
     if (collection.hasSubcollections || collection.hasCompositeProjects) {
       return router.push(`/galaxy/${collection.id}`)
     }
@@ -111,7 +113,13 @@ export default function Galaxy() {
   // }
 
   if (collections.length === 0) {
-    return
+    return (
+      <div
+        className="flex w-full items-center justify-center"
+        style={{ height: 'calc(100vh - 60px)' }}>
+        <LoadingSpinner />
+      </div>
+    )
   }
 
   return (
@@ -134,7 +142,7 @@ export default function Galaxy() {
         />
       )}
 
-      <ColoredGrid className="absolute w-full text-white max-h-screen-content" />
+      <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
       <TransformWrapper
         centerOnInit
         initialScale={2.5}
@@ -146,16 +154,16 @@ export default function Galaxy() {
         }}>
         <TransformComponent>
           <div
-            className="flex items-center justify-center w-screen p-10 overflow-hidden"
+            className="flex w-screen items-center justify-center overflow-hidden p-10"
             style={{ height: 'calc(100vh - 60px - 120px)' }}>
             <div
-              className="relative flex items-center justify-center shrink-0"
+              className="relative flex shrink-0 items-center justify-center"
               style={{
                 width: '200vw',
                 height: '200vh',
                 transform: 'scale(.3)',
               }}>
-              <div className="relative flex items-center justify-center w-screen h-screen ">
+              <div className="relative flex h-screen w-screen items-center justify-center ">
                 {cords.length &&
                   collections.map((collection, idx) => {
                     const { x, y } = cords[idx]
@@ -195,13 +203,16 @@ export default function Galaxy() {
       {/* <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} /> */}
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
         <button
-          className="flex items-center gap-2 px-6 py-2 text-lg whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
+          className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => setShowHelpModal(true)}>
           Help
           <Help />
         </button>
+        <p>
+          <strong>Click a planet to begin ranking</strong>
+        </p>
         <button
-          className="flex items-center gap-2 px-6 py-2 text-lg whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50"
+          className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
           onClick={() => router.push('/ranking')}>
           Ranking
           <PodiumSharp />

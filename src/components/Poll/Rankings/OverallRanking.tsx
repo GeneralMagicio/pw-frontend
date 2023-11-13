@@ -5,6 +5,7 @@ import { fetchCollections } from '../../../utils/flow'
 import { PairType } from '../../../types/Pairs/Pair'
 import { fetchPairs } from '../../../utils/poll'
 import { PairsType } from '../../../types/Pairs'
+import { useRouter } from 'next/router'
 
 interface RankingsProps {
   data: EditingCollectionRanking
@@ -32,6 +33,7 @@ const Rows: React.FC<Props> = ({
   onLockClick,
   editMode,
 }) => {
+  const router = useRouter()
   const [childCollections, setChildCollections] = useState<PairType[]>()
   const [pairs, setPairs] = useState<PairsType>()
 
@@ -44,7 +46,11 @@ const Rows: React.FC<Props> = ({
   }, [data, level])
 
   useEffect(() => {
-    if (collection?.progress !== 'WIP') return
+    if (
+      collection?.progress !== 'WIP' &&
+      collection?.progress !== 'WIP - Threshold'
+    )
+      return
     ;(async () => {
       setPairs(await fetchPairs(collection?.id.toString()))
     })()
@@ -54,13 +60,16 @@ const Rows: React.FC<Props> = ({
     if (!childCollections) return
     return childCollections.find((collection) => collection.id === id)
   }
+  const expanded =
+    data.id === Number(router.query.c) ||
+    data.ranking.some((r) => r.id === Number(router.query.c))
 
   return (
     <OverallRankingHeader
       collection={collection}
       data={data}
       editMode={editMode}
-      expanded={data.expanded || false}
+      expanded={expanded || data.expanded || false}
       level={level}
       onEditChange={onEditChange(data.id)}
       onLockClick={onLockClick(data.id)}
@@ -102,11 +111,11 @@ export const OverallRanking: React.FC<RankingsProps> = ({
 }) => {
   return (
     <div className="container relative mx-auto mb-32 mt-8 flex min-w-[1200px] grow flex-col items-end px-16">
-      <div className="flex items-center w-full gap-6 px-6 py-4 mb-2 text-black rounded-md ">
-        <span className="text-sm grow" />
-        <span className="flex justify-end w-64 text-sm ">OP Allocated</span>
-        <span className="flex justify-end text-sm w-44">%</span>
-        <span className="w-20" />
+      <div className="mb-2 flex w-full items-center gap-6 rounded-md px-6 py-4 text-black ">
+        <span className="grow text-sm" />
+        <span className="flex w-64 justify-end text-sm ">OP Allocated</span>
+        <span className="flex w-20 justify-end text-sm">%</span>
+        <span className="w-8" />
       </div>
       {/* <Rows
         data={data}

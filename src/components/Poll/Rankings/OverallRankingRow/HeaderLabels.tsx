@@ -23,7 +23,7 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
     return (
       <div className="flex gap-2">
         <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
-          Ranked <Check className="w-3 h-3 ml-1" color="#22B7A0" />
+          Ranked <Check className="ml-1 h-3 w-3" color="#22B7A0" />
         </span>
         <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#F366001A] p-1 px-2 text-xs text-[#F36600]">
           List not created
@@ -35,8 +35,11 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
   if (progress === 'Attested') {
     return (
       <div className="flex gap-2">
-        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#d5fabf] p-1 px-2 text-xs text-[#223100]">
-          List created
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
+          Ranked <Check className="ml-1 h-3 w-3" color="#22B7A0" />
+        </span>
+        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
+          List created <Check className="ml-1 h-3 w-3" color="#22B7A0" />
         </span>
       </div>
     )
@@ -48,7 +51,7 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
     ? Math.max((pairs.votedPairs / pairs.totalPairs) * 100, 4)
     : 4
 
-  if (progress === 'WIP') {
+  if (progress === 'WIP' || progress === 'WIP - Threshold') {
     return (
       <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-gray-100 p-1 px-2 text-xs text-[#1C64F2]">
         In progress {progressPercentage.toFixed(0)}%
@@ -60,23 +63,10 @@ export const HeaderLabels: React.FC<HeaderLabelProps> = ({
     return (
       <div className="flex gap-2">
         <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
-          Ranked <Check className="w-3 h-3 ml-1" color="#22B7A0" />
+          Ranked <Check className="ml-1 h-3 w-3" color="#22B7A0" />
         </span>
         <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#F366001A] p-1 px-2 text-xs text-[#F36600]">
           List not created
-        </span>
-      </div>
-    )
-  }
-
-  if (progress === 'Attested') {
-    return (
-      <div className="flex gap-2">
-        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
-          Ranked <Check className="w-3 h-3 ml-1" color="#22B7A0" />
-        </span>
-        <span className="flex w-fit items-center whitespace-nowrap rounded-3xl bg-[#22B7A01A] p-1 px-2 text-xs text-[#22B7A0]">
-          List created <Check className="w-3 h-3 ml-1" color="#22B7A0" />
         </span>
       </div>
     )

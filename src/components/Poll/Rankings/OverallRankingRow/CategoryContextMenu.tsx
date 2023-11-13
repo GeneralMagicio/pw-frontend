@@ -1,24 +1,26 @@
-import { Popover } from '@headlessui/react'
-import { Dots } from '../../../Icon/Dots'
-import { PairsType } from '../../../../types/Pairs'
+import { ArrowForward } from '../../../Icon/ArrowForward'
 import { CollectionProgressStatus } from '../../../Galaxy/types'
-import React from 'react'
+import { Dots } from '../../../Icon/Dots'
 import Link from 'next/link'
 import { PairType } from '../../../../types/Pairs/Pair'
-import { ArrowForward } from '../../../Icon/ArrowForward'
 import { Plus } from '../../../Icon/Plus'
-import { Eye } from '../../../Icon/Eye'
-import { VoteModal } from '../../Pair/VoteModal'
-import Modal from '@/components/Modal/Modal'
+import { Popover } from '@headlessui/react'
+import React from 'react'
 
 type CategoryContextMenuProps = {
   collection?: PairType
-  progress?: CollectionProgressStatus
+  progress: CollectionProgressStatus
+  openAttestationModal?: () => void
+  openEditManualModal?: () => void
+  isEditing: boolean
 }
 
 export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
+  openAttestationModal,
+  openEditManualModal,
+  isEditing,
 }) => {
   return (
     <Popover className="relative">
@@ -26,9 +28,15 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
         <Dots />
       </Popover.Button>
 
-      <Popover.Panel className="absolute z-10 w-56 p-2 bg-white rounded-lg -left-48 drop-shadow-2xl">
+      <Popover.Panel className="absolute -left-48 z-10 w-56 rounded-lg bg-white p-2 drop-shadow-2xl">
         <div className="flex flex-col gap-2">
-          <Options collection={collection} progress={progress} />
+          <Options
+            collection={collection}
+            openAttestationModal={openAttestationModal}
+            openEditManualModal={openEditManualModal}
+            progress={progress}
+            isEditing={isEditing}
+          />
         </div>
       </Popover.Panel>
     </Popover>
@@ -38,66 +46,77 @@ export const CategoryContextMenu: React.FC<CategoryContextMenuProps> = ({
 const Options: React.FC<CategoryContextMenuProps> = ({
   collection,
   progress,
+  openAttestationModal,
+  openEditManualModal,
+  isEditing,
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <DetailsOption collection={collection} />
       {progress === 'Pending' ? (
         <BeginRankingOption collection={collection} />
-      ) : (
+      ) : progress === 'WIP' ? (
         <ContinueRankingOption collection={collection} />
-      )}
-      <div className="w-full h-1 border-b border-gray-200" />
+      ) : progress === 'WIP - Threshold' ? (
+        <ContinueRankingThresholdOption
+          collection={collection}
+          openEditManualModal={openEditManualModal}
+        />
+      ) : null}
+      {['Pending', 'WIP', 'WIP - Threshold'].includes(progress || '') ? (
+        <div className="h-1 w-full border-b border-gray-200" />
+      ) : null}
       <CreateListOption
         collection={collection}
-        disabled={progress !== 'Finished'}
+        progress={progress}
+        openAttestationModal={openAttestationModal}
+        isEditing={isEditing}
       />
     </div>
   )
 }
 
-const DetailsOption: React.FC<CategoryContextMenuProps> = ({ collection }) => {
-  const [showDetails, setShowDetails] = React.useState(false)
-
-  if (!collection) return null
-  return (
-    <>
-      <div
-        className="flex items-center justify-between w-full px-2 py-1 rounded-lg whitespace-nowrap hover:bg-gray-100"
-        onClick={() => setShowDetails(true)}>
-        Details <Eye className="w-5 h-5" />
-      </div>
-      {showDetails && (
-        <Modal isOpen={showDetails} onClose={() => setShowDetails(false)}>
-          <VoteModal
-            handeClose={() => setShowDetails(false)}
-            item={collection}
-          />
-        </Modal>
-      )}
-    </>
-  )
-}
-
-const ContinueRankingOption: React.FC<CategoryContextMenuProps> = ({
-  collection,
-}) => {
+const ContinueRankingOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection'>
+> = ({ collection }) => {
   return (
     <Link href={`/poll/${collection?.id}`}>
-      <div className="flex items-center justify-between w-full px-2 py-1 rounded-lg whitespace-nowrap hover:bg-gray-100">
-        Continue ranking <ArrowForward className="w-5 h-5" />
+      <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+        Continue ranking <ArrowForward className="h-5 w-5" />
       </div>
     </Link>
   )
 }
 
-const BeginRankingOption: React.FC<CategoryContextMenuProps> = ({
-  collection,
-}) => {
+const ContinueRankingThresholdOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection' | 'openEditManualModal'>
+> = ({ collection, openEditManualModal }) => {
+  const finishCategory = async () => {
+    if (!collection?.id) return
+    openEditManualModal?.()
+  }
+  return (
+    <>
+      <Link href={`/poll/${collection?.id}`}>
+        <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+          Continue ranking <ArrowForward className="h-5 w-5" />
+        </div>
+      </Link>
+      <div
+        onClick={finishCategory}
+        className="flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+        Edit manually <ArrowForward className="h-5 w-5" />
+      </div>
+    </>
+  )
+}
+
+const BeginRankingOption: React.FC<
+  Pick<CategoryContextMenuProps, 'collection'>
+> = ({ collection }) => {
   return (
     <Link href={`/poll/${collection?.id}`}>
-      <div className="flex items-center justify-between w-full px-2 py-1 rounded-lg whitespace-nowrap hover:bg-gray-100">
-        Begin ranking <ArrowForward className="w-5 h-5" />
+      <div className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100">
+        Begin ranking <ArrowForward className="h-5 w-5" />
       </div>
     </Link>
   )
@@ -105,22 +124,32 @@ const BeginRankingOption: React.FC<CategoryContextMenuProps> = ({
 
 type CreateListOptionProps = {
   collection?: PairType
-  disabled?: boolean
+  openAttestationModal?: () => void
+  progress: CollectionProgressStatus
+  isEditing: boolean
 }
 const CreateListOption: React.FC<CreateListOptionProps> = ({
   collection,
-  disabled,
+  progress,
+  openAttestationModal,
+  isEditing,
 }) => {
-  if (disabled) {
+  const title = 'Create list'
+  const disabled = progress === 'Pending' || progress === 'WIP'
+  if (isEditing || disabled || !collection) {
     return (
-      <div className="flex items-center justify-between w-full px-2 py-1 text-gray-200 rounded-lg whitespace-nowrap">
-        Create list <Plus className="w-5 h-5" />
+      <div
+        title={'You need to first save your changes.'}
+        className="flex w-full items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 text-gray-200">
+        {title} <Plus className="h-5 w-5" />
       </div>
     )
   }
   return (
-    <div className="flex items-center justify-between w-full px-2 py-1 rounded-lg whitespace-nowrap hover:bg-gray-100">
-      Create list <Plus className="w-5 h-5" />
+    <div
+      className="flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-lg px-2 py-1 hover:bg-gray-100"
+      onClick={openAttestationModal}>
+      {title} <Plus className="h-5 w-5" />
     </div>
   )
 }

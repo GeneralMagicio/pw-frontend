@@ -1,27 +1,32 @@
-import Modal from '@/components/Modal/Modal'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useState } from 'react'
-import { useChainId, useAccount, useConnect } from 'wagmi'
-import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
-import { CircularProgress } from '@chakra-ui/progress'
 import {
-  EAS,
-  SchemaRegistry,
-  SchemaEncoder,
   AttestationRequestData,
+  EAS,
+  SchemaEncoder,
+  SchemaRegistry,
 } from '@ethereum-attestation-service/eas-sdk'
-import cn from 'classnames'
-import { Close } from '@/components/Icon/Close'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
+import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
+import { useAccount, useChainId, useConnect } from 'wagmi'
+import { useEffect, useState } from 'react'
+
+import { CircularProgress } from '@chakra-ui/progress'
+import { Close } from '@/components/Icon/Close'
 import Link from 'next/link'
-import { convertRankingToAttestationFormat } from './attest-utils'
-import { axiosInstance } from '@/utils/axiosInstance'
 import { LinkSharp } from '@/components/Icon/LinkSharp'
+import Modal from '@/components/Modal/Modal'
+import { axiosInstance } from '@/utils/axiosInstance'
+import cn from 'classnames'
+import {
+  convertRankingToAttestationFormat,
+  getPrevAttestationIds,
+} from './attest-utils'
+import { finishCollections, getRankings } from '../../../../utils/poll'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { Warning } from '@/components/Icon/Warning'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  ranking: CollectionRanking
   collectionName: string
   colletionDescription: string
   collectionId: number
@@ -32,18 +37,15 @@ type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
 export const AttestationModal: React.FC<Props> = ({
   isOpen,
   onClose,
-  ranking,
   collectionName,
   colletionDescription,
   collectionId,
 }) => {
   const [step, setSteps] = useState<number>(0)
   const [loading, setLoading] = useState(false)
-  const [url, setUrl] = useState<string>()
   const [agoraUrl, setAgoraUrl] = useState('')
   const [smUrl, setSmUrl] = useState('')
-
-  const progress = Math.ceil(((step - 1) / 3) * 100)
+  const [ranking, setRanking] = useState<CollectionRanking>()
 
   const chainId = useChainId()
   const { isConnected, address } = useAccount()
@@ -51,6 +53,12 @@ export const AttestationModal: React.FC<Props> = ({
   const { openConnectModal } = useConnectModal()
 
   const signer = useSigner()
+
+  useEffect(() => {
+    ;(async () => {
+      setRanking(await getRankings(collectionId.toString()))
+    })()
+  }, [collectionId])
 
   const handleCreate = async () => {
     setLoading(true)
@@ -63,6 +71,8 @@ export const AttestationModal: React.FC<Props> = ({
   }
 
   const attest = async () => {
+    if (!ranking) return
+
     const item = await convertRankingToAttestationFormat(
       ranking,
       collectionName,
@@ -108,7 +118,17 @@ export const AttestationModal: React.FC<Props> = ({
       { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
     ])
 
+    const prevAttestations = await getPrevAttestationIds(
+      address,
+      SCHEMA_UID,
+      easConfig.gqlUrl,
+      collectionName
+    )
+
     try {
+      for (const attestation of prevAttestations) {
+        await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
+      }
 
       const tx = await eas.attest({
         schema: SCHEMA_UID,
@@ -121,10 +141,11 @@ export const AttestationModal: React.FC<Props> = ({
 
       // const newAttestationUID = ""
       const newAttestationUID = await tx.wait()
+      await finishCollections(collectionId)
       await axiosInstance.post('/flow/reportAttest', {
         cid: collectionId,
       })
-      setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
+      // setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
       setAgoraUrl(
         `https://optimism-agora-dev.agora-dev.workers.dev/retropgf/3/list/${newAttestationUID}`
       )
@@ -144,25 +165,32 @@ export const AttestationModal: React.FC<Props> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
         className={cn(
-          'relative flex min-h-[250px] w-[600px] flex-col gap-10 py-8 px-2 font-IBM',
+          'relative flex min-h-[250px] w-[600px] flex-col gap-10 px-2 font-IBM'
         )}>
         {step === 0 && (
-          <div className="mt-10 flex flex-col gap-10">
+          <div className="flex flex-col gap-6">
+            <p className="text-2xl font-bold">Create list</p>
             <p className="text-xl">
               Lists that you create here can be used for the RetroPGF voting
               both in Agora and Supermodular.
             </p>
-            <p className="text-xl font-medium">
-              Only lists created by RetroPGF 3 badge holders will be accessible
-              in the respective voting interfaces. Lists are created using the
-              Ethereum Attestation Service. You need to make a transaction on
-              Optimism to create the list.
+            <p className="text-xl">
+              Lists are created using the Ethereum Attestation Service. You need
+              to make a transaction on Optimism to create the list.
             </p>
+            <div className="rounded-2xl bg-[#1C64F21A] py-3 px-4 text-sm text-[#1C64F2]">
+              After creating this list, you can no longer do any more pairwise
+              rankings in <b>{collectionName}</b>
+            </div>
+            <div className="rounded-2xl bg-[#1C64F21A] py-3 px-4 text-sm text-[#1C64F2]">
+              Only lists created by RetroPGF 3 badge holders will be accessible
+              in the respective voting interfaces.
+            </div>
             <div className="flex justify-between rounded-2xl bg-[#F366001A] py-3 px-4 text-sm text-[#F36600]">
               <p>Create list using EAS on Optimism.</p>
-              <p>{`Estimated cost < 0.000x$`}</p>
+              <p>{`Estimated cost < $0.05`}</p>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between ">
               <button
                 className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
                 onClick={onClose}>
@@ -173,30 +201,33 @@ export const AttestationModal: React.FC<Props> = ({
                   'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
                 }
                 onClick={handleCreate}>
-                {loading ? "Loading..." : "Create list"}
+                {loading ? 'Loading...' : 'Create list'}
               </button>
             </div>
           </div>
         )}
-        
+
         {step === 1 && (
-          <div className="mt-10 flex flex-col gap-10">
+          <div className="flex flex-col gap-10">
+            <header className="mb-2 flex justify-end">
+              <Close className="cursor-pointer" onClick={onClose} />
+            </header>
             <p className="text-xl">
               The list has been created, you can access it shortly on Agora or
               Supermodular.
             </p>
             <div className="flex flex-col items-center justify-center gap-4">
-              <a href={agoraUrl} rel="noreferrer" target='_blank'>
+              <a href={agoraUrl} rel="noreferrer" target="_blank">
                 <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
                   onClick={() => {}}>
                   View list on Agora
                   <LinkSharp className="ml-4" />
                 </button>
               </a>
-              <a href={smUrl} rel="noreferrer" target='_blank'>
+              <a href={smUrl} rel="noreferrer" target="_blank">
                 <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
+                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8"
                   onClick={() => {}}>
                   View list on Supermodular
                   <LinkSharp className="ml-4" />

@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
           )}
           disabled={!canFinish}
           onClick={handleFinishVoting}>
-          Finish
+          Continue
           <span className="relative">
             {canFinish ? (
               <ArrowForward />

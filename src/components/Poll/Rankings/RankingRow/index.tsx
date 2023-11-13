@@ -19,7 +19,7 @@ export const RankingRow: React.FC<RankingProps> = ({ data }) => {
       </span>
       <span className="flex w-36 items-center">
         <span className="">
-          {(data.share * 3e6).toLocaleString(undefined, {
+          {(data.share * 3e7).toLocaleString(undefined, {
             maximumFractionDigits: 2,
           })}
         </span>

@@ -29,6 +29,8 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
         return 'Not ranked'
       case 'WIP':
         return 'In progress'
+      case 'WIP - Threshold':
+        return 'In progress'
       case 'Finished':
         return 'Ranked'
       case 'Attested':
@@ -68,7 +70,7 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
             </button>
           )}
 
-          {progress === 'WIP' && (
+          {(progress === 'WIP' || progress === 'WIP - Threshold') && (
             <button
               className={cn(
                 btnClassName,

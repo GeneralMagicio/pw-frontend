@@ -8,7 +8,7 @@ import {
   resetErrorProperty,
   setErrorProperty,
   addAdditionalProperties,
-  setLockProperty,
+  setLock,
   removeAdditionalProperties,
 } from '@/components/Poll/Rankings/edit-logic/utils'
 import { useRouter } from 'next/router'
@@ -69,7 +69,7 @@ export default function RankingPage({
 
   const changeLockStatus =
     (data: EditingCollectionRanking) => (id: number) => () => {
-      setTempRankings(setLockProperty(data, id))
+      setTempRankings(setLock(data, id))
     }
 
   useEffect(() => {
@@ -113,7 +113,6 @@ export default function RankingPage({
           colletionDescription={collection.impactDescription}
           isOpen={open}
           onClose={() => setOpen(false)}
-          ranking={rankings}
         />
       )}
       {!isMoon && (
