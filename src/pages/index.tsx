@@ -153,7 +153,7 @@ export default function Home() {
       <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
         <Star className="absolute right-0 -top-40" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
-          Ready to Shape the Galaxy?
+          Ready to shape the solar system?
         </h2>
         <p className="text-[32px]  font-medium text-black">
           Kickstart Your Journey: Connect Your Wallet Now
