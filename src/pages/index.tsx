@@ -114,9 +114,9 @@ export default function Home() {
           <h3 className="text-[32px] font-bold">Streamlining List Creation</h3>
           <p className="text-lg font-medium">
             With Pairwise, you can easily create, edit, and share curated lists
-            of projects, to be imported directly into Agora and Supermodular for
-            final voting. By progressing through planets and moons, the process
-            of list-making is engaging and fun!
+            of projects, to be imported directly into Agora and West for final
+            voting. By progressing through planets and moons, the process of
+            list-making is engaging and fun!
           </p>
           <CollectionsLeft className="absolute -left-[350px] -mt-[300px]" />
         </div>
@@ -142,7 +142,7 @@ export default function Home() {
           </p>
           <img
             alt="Voted Projects"
-            className="w-3/4 absolute -left-[160px] -mt-[98px]"
+            className="absolute -left-[160px] -mt-[98px] w-3/4"
             src="/images/voted-projects.png"
           />
         </div>
@@ -151,7 +151,7 @@ export default function Home() {
       <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
         <Star className="absolute right-0 -top-40" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
-          Ready to Shape the Galaxy?
+          Ready to shape the solar system?
         </h2>
         <p className="text-[32px]  font-medium text-black">
           Kickstart Your Journey: Connect Your Wallet Now

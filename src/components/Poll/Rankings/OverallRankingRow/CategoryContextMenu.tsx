@@ -134,7 +134,7 @@ const CreateListOption: React.FC<CreateListOptionProps> = ({
   openAttestationModal,
   isEditing,
 }) => {
-  const title = 'Create list'
+  const title = progress === 'Attested' ? 'Recreate list' : 'Create list'
   const disabled = progress === 'Pending' || progress === 'WIP'
   if (isEditing || disabled || !collection) {
     return (

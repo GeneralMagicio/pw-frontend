@@ -6,6 +6,11 @@ import {
 } from '@ethereum-attestation-service/eas-sdk'
 import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
 import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
+import {
+  convertRankingToAttestationFormat,
+  getPrevAttestationIds,
+} from './attest-utils'
+import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useAccount, useChainId, useConnect } from 'wagmi'
 import { useEffect, useState } from 'react'
 
@@ -14,15 +19,10 @@ import { Close } from '@/components/Icon/Close'
 import Link from 'next/link'
 import { LinkSharp } from '@/components/Icon/LinkSharp'
 import Modal from '@/components/Modal/Modal'
+import { Warning } from '@/components/Icon/Warning'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
-import {
-  convertRankingToAttestationFormat,
-  getPrevAttestationIds,
-} from './attest-utils'
-import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { Warning } from '@/components/Icon/Warning'
 import Button from '@/components/Button'
 
 interface Props {
@@ -45,7 +45,7 @@ export const AttestationModal: React.FC<Props> = ({
   const [step, setSteps] = useState<number>(0)
   const [loading, setLoading] = useState(false)
   const [agoraUrl, setAgoraUrl] = useState('')
-  const [smUrl, setSmUrl] = useState('')
+  const [westUrl, setWestUrl] = useState('')
   const [ranking, setRanking] = useState<CollectionRanking>()
 
   const chainId = useChainId()
@@ -146,13 +146,10 @@ export const AttestationModal: React.FC<Props> = ({
       await axiosInstance.post('/flow/reportAttest', {
         cid: collectionId,
       })
-      // setUrl(`${easConfig.explorer}/attestation/view/${newAttestationUID}`)
       setAgoraUrl(
-        `https://optimism-agora-dev.agora-dev.workers.dev/retropgf/3/list/${newAttestationUID}`
+        `https://vote.optimism.io/retropgf/3/list/${newAttestationUID}`
       )
-      setSmUrl(
-        `https://retro-pgf-staging.vercel.app/lists/${newAttestationUID}`
-      )
+      setWestUrl(`https://round3.optimism.io/lists/${newAttestationUID}`)
       setSteps(1)
     } catch (e) {
       console.error('error on sending tx:', e)
@@ -166,14 +163,14 @@ export const AttestationModal: React.FC<Props> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
         className={cn(
-          'relative flex min-h-[250px] w-[600px] flex-col gap-10 px-2 font-IBM'
+          'relative flex min-h-[250px] w-[600px] flex-col gap-10 font-IBM'
         )}>
         {step === 0 && (
           <div className="flex flex-col gap-6">
             <p className="text-2xl font-bold">Create list</p>
             <p className="text-xl">
               Lists that you create here can be used for the RetroPGF voting
-              both in Agora and Supermodular.
+              both in Agora and West.
             </p>
             <p className="text-xl">
               Lists are created using the Ethereum Attestation Service. You need
@@ -204,24 +201,26 @@ export const AttestationModal: React.FC<Props> = ({
         )}
 
         {step === 1 && (
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-5">
             <header className="mb-2 flex justify-end">
               <Close className="cursor-pointer" onClick={onClose} />
             </header>
-            <p className="text-xl">
-              The list has been created, you can access it shortly on Agora or
-              Supermodular.
+            <p className="text-center text-2xl font-bold">
+              Your list has been created!
             </p>
-            <div className="flex flex-col items-center justify-center gap-4">
+            <p className="mb-5 text-center text-xl">
+              Great work, you can access the list shortly on Agora or West.
+            </p>
+            <div className="mb-5 flex flex-col items-center justify-center gap-5">
               <a href={agoraUrl} rel="noreferrer" target="_blank">
                 <Button varient="secondary">
                   View list on Agora
                   <LinkSharp />
                 </Button>
               </a>
-              <a href={smUrl} rel="noreferrer" target="_blank">
+              <a href={westUrl} rel="noreferrer" target="_blank">
                 <Button varient="secondary">
-                  View list on Supermodular
+                  View list on West
                   <LinkSharp />
                 </Button>
               </a>
