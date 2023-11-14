@@ -8,6 +8,7 @@ import { PlanetShape } from '../PlanetShape'
 import { PairType } from '@/types/Pairs/Pair'
 import { Unlocked } from '@/components/Icon/Unlocked'
 import { PodiumSharp } from '@/components/Icon/PodiumSharp'
+import Button from '@/components/Button'
 
 interface ProjectPlanetProps {
   isRight?: boolean
@@ -39,8 +40,8 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
   }
 
   const btnClassName = finishedOrAttested
-    ? 'bg-white text-black'
-    : 'text-white bg-black'
+    ? 'bg-white text-black w-fit'
+    : 'text-white bg-black w-fit'
 
   return (
     <>
@@ -60,36 +61,32 @@ export const ProjectPlanet: React.FC<ProjectPlanetProps> = ({
           </span>
 
           {progress === 'Pending' && (
-            <button
-              className={cn(
-                btnClassName,
-                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
-              )}>
+            <Button
+              varient="primary"
+              className={btnClassName}
+              theme="black"
+              size="large">
               <span className="font-medium">Begin</span>
               <ArrowForward />
-            </button>
+            </Button>
           )}
 
           {(progress === 'WIP' || progress === 'WIP - Threshold') && (
-            <button
-              className={cn(
-                btnClassName,
-                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
-              )}>
+            <Button
+              varient="primary"
+              className={btnClassName}
+              theme="black"
+              size="large">
               <span className="font-medium">Continue</span>
               <ArrowForward />
-            </button>
+            </Button>
           )}
 
           {finishedOrAttested && (
-            <button
-              className={cn(
-                btnClassName,
-                'flex w-fit items-center gap-2 whitespace-nowrap rounded-3xl border-6 border-gray-200 bg-black p-2 px-4 text-lg '
-              )}>
+            <Button varient="primary" className={btnClassName} size="large">
               <span className="font-medium">Ranking</span>
               <PodiumSharp />
-            </button>
+            </Button>
           )}
         </div>
         {!isRight && <PlanetArrorw className="ml-2 -scale-x-100" />}

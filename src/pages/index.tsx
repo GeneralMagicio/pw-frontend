@@ -16,6 +16,7 @@ import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
 import { VectorHorizontal4 } from '@/components/Icon/VectorHorizontal4'
 import { Votes } from '@/components/Icon/Votes'
+import Button from '@/components/Button'
 
 export default function Home() {
   return (
@@ -46,10 +47,7 @@ export default function Home() {
               Curate RetroPGF 3 Voting Lists with Pairwise
             </h2>
             <p className="text-2xl ">Making OP Allocations Easy!</p>
-            <ConnectWalletButton
-              alternativeText="Start"
-              className="flex h-12 items-center bg-black"
-            />
+            <ConnectWalletButton alternativeText="Start" />
           </div>
         </div>
         <Image
@@ -81,10 +79,10 @@ export default function Home() {
           and have fun doing it!
         </p>
         <a href="#section1">
-          <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
+          <Button varient="brand" size="large">
             Learn more
-            <ArrowDown className="ml-2" />
-          </button>
+            <ArrowDown />
+          </Button>
         </a>
         <Star className="absolute -bottom-20 -left-28" height={35} width={35} />
       </div>

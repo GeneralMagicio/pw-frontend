@@ -16,7 +16,7 @@ export function Header() {
         </div>
       </Link>
       <div className="relative">
-        <ConnectWalletButton className="h-[36px] bg-red" />
+        <ConnectWalletButton size="small" className="bg-red" />
       </div>
     </header>
   )

@@ -1,3 +1,4 @@
+import Button from '@/components/Button'
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 
@@ -27,11 +28,14 @@ export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
           src="/images/unlocked-planets.svg"
         />
       </div>
-      <button
-        className="flex h-[50px] items-center justify-center self-end rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
+
+      <Button
+        className="self-end"
+        varient="brand"
+        size="large"
         onClick={onNext}>
-        {'Next'} <ArrowForward className="ml-1" />
-      </button>
+        {'Next'} <ArrowForward />
+      </Button>
     </div>
   )
 }
@@ -58,16 +62,13 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         />
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
-          onClick={onPrevious}>
-          <ArrowBackward className="mr-4" /> {'Previous'}
-        </button>
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-          onClick={onNext}>
-          {'Next'} <ArrowForward className="ml-1" />
-        </button>
+        <Button varient="secondary" size="large" onClick={onPrevious}>
+          <ArrowBackward /> {'Previous'}
+        </Button>
+
+        <Button varient="brand" size="large" onClick={onNext}>
+          {'Next'} <ArrowForward />
+        </Button>
       </div>
     </div>
   )
@@ -97,16 +98,12 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
         />
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
-          onClick={onPrevious}>
-          <ArrowBackward className="mr-4" /> {'Previous'}
-        </button>
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-          onClick={onNext}>
-          {`Understood, Let's Go!`} <ArrowForward className="ml-1" />
-        </button>
+        <Button varient="secondary" size="large" onClick={onPrevious}>
+          <ArrowBackward /> {'Previous'}
+        </Button>
+        <Button varient="brand" size="large" onClick={onNext}>
+          {`Understood, Let's Go!`} <ArrowForward />
+        </Button>
       </div>
     </div>
   )

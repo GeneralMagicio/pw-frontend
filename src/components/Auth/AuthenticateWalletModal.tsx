@@ -4,6 +4,7 @@ import { Close } from '@/components/Icon/Close'
 import { ColoredGrid } from '../Icon/ColoredGrid'
 import { SadSun } from '../Icon/SadSun'
 import { useRouter } from 'next/router'
+import Button from '../Button'
 
 interface AuthenticateWalletModalProps {
   handleClose: () => void
@@ -18,7 +19,7 @@ export const AuthenticateWalletModal: React.FC<
 
   const wrongChain = chain?.id !== 10 // Optimism
 
-  const handleConnecClick = () => {
+  const handleConnectClick = () => {
     if (wrongChain) {
       switchNetwork?.(10)
     } else {
@@ -50,19 +51,19 @@ export const AuthenticateWalletModal: React.FC<
           )}
           <div className="flex w-full justify-center gap-5">
             {wrongChain && (
-              <button
-                className="min-w-[120px] rounded-full border border-red px-4 py-2 text-red"
+              <Button
+                varient="brand"
+                className="bg-red"
                 onClick={handleDisconnectClick}>
                 Disconnect
-              </button>
+              </Button>
             )}
-            <button
-              className={
-                'min-w-[120px] rounded-full bg-red px-4 py-2 text-white'
-              }
-              onClick={handleConnecClick}>
+            <Button
+              varient="brand"
+              className="bg-red"
+              onClick={handleConnectClick}>
               {wrongChain ? 'Connect to Optimism' : 'Sign in'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

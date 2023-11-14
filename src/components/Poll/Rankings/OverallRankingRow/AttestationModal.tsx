@@ -23,6 +23,7 @@ import { Warning } from '@/components/Icon/Warning'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+import Button from '@/components/Button'
 
 interface Props {
   isOpen: boolean
@@ -268,20 +269,16 @@ export const AttestationModal: React.FC<Props> = ({
             </p>
             <div className="mb-5 flex flex-col items-center justify-center gap-5">
               <a href={agoraUrl} rel="noreferrer" target="_blank">
-                <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
-                  onClick={() => {}}>
+                <Button varient="secondary">
                   View list on Agora
-                  <LinkSharp className="ml-4" />
-                </button>
+                  <LinkSharp />
+                </Button>
               </a>
               <a href={westUrl} rel="noreferrer" target="_blank">
-                <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8"
-                  onClick={() => {}}>
+                <Button varient="secondary">
                   View list on West
-                  <LinkSharp className="ml-4" />
-                </button>
+                  <LinkSharp />
+                </Button>
               </a>
             </div>
           </div>

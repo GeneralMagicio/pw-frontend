@@ -2,11 +2,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
 import { useAccount, useSwitchNetwork } from 'wagmi'
+import Button, { ButtonProps } from '../Button'
 
-export const ConnectWalletButton: React.FC<{
-  className?: string
-  alternativeText?: string
-}> = ({ className = 'bg-red', alternativeText }) => {
+export const ConnectWalletButton: React.FC<
+  {
+    alternativeText?: string
+  } & ButtonProps
+> = ({ alternativeText, ...props }) => {
   const router = useRouter()
   const { chains, switchNetworkAsync } = useSwitchNetwork()
   return (
@@ -15,19 +17,20 @@ export const ConnectWalletButton: React.FC<{
         if (!mounted) return null
         if (!account || !chain) {
           return (
-            <button
-              className={cn(className, 'min-w-[120px] rounded-full  px-4 ')}
+            <Button
+              varient="brand"
+              size="large"
+              {...props}
               onClick={openConnectModal}>
-              <span className="font-bold text-white">Connect Wallet</span>
-            </button>
+              <span className="font-bold ">Connect Wallet</span>
+            </Button>
           )
         }
         return (
-          <button
-            className={cn(
-              'flex min-w-[120px] items-center justify-center rounded-full border border-black bg-transparent px-4  text-black',
-              className
-            )}
+          <Button
+            size="large"
+            {...props}
+            varient="secondary"
             onClick={
               !alternativeText
                 ? async () => {
@@ -41,7 +44,7 @@ export const ConnectWalletButton: React.FC<{
             <span className="font-bold">
               {alternativeText || account.displayName}
             </span>
-          </button>
+          </Button>
         )
       }}
     </ConnectButton.Custom>

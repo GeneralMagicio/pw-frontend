@@ -9,6 +9,7 @@ import { PairType } from '@/types/Pairs/Pair'
 import { Pencil } from '../Icon/Pencil'
 import { Plus } from '../Icon/Plus'
 import { useRouter } from 'next/router'
+import Button from '../Button'
 
 export const RankingConfirmationModal: React.FC = () => {
   const [open, setOpen] = useState(false)
@@ -55,13 +56,13 @@ export const RankingConfirmationModal: React.FC = () => {
             <p className="font-Inter text-base font-medium">
               Review your ranking
             </p>
-            <button
-              disabled={!Boolean(collection)}
-              className="flex items-center justify-center rounded-xl border border-black p-2 px-3 font-IBM text-base font-medium"
+            <Button
+              varient="secondary"
+              className="rounded-xl"
               onClick={() => router.push(`/ranking?c=${collection?.id}`)}>
               Edit
-              <Pencil className="ml-2" />
-            </button>
+              <Pencil />
+            </Button>
           </header>
           <div className="mt-4 flex max-h-[160px] flex-col gap-4 overflow-y-auto font-Inter text-base">
             {rankings && (
@@ -114,19 +115,16 @@ export const RankingConfirmationModal: React.FC = () => {
           </div>
         </div>
         <footer className="flex items-center justify-between">
-          <button
-            className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
-            onClick={() => router.back()}>
+          <Button varient="secondary" size="large">
             {'Rank other projects'}
-            <ArrowForward className="ml-4" />
-          </button>
-          <button
-            className={
-              'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
-            }
+            <ArrowForward />
+          </Button>
+          <Button
+            varient="secondary"
+            size="large"
             onClick={() => setOpen(true)}>
-            Create list <Plus className="ml-2" />
-          </button>
+            Create list <Plus />
+          </Button>
         </footer>
       </div>
     </>
