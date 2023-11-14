@@ -125,7 +125,6 @@ export function setLock(
   input: EditingCollectionRanking,
   id: number
   ): EditingCollectionRanking {
-  console.log("Here")
   const data = cloneDeep(input)
 
   if (data.id === id) {

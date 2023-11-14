@@ -108,9 +108,9 @@ export const EditTextField: FC<Props> = ({
         <input
           className={`w-24 bg-transparent text-right outline-0 ${
             error ? 'text-red' : 'text-black'
-          }`}
+          } edit-input`}
+          name="OP Amount"
           disabled={state !== 'normal'}
-          id="edit-input"
           onBlur={() => setFocus(false)}
           onChange={handleChange}
           onFocus={() => setFocus(true)}

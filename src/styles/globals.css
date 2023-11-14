@@ -6,8 +6,8 @@
 @import './layout.css';
 
 
-#edit-input::-webkit-inner-spin-button, 
-#edit-input::-webkit-outer-spin-button {
+.edit-input::-webkit-inner-spin-button, 
+.edit-input::-webkit-outer-spin-button {
   -webkit-appearance: none; 
   margin: 0;
   display: none;
