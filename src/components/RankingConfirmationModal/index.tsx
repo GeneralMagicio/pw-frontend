@@ -38,7 +38,7 @@ export const RankingConfirmationModal: React.FC = () => {
             collectionName={collection.name}
             colletionDescription={collection.impactDescription}
             isOpen={open}
-            onClose={() => setOpen(false)}
+            onClose={() => window.location.reload()}
           />
         )}
         <header className="mb-2 flex w-full ">

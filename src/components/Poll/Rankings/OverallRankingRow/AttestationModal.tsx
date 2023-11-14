@@ -47,19 +47,19 @@ enum ProgressState {
 const createButtonText = (state: ProgressState) => {
   switch (state) {
     case ProgressState.Initial:
-      return "Create list"
+      return 'Create list'
     case ProgressState.Wallet_Prep:
-      return "Preparing Wallet..."
+      return 'Preparing Wallet...'
     case ProgressState.Creating:
-      return "Preparing List..."
+      return 'Preparing List...'
     case ProgressState.Revoking:
-      return "Revoking Previous Lists..."
+      return 'Revoking Previous Lists...'
     case ProgressState.Attesting:
-      return "Attesting..."
+      return 'Attesting...'
     case ProgressState.Error:
-      return "Error! Try again later."
+      return 'Error! Try again later.'
     case ProgressState.Finished:
-      return "Create list"
+      return 'Create list'
   }
 }
 
@@ -196,7 +196,10 @@ export const AttestationModal: React.FC<Props> = ({
       // )
     }
   }
-  const notYetDisabled = progress !== ProgressState.Initial && progress !== ProgressState.Finished && progress !== ProgressState.Error
+  const notYetDisabled =
+    progress !== ProgressState.Initial &&
+    progress !== ProgressState.Finished &&
+    progress !== ProgressState.Error
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
@@ -228,9 +231,12 @@ export const AttestationModal: React.FC<Props> = ({
             </div>
             <div className="flex justify-between ">
               <button
-                className={cn("flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8", {
-                  "opacity-50": notYetDisabled,
-                })}
+                className={cn(
+                  'flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8',
+                  {
+                    'opacity-50': notYetDisabled,
+                  }
+                )}
                 disabled={notYetDisabled}
                 onClick={onClose}>
                 Not yet
