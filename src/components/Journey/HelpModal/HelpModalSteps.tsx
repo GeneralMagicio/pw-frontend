@@ -88,7 +88,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
           {`When you are satisfied with your rankings on one planet, you can move
           onto the next! You can make any manual adjustments you would like in
           the "Ranking" section. This is where you can finalize your list and
-          submit to Agora and Supermodular for voting.`}
+          submit to Agora and West for voting.`}
         </p>
         <img
           alt="ethers"
