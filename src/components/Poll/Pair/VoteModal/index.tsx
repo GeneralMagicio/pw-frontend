@@ -85,9 +85,9 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                   />
                 </div>
               )}
-              {Boolean(metadata?.contributionLinks?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Contribution Links:</b>
+              <div className="flex flex-col gap-2">
+                <b>Contribution Links:</b>
+                {Boolean(metadata?.contributionLinks?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.contributionLinks.map((cLink) => (
                       <li key={cLink.url}>
@@ -102,11 +102,15 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-              {Boolean(metadata?.impactMetrics?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Impact Metrics:</b>
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No contribution links</li>
+                  </ul>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <b>Impact Metrics:</b>
+                {Boolean(metadata?.impactMetrics?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.impactMetrics.map((metric) => (
                       <li key={metric.url}>
@@ -121,11 +125,15 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-              {Boolean(metadata?.fundingSources?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Funding Sources:</b>
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No impact metrics</li>
+                  </ul>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <b>Funding Sources:</b>
+                {Boolean(metadata?.fundingSources?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.fundingSources.map((fund) => (
                       <li key={fund.type}>
@@ -134,8 +142,12 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No funding sources</li>
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           {!item.childProjects?.length ? null : (
