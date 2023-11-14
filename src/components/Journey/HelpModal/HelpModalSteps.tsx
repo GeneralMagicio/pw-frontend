@@ -47,9 +47,9 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         <p className="max-w-[55%] text-xl font-semibold">
           Jump straight into ranking projects where you have expertise. Your
           initial category allocations can be edited anytime before submitting
-          your list. The more project rankings you complete, the more fine-tuned
-          the project allocations. Leverage your expertise to shape impact in
-          the Optimism ecosystem!
+          your list. The more projects you rank, the more fine-tuned the project
+          allocations. Leverage your expertise to shape impact in the Optimism
+          ecosystem!
         </p>
         <img
           alt="ethers"
