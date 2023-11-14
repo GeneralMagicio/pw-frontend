@@ -23,10 +23,7 @@ export default function Poll() {
   const { isConnected } = useAccount()
 
   const goToRanking = () => {
-    router.push({
-      pathname: `${router.pathname}/ranking`,
-      query: router.query,
-    })
+    router.push(`/ranking?c=${cid}`)
   }
 
   const fetchData = async () => {
