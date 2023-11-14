@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/utils/axiosInstance'
 import { CollectionRanking } from '../edit-logic/edit'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 const flattenRanking = (input: CollectionRanking) => {
   const result: { RPGF3Id: string; share: number }[] = []
@@ -60,7 +60,7 @@ export const getPrevAttestationIds = async (
   address: string,
   schemaId: string,
   gqlUrl: string,
-  category: string,
+  category: string
 ): Promise<string[]> => {
   const query = `
   query ExampleQuery($where: AttestationWhereInput) {
@@ -80,17 +80,22 @@ export const getPrevAttestationIds = async (
     variables: {
       where: {
         revocable: { equals: true },
+        revoked: { equals: false },
         schemaId: {
           equals: schemaId,
         },
         attester: { equals: address },
-        
       },
       by: null,
     },
   })
 
-  const temp = res.data.data.groupByAttestation.map((item: any) => ({...item, data: JSON.parse(item.decodedDataJson)}))
+  const temp = res.data.data.groupByAttestation.map((item: any) => ({
+    ...item,
+    data: JSON.parse(item.decodedDataJson),
+  }))
 
-  return temp.filter((item: any) => item.data[0].value.value === category).map((item: any) => item.id)
+  return temp
+    .filter((item: any) => item.data[0].value.value === category)
+    .map((item: any) => item.id)
 }
