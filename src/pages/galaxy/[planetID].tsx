@@ -14,6 +14,7 @@ import { fetchCollections } from '@/utils/flow'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 import { useWindowWidth } from '@react-hook/window-size/throttled'
+import Button from '@/components/Button'
 
 const PLANET_SIZE = 150
 
@@ -93,7 +94,11 @@ export default function AGalaxy() {
 
   const handleClick = (collection: PairType) => () => {
     if (isPanning.current) return
-    if (collection.progress === 'Pending' || collection.progress === 'WIP' || collection.progress === 'WIP - Threshold') {
+    if (
+      collection.progress === 'Pending' ||
+      collection.progress === 'WIP' ||
+      collection.progress === 'WIP - Threshold'
+    ) {
       return router.push(
         `/${collection.hasSubcollections ? 'galaxy' : 'poll'}/${collection.id}`
       )
@@ -114,14 +119,17 @@ export default function AGalaxy() {
   return (
     <div className="relative overflow-hidden">
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
-      <button
-        className="absolute left-10 top-10 z-20 flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-100 bg-white p-2 px-6 text-lg text-black"
+      <Button
+        className="absolute left-10 top-10 z-20"
+        varient="primary"
+        size="large"
         onClick={() => {
           router.back()
         }}>
-        <ArrowBackward className="text-black" />
+        <ArrowBackward />
         <span>Back</span>
-      </button>
+      </Button>
+
       {/* {showNewSectionsModal && (
         <NewSectionsModal
           isOpen={true}

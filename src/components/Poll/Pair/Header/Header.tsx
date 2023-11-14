@@ -6,6 +6,7 @@ import { Unlocked } from '@/components/Icon/Unlocked'
 import cn from 'classnames'
 import styles from './Header.module.scss'
 import { useRouter } from 'next/router'
+import Button from '@/components/Button'
 
 interface HeaderProps {
   question: string
@@ -38,21 +39,22 @@ export const Header: React.FC<HeaderProps> = ({
         'relative z-30  flex h-[93px] items-center justify-between gap-4 px-20 text-lg font-semibold text-black'
       )}>
       <div className="flex justify-start w-44">
-        <button
-          className={cn(
-            'flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg'
-          )}
-          onClick={() => router.back()}>
+        <Button
+          varient="primary"
+          size="large"
+          onClick={() => {
+            router.back()
+          }}>
           <ArrowBackward />
-          Back
-        </button>
+          <span>Back</span>
+        </Button>
       </div>
       <p className="max-w-xl text-xl font-bold text-center">{question}</p>
       <div className="flex justify-end w-44">
-        <button
-          className={cn(
-            'group relative flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg disabled:text-gray-400 group-hover:flex'
-          )}
+        <Button
+          varient="primary"
+          size="large"
+          className={cn('group  disabled:text-gray-400 group-hover:flex')}
           disabled={!canFinish}
           onClick={handleFinishVoting}>
           Continue
@@ -76,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
               votes.
             </div>
           )}
-        </button>
+        </Button>
       </div>
       <div className="absolute inset-x-0 bottom-0 h-1 bg-white"></div>
       <div

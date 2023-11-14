@@ -13,6 +13,7 @@ import { fetchCollections } from '@/utils/flow'
 import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 import { useWindowWidth } from '@react-hook/window-size/throttled'
+import Button from '@/components/Button'
 
 const PLANET_SIZE = 150
 
@@ -63,7 +64,8 @@ export default function Galaxy() {
   const handlePlanetClick = (collection: PairType) => () => {
     if (isPanning.current) return
     if (
-      (collection.progress === 'Finished' || collection.progress === 'Attested') &&
+      (collection.progress === 'Finished' ||
+        collection.progress === 'Attested') &&
       !collection.hasSubcollections &&
       !collection.hasCompositeProjects
     )
@@ -202,21 +204,19 @@ export default function Galaxy() {
 
       {/* <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} /> */}
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
-        <button
-          className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
-          onClick={() => setShowHelpModal(true)}>
+        <Button varient="primary" onClick={() => setShowHelpModal(true)}>
           Help
           <Help />
-        </button>
+        </Button>
         <p>
           <strong>Click a planet to begin ranking</strong>
         </p>
-        <button
-          className="flex items-center gap-2 whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
-          onClick={() => router.push('/ranking')}>
-          Ranking
-          <PodiumSharp />
-        </button>
+        <div>
+          <Button varient="primary" onClick={() => router.push('/ranking')}>
+            Ranking
+            <PodiumSharp />
+          </Button>
+        </div>
       </div>
     </div>
   )

@@ -23,6 +23,7 @@ import {
 import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Warning } from '@/components/Icon/Warning'
+import Button from '@/components/Button'
 
 interface Props {
   isOpen: boolean
@@ -191,18 +192,13 @@ export const AttestationModal: React.FC<Props> = ({
               <p>{`Estimated cost < $0.05`}</p>
             </div>
             <div className="flex justify-between ">
-              <button
-                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
-                onClick={onClose}>
+              <Button varient="secondary" size="large" onClick={onClose}>
                 Not yet
-              </button>
-              <button
-                className={
-                  'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
-                }
-                onClick={handleCreate}>
+              </Button>
+
+              <Button varient="secondary" size="large" onClick={handleCreate}>
                 {loading ? 'Loading...' : 'Create list'}
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -218,20 +214,16 @@ export const AttestationModal: React.FC<Props> = ({
             </p>
             <div className="flex flex-col items-center justify-center gap-4">
               <a href={agoraUrl} rel="noreferrer" target="_blank">
-                <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
-                  onClick={() => {}}>
+                <Button varient="secondary">
                   View list on Agora
-                  <LinkSharp className="ml-4" />
-                </button>
+                  <LinkSharp />
+                </Button>
               </a>
               <a href={smUrl} rel="noreferrer" target="_blank">
-                <button
-                  className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8"
-                  onClick={() => {}}>
+                <Button varient="secondary">
                   View list on Supermodular
-                  <LinkSharp className="ml-4" />
-                </button>
+                  <LinkSharp />
+                </Button>
               </a>
             </div>
           </div>
