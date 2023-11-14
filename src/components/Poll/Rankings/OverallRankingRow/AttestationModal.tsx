@@ -154,7 +154,6 @@ export const AttestationModal: React.FC<Props> = ({
         },
       ])
 
-      setProgress(ProgressState.Revoking)
       const prevAttestations = await getPrevAttestationIds(
         address,
         SCHEMA_UID,
@@ -162,8 +161,11 @@ export const AttestationModal: React.FC<Props> = ({
         collectionName
       )
 
-      for (const attestation of prevAttestations) {
-        await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
+      if (prevAttestations.length > 0) {
+        setProgress(ProgressState.Revoking)
+        for (const attestation of prevAttestations) {
+          await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
+        }
       }
 
       setProgress(ProgressState.Attesting)
