@@ -21,7 +21,7 @@ export const EditManualModal: React.FC<Props> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex w-96 flex-col gap-5 font-IBM">
-        <p className="text-2xl font-bold">Please note</p>
+        <p className="text-2xl font-bold">Warning</p>
         <p>
           After making manual edits to a category you can&apos;t do any more
           pairwise rankings for that category.

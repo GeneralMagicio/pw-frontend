@@ -1,3 +1,4 @@
+import Button from '@/components/Button'
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 
@@ -27,11 +28,14 @@ export const HelpModalStepOne: React.FC<Props> = ({ onNext }) => {
           src="/images/unlocked-planets.svg"
         />
       </div>
-      <button
-        className="flex h-[50px] items-center justify-center self-end rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
+
+      <Button
+        className="self-end"
+        varient="brand"
+        size="large"
         onClick={onNext}>
-        {'Next'} <ArrowForward className="ml-1" />
-      </button>
+        {'Next'} <ArrowForward />
+      </Button>
     </div>
   )
 }
@@ -47,9 +51,9 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         <p className="max-w-[55%] text-xl font-semibold">
           Jump straight into ranking projects where you have expertise. Your
           initial category allocations can be edited anytime before submitting
-          your list. The more project rankings you complete, the more fine-tuned
-          the project allocations. Leverage your expertise to shape impact in
-          the Optimism ecosystem!
+          your list. The more projects you rank, the more fine-tuned the project
+          allocations. Leverage your expertise to shape impact in the Optimism
+          ecosystem!
         </p>
         <img
           alt="ethers"
@@ -58,16 +62,13 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         />
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
-          onClick={onPrevious}>
-          <ArrowBackward className="mr-4" /> {'Previous'}
-        </button>
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-          onClick={onNext}>
-          {'Next'} <ArrowForward className="ml-1" />
-        </button>
+        <Button varient="secondary" size="large" onClick={onPrevious}>
+          <ArrowBackward /> {'Previous'}
+        </Button>
+
+        <Button varient="brand" size="large" onClick={onNext}>
+          {'Next'} <ArrowForward />
+        </Button>
       </div>
     </div>
   )
@@ -88,7 +89,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
           {`When you are satisfied with your rankings on one planet, you can move
           onto the next! You can make any manual adjustments you would like in
           the "Ranking" section. This is where you can finalize your list and
-          submit to Agora and Supermodular for voting.`}
+          submit to Agora and West for voting.`}
         </p>
         <img
           alt="ethers"
@@ -97,16 +98,12 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
         />
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 text-sm"
-          onClick={onPrevious}>
-          <ArrowBackward className="mr-4" /> {'Previous'}
-        </button>
-        <button
-          className="flex h-[50px] items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-          onClick={onNext}>
-          {`Understood, Let's Go!`} <ArrowForward className="ml-1" />
-        </button>
+        <Button varient="secondary" size="large" onClick={onPrevious}>
+          <ArrowBackward /> {'Previous'}
+        </Button>
+        <Button varient="brand" size="large" onClick={onNext}>
+          {`Understood, Let's Go!`} <ArrowForward />
+        </Button>
       </div>
     </div>
   )

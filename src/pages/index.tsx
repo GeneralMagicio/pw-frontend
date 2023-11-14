@@ -16,6 +16,7 @@ import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
 import { VectorHorizontal4 } from '@/components/Icon/VectorHorizontal4'
 import { Votes } from '@/components/Icon/Votes'
+import Button from '@/components/Button'
 
 export default function Home() {
   return (
@@ -46,10 +47,7 @@ export default function Home() {
               Curate RetroPGF 3 Voting Lists with Pairwise
             </h2>
             <p className="text-2xl ">Making OP Allocations Easy!</p>
-            <ConnectWalletButton
-              alternativeText="Start"
-              className="flex h-12 items-center bg-black"
-            />
+            <ConnectWalletButton alternativeText="Start" />
           </div>
         </div>
         <Image
@@ -81,10 +79,10 @@ export default function Home() {
           and have fun doing it!
         </p>
         <a href="#section1">
-          <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
+          <Button varient="brand" size="large">
             Learn more
-            <ArrowDown className="ml-2" />
-          </button>
+            <ArrowDown />
+          </Button>
         </a>
         <Star className="absolute -bottom-20 -left-28" height={35} width={35} />
       </div>
@@ -116,9 +114,9 @@ export default function Home() {
           <h3 className="text-[32px] font-bold">Streamlining List Creation</h3>
           <p className="text-lg font-medium">
             With Pairwise, you can easily create, edit, and share curated lists
-            of projects, to be imported directly into Agora and Supermodular for
-            final voting. By progressing through planets and moons, the process
-            of list-making is engaging and fun!
+            of projects, to be imported directly into Agora and West for final
+            voting. By progressing through planets and moons, the process of
+            list-making is engaging and fun!
           </p>
           <CollectionsLeft className="absolute -left-[350px] -mt-[300px]" />
         </div>
@@ -144,7 +142,7 @@ export default function Home() {
           </p>
           <img
             alt="Voted Projects"
-            className="w-3/4 absolute -left-[160px] -mt-[98px]"
+            className="absolute -left-[160px] -mt-[98px] w-3/4"
             src="/images/voted-projects.png"
           />
         </div>
@@ -153,7 +151,7 @@ export default function Home() {
       <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
         <Star className="absolute right-0 -top-40" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
-          Ready to Shape the Galaxy?
+          Ready to shape the solar system?
         </h2>
         <p className="text-[32px]  font-medium text-black">
           Kickstart Your Journey: Connect Your Wallet Now

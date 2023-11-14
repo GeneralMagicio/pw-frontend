@@ -1,10 +1,11 @@
-import { Close } from '@/components/Icon/Close'
-import { sanitize } from 'dompurify'
-import Image from 'next/image'
-import { Layers } from '@/components/Icon/Layers'
 import { PairType, PairTypeMetaData } from '@/types/Pairs/Pair'
 import { useEffect, useState } from 'react'
+
+import { Close } from '@/components/Icon/Close'
+import Image from 'next/image'
+import { Layers } from '@/components/Icon/Layers'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { sanitize } from 'dompurify'
 
 interface VoteModalProps {
   item: PairType
@@ -24,15 +25,15 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
     <>
       <div className="relative flex  min-w-[700px] flex-col  gap-6">
         <div className="flex flex-col">
-          <header className="flex justify-between mb-2">
+          <header className="mb-2 flex justify-between">
             <h3 className="text-2xl font-bold ">{item.name}</h3>
             <Close className="cursor-pointer" onClick={handeClose} />
           </header>
           {item.numOfChildren > 0 && (
-            <div className="self-start p-1 border rounded-lg border-black-3">
-              <div className="flex items-center gap-2 px-3 py-1 border rounded-lg border-gray-10">
+            <div className="self-start rounded-lg border border-black-3 p-1">
+              <div className="flex items-center gap-2 rounded-lg border border-gray-10 px-3 py-1">
                 <Layers />
-                <span className="text-sm font-IBM">
+                <span className="font-IBM text-sm">
                   {`${item.numOfChildren} + Projects`}
                 </span>
               </div>
@@ -49,7 +50,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                 src={item.image || '/nip.png'}
                 width={360}
               />
-              <div className="max-w-[360px] overflow-hidden whitespace-nowrap text-ellipsis ">
+              <div className="max-w-[360px] overflow-hidden text-ellipsis whitespace-nowrap ">
                 <span className="font-medium"> Website: </span>
                 <a
                   className="text-blue-400"
@@ -60,7 +61,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                 </a>
               </div>
             </div>
-            <div className="flex flex-col gap-6 px-4 overflow-auto text-lg font-Inter">
+            <div className="flex flex-col gap-6 overflow-auto px-4 font-Inter text-lg">
               <div className="flex flex-col gap-2">
                 <p
                   dangerouslySetInnerHTML={{
@@ -84,9 +85,9 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                   />
                 </div>
               )}
-              {Boolean(metadata?.contributionLinks?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Contribution Links:</b>
+              <div className="flex flex-col gap-2">
+                <b>Contribution Links:</b>
+                {Boolean(metadata?.contributionLinks?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.contributionLinks.map((cLink) => (
                       <li key={cLink.url}>
@@ -95,17 +96,21 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                           href={cLink.url}
                           rel="noreferrer"
                           target="_blank">
-                          {cLink.type}
+                          {cLink.description}
                         </a>{' '}
-                        - {cLink.description}
+                        - {cLink.type}
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-              {Boolean(metadata?.impactMetrics?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Impact Metrics:</b>
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No contribution links</li>
+                  </ul>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <b>Impact Metrics:</b>
+                {Boolean(metadata?.impactMetrics?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.impactMetrics.map((metric) => (
                       <li key={metric.url}>
@@ -120,11 +125,15 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-              {Boolean(metadata?.fundingSources?.length) && (
-                <div className="flex flex-col gap-2">
-                  <b>Funding Sources:</b>
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No impact metrics</li>
+                  </ul>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <b>Funding Sources:</b>
+                {Boolean(metadata?.fundingSources?.length) ? (
                   <ul className="list-disc pl-8">
                     {metadata?.fundingSources.map((fund) => (
                       <li key={fund.type}>
@@ -133,21 +142,25 @@ export const VoteModal: React.FC<VoteModalProps> = ({ handeClose, item }) => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                ) : (
+                  <ul className="list-disc pl-8">
+                    <li>No funding sources</li>
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           {!item.childProjects?.length ? null : (
             <div className="mt-6 mb-10 ">
-              <h5 className="pb-2 text-lg border-b border-b-gray-10">
+              <h5 className="border-b border-b-gray-10 pb-2 text-lg">
                 {item.childProjects.length} projects
               </h5>
-              <div className="flex flex-wrap w-full mt-4 gap-7">
+              <div className="mt-4 flex w-full flex-wrap gap-7">
                 {item.childProjects.map((child) => (
                   <div className="flex w-1/4 gap-4" key={child.id}>
                     <Image
                       alt={item.name}
-                      className="w-12 h-12 rounded shrink-0"
+                      className="h-12 w-12 shrink-0 rounded"
                       height={48}
                       src={child.image}
                       width={48}

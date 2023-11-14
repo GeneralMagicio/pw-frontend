@@ -168,7 +168,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
               collectionName={collection.name}
               colletionDescription={collection.impactDescription}
               isOpen={isAttestationModalOpen}
-              onClose={() => setIsAttestationModalOpen(false)}
+              onClose={() => window.location.reload()}
             />
           )}
           {isEditManualModalOpen && (
