@@ -162,7 +162,7 @@ export const AttestationModal: React.FC<Props> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
         className={cn(
-          'relative flex min-h-[250px] w-[600px] flex-col gap-10 px-2 font-IBM'
+          'relative flex min-h-[250px] w-[600px] flex-col gap-10 font-IBM'
         )}>
         {step === 0 && (
           <div className="flex flex-col gap-6">
@@ -205,15 +205,17 @@ export const AttestationModal: React.FC<Props> = ({
         )}
 
         {step === 1 && (
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-5">
             <header className="mb-2 flex justify-end">
               <Close className="cursor-pointer" onClick={onClose} />
             </header>
-            <p className="text-xl">
-              The list has been created, you can access it shortly on Agora or
-              West.
+            <p className="text-center text-2xl font-bold">
+              Your list has been created!
             </p>
-            <div className="flex flex-col items-center justify-center gap-4">
+            <p className="mb-5 text-center text-xl">
+              Great work, you can access the list shortly on Agora or West.
+            </p>
+            <div className="mb-5 flex flex-col items-center justify-center gap-5">
               <a href={agoraUrl} rel="noreferrer" target="_blank">
                 <button
                   className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
