@@ -34,6 +34,35 @@ interface Props {
 
 type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
 
+enum ProgressState {
+  'Initial',
+  'Wallet_Prep',
+  'Creating',
+  'Revoking',
+  'Attesting',
+  'Finished',
+  'Error',
+}
+
+const createButtonText = (state: ProgressState) => {
+  switch (state) {
+    case ProgressState.Initial:
+      return "Create list"
+    case ProgressState.Wallet_Prep:
+      return "Preparing Wallet..."
+    case ProgressState.Creating:
+      return "Preparing List..."
+    case ProgressState.Revoking:
+      return "Revoking Previous Lists..."
+    case ProgressState.Attesting:
+      return "Attesting..."
+    case ProgressState.Error:
+      return "Error! Try again later."
+    case ProgressState.Finished:
+      return "Create list"
+  }
+}
+
 export const AttestationModal: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -42,7 +71,8 @@ export const AttestationModal: React.FC<Props> = ({
   collectionId,
 }) => {
   const [step, setSteps] = useState<number>(0)
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
+  const [progress, setProgress] = useState<ProgressState>(ProgressState.Initial)
   const [agoraUrl, setAgoraUrl] = useState('')
   const [westUrl, setWestUrl] = useState('')
   const [ranking, setRanking] = useState<CollectionRanking>()
@@ -61,23 +91,17 @@ export const AttestationModal: React.FC<Props> = ({
   }, [collectionId])
 
   const handleCreate = async () => {
-    setLoading(true)
     try {
       await attest()
     } catch (e) {
       console.error(e)
     }
-    setLoading(false)
   }
 
   const attest = async () => {
     if (!ranking) return
 
-    const item = await convertRankingToAttestationFormat(
-      ranking,
-      collectionName,
-      colletionDescription
-    )
+    setProgress(ProgressState.Wallet_Prep)
 
     if (!isConnected) {
       try {
@@ -108,28 +132,41 @@ export const AttestationModal: React.FC<Props> = ({
     schemaRegistry.connect(signer as any)
     const schema = await schemaRegistry.getSchema({ uid: SCHEMA_UID })
     const schemaEncoder = new SchemaEncoder(schema.schema)
-    const encodedData = schemaEncoder.encodeData([
-      { name: 'listName', type: 'string', value: item.listName },
-      {
-        name: 'listMetadataPtrType',
-        type: 'uint256',
-        value: item.listMetadataPtrType,
-      },
-      { name: 'listMetadataPtr', type: 'string', value: item.listMetadataPtr },
-    ])
-
-    const prevAttestations = await getPrevAttestationIds(
-      address,
-      SCHEMA_UID,
-      easConfig.gqlUrl,
-      collectionName
-    )
-
+    setProgress(ProgressState.Creating)
     try {
+      const item = await convertRankingToAttestationFormat(
+        ranking,
+        collectionName,
+        colletionDescription
+      )
+
+      const encodedData = schemaEncoder.encodeData([
+        { name: 'listName', type: 'string', value: item.listName },
+        {
+          name: 'listMetadataPtrType',
+          type: 'uint256',
+          value: item.listMetadataPtrType,
+        },
+        {
+          name: 'listMetadataPtr',
+          type: 'string',
+          value: item.listMetadataPtr,
+        },
+      ])
+
+      setProgress(ProgressState.Revoking)
+      const prevAttestations = await getPrevAttestationIds(
+        address,
+        SCHEMA_UID,
+        easConfig.gqlUrl,
+        collectionName
+      )
+
       for (const attestation of prevAttestations) {
         await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
       }
 
+      setProgress(ProgressState.Attesting)
       const tx = await eas.attest({
         schema: SCHEMA_UID,
         data: {
@@ -145,6 +182,7 @@ export const AttestationModal: React.FC<Props> = ({
       await axiosInstance.post('/flow/reportAttest', {
         cid: collectionId,
       })
+      setProgress(ProgressState.Finished)
       setAgoraUrl(
         `https://vote.optimism.io/retropgf/3/list/${newAttestationUID}`
       )
@@ -152,12 +190,13 @@ export const AttestationModal: React.FC<Props> = ({
       setSteps(1)
     } catch (e) {
       console.error('error on sending tx:', e)
+      setProgress(ProgressState.Error)
       // setUrl(
       //   `https://optimism-goerli-bedrock.easscan.org/address/0xF23eA0b5F14afcbe532A1df273F7B233EBe41C78`
       // )
     }
   }
-  const isLessThanLastStep = step < 4
+  const notYetDisabled = progress !== ProgressState.Initial && progress !== ProgressState.Finished && progress !== ProgressState.Error
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div
@@ -189,7 +228,10 @@ export const AttestationModal: React.FC<Props> = ({
             </div>
             <div className="flex justify-between ">
               <button
-                className="flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8 "
+                className={cn("flex h-[50px] items-center justify-center rounded-full border border-black p-2 px-8", {
+                  "opacity-50": notYetDisabled,
+                })}
+                disabled={notYetDisabled}
                 onClick={onClose}>
                 Not yet
               </button>
@@ -197,8 +239,9 @@ export const AttestationModal: React.FC<Props> = ({
                 className={
                   'flex h-12 w-fit items-center self-center rounded-full bg-black px-8 py-2  text-white'
                 }
+                disabled={progress !== ProgressState.Initial}
                 onClick={handleCreate}>
-                {loading ? 'Loading...' : 'Create list'}
+                {createButtonText(progress)}
               </button>
             </div>
           </div>
