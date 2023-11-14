@@ -5,11 +5,15 @@ import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 
 import { ReactNode } from 'react'
+import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   WEB3_CHAINS,
-  [publicProvider()]
+  [
+    infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY || '' }),
+    publicProvider(),
+  ]
 )
 const { connectors } = getDefaultWallets({
   appName: SITE_NAME,
