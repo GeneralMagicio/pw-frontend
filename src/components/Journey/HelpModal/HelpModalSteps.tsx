@@ -47,9 +47,9 @@ export const HelpModalStepTwo: React.FC<StepTwoProps> = ({
         <p className="max-w-[55%] text-xl font-semibold">
           Jump straight into ranking projects where you have expertise. Your
           initial category allocations can be edited anytime before submitting
-          your list. The more project rankings you complete, the more fine-tuned
-          the project allocations. Leverage your expertise to shape impact in
-          the Optimism ecosystem!
+          your list. The more projects you rank, the more fine-tuned the project
+          allocations. Leverage your expertise to shape impact in the Optimism
+          ecosystem!
         </p>
         <img
           alt="ethers"
@@ -88,7 +88,7 @@ export const HelpModalStepThree: React.FC<StepTwoProps> = ({
           {`When you are satisfied with your rankings on one planet, you can move
           onto the next! You can make any manual adjustments you would like in
           the "Ranking" section. This is where you can finalize your list and
-          submit to Agora and Supermodular for voting.`}
+          submit to Agora and West for voting.`}
         </p>
         <img
           alt="ethers"

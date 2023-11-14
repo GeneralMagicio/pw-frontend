@@ -7,13 +7,14 @@ import {
   useRef,
   useState,
 } from 'react'
+
+import { Disabled } from '@/components/Icon/Disabled'
+import { EditingCollectionRanking } from './edit-logic/edit'
 import { PadlockLocked } from '@/components/Icon/Padlock-Locked'
 import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
-import debounce from 'lodash.debounce'
-import cn from 'classnames'
-import { EditingCollectionRanking } from './edit-logic/edit'
-import { Disabled } from '@/components/Icon/Disabled'
 import { Warning } from '../../Icon/Warning'
+import cn from 'classnames'
+import debounce from 'lodash.debounce'
 
 interface Props {
   value: number
@@ -99,13 +100,7 @@ export const EditTextField: FC<Props> = ({
           {state === 'locked' ? (
             <PadlockLocked height={25} width={25} />
           ) : state === 'disabled' ? (
-            <div title="Rank more projects in this category to unlock.">
-              <PadlockLocked
-                height={25}
-                width={25}
-                className="text-[#9e9d9d]"
-              />
-            </div>
+            <PadlockLocked height={25} width={25} className="text-[#9e9d9d]" />
           ) : (
             <PadlockUnlocked fill="blue" height={25} width={25} />
           )}
