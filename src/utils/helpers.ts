@@ -71,3 +71,10 @@ export const toFixedNumber = (num: number, digits: number) => {
   const pow = Math.pow(10, digits)
   return Math.round(num * pow) / pow
 }
+
+export const formatRankingValue = (value: number) =>
+  value
+    ? (value * 3e7).toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      })
+    : '_'
