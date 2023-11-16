@@ -10,9 +10,11 @@ import { Pencil } from '../Icon/Pencil'
 import { Plus } from '../Icon/Plus'
 import { useRouter } from 'next/router'
 import Button from '../Button'
+import { EditManualModal } from '../Poll/Rankings/OverallRankingRow/EditManualModal'
 
 export const RankingConfirmationModal: React.FC = () => {
   const [open, setOpen] = useState(false)
+  const [editConfirmationOpen, setEditConfirmationOpen] = useState(false)
   const [rankings, setRankings] = useState<CollectionRanking>()
   const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
@@ -33,6 +35,7 @@ export const RankingConfirmationModal: React.FC = () => {
   return (
     <>
       <div className="flex max-w-[800px]  flex-col justify-center gap-5 font-IBM">
+       {collection && <EditManualModal isOpen={editConfirmationOpen} onClose={() => setEditConfirmationOpen(false)} collectionId={collection.id} />}
         {open && rankings && collection && (
           <AttestationModal
             collectionId={collection.id}
@@ -42,7 +45,7 @@ export const RankingConfirmationModal: React.FC = () => {
             onClose={() => (window.location.href = '/galaxy')}
           />
         )}
-        <header className="mb-2 flex w-full ">
+        <header className="flex w-full mb-2 ">
           <h3 className="text-2xl font-bold">Well done!</h3>
         </header>
 
@@ -52,25 +55,25 @@ export const RankingConfirmationModal: React.FC = () => {
           can create list or continue ranking other projects.
         </p>
         <div className="min-h-[270px] rounded-xl bg-grayish py-4 px-6">
-          <header className="flex items-center justify-between border-b border-gray-10 pb-4">
-            <p className="font-Inter text-base font-medium">
+          <header className="flex items-center justify-between pb-4 border-b border-gray-10">
+            <p className="text-base font-medium font-Inter">
               Review your ranking
             </p>
             <Button
               varient="secondary"
               className="rounded-xl"
-              onClick={() => router.push(`/ranking?c=${collection?.id}`)}>
+              onClick={() => setEditConfirmationOpen(true)}>
               Edit
               <Pencil />
             </Button>
           </header>
           <div className="mt-4 flex max-h-[160px] flex-col gap-4 overflow-y-auto font-Inter text-base">
             {rankings && (
-              <div className="flex items-center gap-6 rounded-xl text-black">
-                <span className="flex grow items-center gap-4 font-medium ">
+              <div className="flex items-center gap-6 text-black rounded-xl">
+                <span className="flex items-center gap-4 font-medium grow ">
                   {rankings.name}
                 </span>
-                <span className="relative flex w-20 items-center text-right font-medium">
+                <span className="relative flex items-center w-20 font-medium text-right">
                   <span className="">
                     {(rankings?.share * 3e7).toLocaleString(undefined, {
                       maximumFractionDigits: 2,
@@ -92,10 +95,10 @@ export const RankingConfirmationModal: React.FC = () => {
             )}
             {rankings?.ranking.map((ranking) => (
               <div
-                className="flex items-center gap-6 rounded-xl pl-6 text-black"
+                className="flex items-center gap-6 pl-6 text-black rounded-xl"
                 key={ranking.id}>
                 <span className="grow">{ranking.name} </span>
-                <span className="flex w-20 items-center text-right">
+                <span className="flex items-center w-20 text-right">
                   <span className="">
                     {(ranking.share * 3e7).toLocaleString(undefined, {
                       maximumFractionDigits: 2,
