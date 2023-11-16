@@ -7,8 +7,10 @@ import Button, { ButtonProps } from '../Button'
 export const ConnectWalletButton: React.FC<
   {
     alternativeText?: string
-  } & ButtonProps
-> = ({ alternativeText, ...props }) => {
+    activeClassName?: string
+    inactiveClassName?: string
+  } & Omit<ButtonProps, 'className'>
+> = ({ alternativeText, activeClassName, inactiveClassName, ...props }) => {
   const router = useRouter()
   const { chains, switchNetworkAsync } = useSwitchNetwork()
   return (
@@ -20,6 +22,7 @@ export const ConnectWalletButton: React.FC<
             <Button
               varient="brand"
               size="large"
+              className={inactiveClassName}
               {...props}
               onClick={openConnectModal}>
               <span className="font-bold ">Connect Wallet</span>
@@ -29,6 +32,7 @@ export const ConnectWalletButton: React.FC<
         return (
           <Button
             size="large"
+            className={activeClassName}
             {...props}
             varient="secondary"
             onClick={

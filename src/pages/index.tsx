@@ -158,11 +158,11 @@ export default function Home() {
         </p>
         <ConnectWalletButton
           alternativeText="Start"
-          className="flex h-12 items-center bg-black"
+          activeClassName="flex h-12 items-center"
         />
         <Star className="absolute -bottom-20 -left-20" height={35} width={35} />
       </div>
-      <footer className="flex w-full justify-between px-20 py-8">
+      <footer className="flex justify-between w-full px-20 py-8">
         <div className="flex gap-6">
           <a href="https://twitter.com/generalmagicio">
             <Twitter />
