@@ -10,6 +10,7 @@ import { Pencil } from '../Icon/Pencil'
 import { Plus } from '../Icon/Plus'
 import { useRouter } from 'next/router'
 import Button from '../Button'
+import { formatRankingValue } from '@/utils/helpers'
 
 export const RankingConfirmationModal: React.FC = () => {
   const [open, setOpen] = useState(false)
@@ -71,11 +72,7 @@ export const RankingConfirmationModal: React.FC = () => {
                   {rankings.name}
                 </span>
                 <span className="relative flex w-20 items-center text-right font-medium">
-                  <span className="">
-                    {(rankings?.share * 3e7).toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </span>
+                  <span className="">{formatRankingValue(rankings.share)}</span>
                   <span className="absolute -right-5 mb-1 ml-1 align-super text-[8px] text-red">
                     OP
                   </span>
@@ -96,11 +93,7 @@ export const RankingConfirmationModal: React.FC = () => {
                 key={ranking.id}>
                 <span className="grow">{ranking.name} </span>
                 <span className="flex w-20 items-center text-right">
-                  <span className="">
-                    {(ranking.share * 3e7).toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </span>
+                  <span className="">{formatRankingValue(ranking.share)}</span>
                 </span>
                 <span className="flex w-[20%] items-center justify-center">
                   <span className="mr-1 text-[8px] text-red">%</span>
