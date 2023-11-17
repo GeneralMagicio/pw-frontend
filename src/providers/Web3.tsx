@@ -5,12 +5,18 @@ import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 
 import { ReactNode } from 'react'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   WEB3_CHAINS,
   [
+    jsonRpcProvider({
+      rpc: () => ({
+        http: process.env.NEXT_PUBLIC_QUICKNODE_HTTP_PROVIDER_URL || ''
+      }),
+    }),
     infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY || '' }),
     publicProvider(),
   ]
