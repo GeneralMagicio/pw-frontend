@@ -39,36 +39,24 @@ export const EditTextField: FC<Props> = ({
   useEffect(() => {
     // @ts-ignore
     inputRef.current!.value = value
-      ? value.toLocaleString(undefined, {
-          maximumFractionDigits: 0,
-          minimumFractionDigits: 0,
-        })
-      : ''
   }, [value])
 
   const debounceChange = useCallback(
     debounce((newValue: number) => {
-      if (newValue) onChange(+newValue)
+      if (newValue != 0) onChange(+newValue)
       else {
         onChange(0)
         // @ts-ignore
         inputRef.current!.value = ''
       }
-    }, 1000),
+    }, 500),
     [onChange]
   )
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(
-      event.target.value
-        .split('')
-        .filter((char) => char !== ',')
-        .join('')
-    )
-    inputRef.current!.value = newValue.toLocaleString(undefined, {
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    })
+    const newValue = Number(event.target.value)
+    inputRef.current!.value = event.target.value
+
     debounceChange(newValue)
   }
 
