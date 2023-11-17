@@ -3,17 +3,18 @@ import { useEffect, useState } from 'react'
 
 import { ArrowForward } from '../Icon/ArrowForward'
 import { AttestationModal } from '../Poll/Rankings/OverallRankingRow/AttestationModal'
-import { Check } from '../Icon/Check'
 import { CollectionRanking } from '../Poll/Rankings/edit-logic/edit'
 import { PairType } from '@/types/Pairs/Pair'
 import { Pencil } from '../Icon/Pencil'
 import { Plus } from '../Icon/Plus'
 import { useRouter } from 'next/router'
 import Button from '../Button'
+import { EditManualModal } from '../Poll/Rankings/OverallRankingRow/EditManualModal'
 import { formatRankingValue } from '@/utils/helpers'
 
 export const RankingConfirmationModal: React.FC = () => {
   const [open, setOpen] = useState(false)
+  const [editConfirmationOpen, setEditConfirmationOpen] = useState(false)
   const [rankings, setRankings] = useState<CollectionRanking>()
   const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
@@ -34,6 +35,13 @@ export const RankingConfirmationModal: React.FC = () => {
   return (
     <>
       <div className="flex max-w-[800px]  flex-col justify-center gap-5 font-IBM">
+        {collection && (
+          <EditManualModal
+            isOpen={editConfirmationOpen}
+            onClose={() => setEditConfirmationOpen(false)}
+            collectionId={collection.id}
+          />
+        )}
         {open && rankings && collection && (
           <AttestationModal
             collectionId={collection.id}
@@ -60,7 +68,7 @@ export const RankingConfirmationModal: React.FC = () => {
             <Button
               varient="secondary"
               className="rounded-xl"
-              onClick={() => router.push(`/ranking?c=${collection?.id}`)}>
+              onClick={() => setEditConfirmationOpen(true)}>
               Edit
               <Pencil />
             </Button>

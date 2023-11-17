@@ -20,7 +20,7 @@ import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { getOverallRanking } from '@/utils/poll'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 
 export const flattenRankingData = (
   input: CollectionRanking
@@ -32,11 +32,15 @@ export const flattenRankingData = (
 }
 
 export default function RankingPage() {
+  const router = useRouter()
   const [rankings, setRankings] = useState<EditingCollectionRanking>()
   const [tempRankings, setTempRankings] = useState<EditingCollectionRanking>()
   const [editMode, setEditMode] = useState(false)
-  // const [isOpen, setOpen] = useState(false)
   const [error, setError] = useState(false)
+  
+  useEffect(() => {
+    setEditMode(router.query.edit === 'true' ? true : false)
+  }, [router.query.edit])
 
   const handleBack = () => {
     if (editMode) {
@@ -97,7 +101,7 @@ export default function RankingPage() {
   if (!rankings || !tempRankings) {
     return (
       <div
-        className="flex w-full items-center justify-center"
+        className="flex items-center justify-center w-full"
         style={{ height: 'calc(100vh - 60px)' }}>
         <LoadingSpinner />
       </div>
