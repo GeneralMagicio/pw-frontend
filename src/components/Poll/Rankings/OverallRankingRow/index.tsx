@@ -15,6 +15,7 @@ import { PairsType } from '../../../../types/Pairs'
 import { ProjectContextMenu } from './ProjectContextMenu'
 import { useCollapse } from 'react-collapsed'
 import { EditManualModal } from './EditManualModal'
+import { formatRankingValue } from '@/utils/helpers'
 
 interface RankingProps {
   data: EditingProjectRanking
@@ -37,12 +38,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
       <span className="flex w-48 items-center justify-end">
         {!editMode ? (
           <>
-            <span className="">
-              {(data.share * 3e7).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </span>
+            <span className="">{formatRankingValue(data.share)}</span>
             <span className="mb-1 ml-1 align-super text-[8px] text-red">
               OP
             </span>
@@ -120,12 +116,7 @@ export const OverallRankingHeader: React.FC<HeaderProps> = ({
         <span className="flex w-48 items-center justify-end">
           {!editMode ? (
             <>
-              <span className="">
-                {(data.share * 3e7).toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
-              </span>
+              <span className="">{formatRankingValue(data.share)}</span>
               <span className="mb-1 ml-1 align-super text-[8px] text-red">
                 OP
               </span>

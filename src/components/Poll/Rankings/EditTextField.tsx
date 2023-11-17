@@ -38,10 +38,12 @@ export const EditTextField: FC<Props> = ({
 
   useEffect(() => {
     // @ts-ignore
-    inputRef.current!.value = value.toLocaleString(undefined, {
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    })
+    inputRef.current!.value = value
+      ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0,
+        })
+      : ''
   }, [value])
 
   const debounceChange = useCallback(
@@ -50,7 +52,7 @@ export const EditTextField: FC<Props> = ({
       else {
         onChange(0)
         // @ts-ignore
-        inputRef.current!.value = 0
+        inputRef.current!.value = ''
       }
     }, 1000),
     [onChange]

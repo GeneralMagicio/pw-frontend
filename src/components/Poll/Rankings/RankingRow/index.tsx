@@ -1,5 +1,6 @@
 import { Move } from '@/components/Icon/Move'
 import { RankingItem } from '@/types/Ranking'
+import { formatRankingValue } from '@/utils/helpers'
 
 interface RankingProps {
   data: RankingItem
@@ -18,11 +19,7 @@ export const RankingRow: React.FC<RankingProps> = ({ data }) => {
         </span>
       </span>
       <span className="flex w-36 items-center">
-        <span className="">
-          {(data.share * 3e7).toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-          })}
-        </span>
+        <span className="">{formatRankingValue(data.share)}</span>
         <span className="mb-1 ml-1 align-super text-[8px] text-red">OP</span>
       </span>
     </div>
