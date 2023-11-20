@@ -15,18 +15,18 @@ export const EditManualModal: React.FC<Props> = ({
   const handleOkClick = async () => {
     if (!collectionId) return
     await finishCollections(collectionId)
-    window.location.href = `/ranking?c=${collectionId}`
+    window.location.href = `/ranking?c=${collectionId}&edit=true`
   }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="flex w-96 flex-col gap-5 font-IBM">
+      <div className="flex flex-col gap-5 w-96 font-IBM">
         <p className="text-2xl font-bold">Warning</p>
         <p>
           After making manual edits to a category you can&apos;t do any more
           pairwise rankings for that category.
         </p>
-        <div className="flex w-full justify-center gap-5">
+        <div className="flex justify-center w-full gap-5">
           <button
             className={
               'flex h-12 w-fit items-center self-center rounded-full border border-black px-8 py-2'

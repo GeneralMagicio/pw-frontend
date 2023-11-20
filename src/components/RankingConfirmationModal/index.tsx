@@ -3,16 +3,18 @@ import { useEffect, useState } from 'react'
 
 import { ArrowForward } from '../Icon/ArrowForward'
 import { AttestationModal } from '../Poll/Rankings/OverallRankingRow/AttestationModal'
-import { Check } from '../Icon/Check'
 import { CollectionRanking } from '../Poll/Rankings/edit-logic/edit'
 import { PairType } from '@/types/Pairs/Pair'
 import { Pencil } from '../Icon/Pencil'
 import { Plus } from '../Icon/Plus'
 import { useRouter } from 'next/router'
 import Button from '../Button'
+import { EditManualModal } from '../Poll/Rankings/OverallRankingRow/EditManualModal'
+import { formatRankingValue } from '@/utils/helpers'
 
 export const RankingConfirmationModal: React.FC = () => {
   const [open, setOpen] = useState(false)
+  const [editConfirmationOpen, setEditConfirmationOpen] = useState(false)
   const [rankings, setRankings] = useState<CollectionRanking>()
   const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
@@ -33,6 +35,13 @@ export const RankingConfirmationModal: React.FC = () => {
   return (
     <>
       <div className="flex max-w-[800px]  flex-col justify-center gap-5 font-IBM">
+        {collection && (
+          <EditManualModal
+            isOpen={editConfirmationOpen}
+            onClose={() => setEditConfirmationOpen(false)}
+            collectionId={collection.id}
+          />
+        )}
         {open && rankings && collection && (
           <AttestationModal
             collectionId={collection.id}
@@ -59,7 +68,7 @@ export const RankingConfirmationModal: React.FC = () => {
             <Button
               varient="secondary"
               className="rounded-xl"
-              onClick={() => router.push(`/ranking?c=${collection?.id}`)}>
+              onClick={() => setEditConfirmationOpen(true)}>
               Edit
               <Pencil />
             </Button>
@@ -71,11 +80,7 @@ export const RankingConfirmationModal: React.FC = () => {
                   {rankings.name}
                 </span>
                 <span className="relative flex w-20 items-center text-right font-medium">
-                  <span className="">
-                    {(rankings?.share * 3e7).toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </span>
+                  <span className="">{formatRankingValue(rankings.share)}</span>
                   <span className="absolute -right-5 mb-1 ml-1 align-super text-[8px] text-red">
                     OP
                   </span>
@@ -96,11 +101,7 @@ export const RankingConfirmationModal: React.FC = () => {
                 key={ranking.id}>
                 <span className="grow">{ranking.name} </span>
                 <span className="flex w-20 items-center text-right">
-                  <span className="">
-                    {(ranking.share * 3e7).toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </span>
+                  <span className="">{formatRankingValue(ranking.share)}</span>
                 </span>
                 <span className="flex w-[20%] items-center justify-center">
                   <span className="mr-1 text-[8px] text-red">%</span>
