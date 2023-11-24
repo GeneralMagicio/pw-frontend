@@ -15,12 +15,14 @@ import { PadlockUnlocked } from '@/components/Icon/Padlock-Unlocked'
 import { Warning } from '../../Icon/Warning'
 import cn from 'classnames'
 import debounce from 'lodash.debounce'
+import Tooltip from '@/components/Tooltip'
 
 interface Props {
   value: number
   state: EditingCollectionRanking['state']
   error: boolean
   focus: boolean
+  type?: 'project' | 'category'
   onChange: (value: number) => void
   onLockClick: () => void
 }
@@ -32,6 +34,7 @@ export const EditTextField: FC<Props> = ({
   onChange,
   onLockClick,
   error,
+  type = 'category',
 }) => {
   const [isFocused, setFocus] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -74,7 +77,6 @@ export const EditTextField: FC<Props> = ({
   return (
     <>
       <div
-        title={titleMap[state]}
         className={cn(
           `flex items-center gap-1 rounded-lg border ${
             error ? 'border-[#ff0000]' : 'border-gray-300'
@@ -88,11 +90,21 @@ export const EditTextField: FC<Props> = ({
             if (!error && state !== 'disabled') onLockClick()
           }}>
           {state === 'locked' ? (
-            <PadlockLocked height={25} width={25} />
+            <Tooltip text={`Click here to unlock the OP to this ${type}`}>
+              <PadlockLocked height={25} width={25} />
+            </Tooltip>
           ) : state === 'disabled' ? (
-            <PadlockLocked height={25} width={25} className="text-[#9e9d9d]" />
+            <Tooltip text={titleMap[state]}>
+              <PadlockLocked
+                height={25}
+                width={25}
+                className="text-[#9e9d9d]"
+              />
+            </Tooltip>
           ) : (
-            <PadlockUnlocked fill="blue" height={25} width={25} />
+            <Tooltip text={`Click here to lock the OP to this ${type}`}>
+              <PadlockUnlocked fill="blue" height={25} width={25} />
+            </Tooltip>
           )}
         </div>
         <input
