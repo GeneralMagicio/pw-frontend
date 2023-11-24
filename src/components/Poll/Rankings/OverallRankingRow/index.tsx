@@ -40,7 +40,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
           <>
             <span className="">{formatRankingValue(data.share)}</span>
             <span className="mb-1 ml-1 align-super text-[8px] text-red">
-              OP
+              OPP
             </span>
           </>
         ) : (
@@ -51,6 +51,7 @@ export const OverallRankingRow: React.FC<RankingProps> = ({
             onChange={onEditChange}
             onLockClick={onLockClick}
             value={Math.round(data.share * 3e7)}
+            type="project"
           />
         )}
       </span>
