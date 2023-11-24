@@ -1,5 +1,7 @@
 import '@/styles/globals.css'
 
+import { useEffect, useLayoutEffect, useState } from 'react'
+
 import type { AppProps } from 'next/app'
 import { AuthGuard } from '@/components/Auth/AuthGuard'
 import { MainLayout } from '@/components/layout/MainLayout'
@@ -8,7 +10,7 @@ import { Web3Provider } from '@/providers/Web3'
 import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
 import localFont from 'next/font/local'
-import { useLayoutEffect } from 'react'
+import { useWindowWidth } from '@react-hook/window-size'
 
 const IBMFont = localFont({
   src: [
@@ -62,6 +64,28 @@ export default function App({ Component, pageProps }: AppProps) {
       axiosInstance.defaults.headers.common['auth'] = `${token}`
     }
   }, [])
+  const [smallscreen, setSmallScreen] = useState(false)
+  const width = useWindowWidth()
+
+  useEffect(() => {
+    if (width < 1024) {
+      setSmallScreen(true)
+    } else {
+      setSmallScreen(false)
+    }
+  }, [width])
+
+  if (smallscreen) {
+    return (
+      <div className="main-layout flex min-h-screen shrink-0 flex-col items-center justify-center bg-cover bg-no-repeat font-IBM text-black">
+        <div className="flex w-96 flex-col gap-3 p-10 text-center">
+          <div className="text-xl font-bold">Large screens only</div>
+          Pairwise is not currently available on mobile and tablet devices.
+          Please visit on a desktop or laptop computer.
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
