@@ -18,6 +18,16 @@ interface HeaderProps {
   canFinish?: boolean
 }
 
+const calculateProgressPercentage = (voted: number, total: number) => {
+  if (total === 0) return 4
+
+  if (voted < Math.ceil(total / 2)) {
+    return Math.max((voted / total) * 100 * 2, 4)
+  } else {
+    return Math.max((voted / total) * 100, 4)
+  }
+}
+
 export const Header: React.FC<HeaderProps> = ({
   question,
   handleFinishVoting,
@@ -28,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   name,
 }) => {
   const router = useRouter()
-  const progressPercentage = total ? Math.max((voted / total) * 100, 4) : 4
+  const progressPercentage = calculateProgressPercentage(voted, total)
   const minVotesToUnlock = Math.ceil(total * threshold)
   const voteCountsToUnklock = minVotesToUnlock - voted
 
@@ -78,6 +88,12 @@ export const Header: React.FC<HeaderProps> = ({
               votes.
             </div>
           )}
+          {voteCountsToUnklock === 0 && (
+            <div className="absolute -bottom-[230%] left-0 top-16 w-[350px] -translate-x-1/2 whitespace-pre-wrap rounded-2xl bg-gray-90 p-2 text-[14px]  leading-6 text-black backdrop-blur-sm">
+              This collection is now unlocked to create a list! You can also
+              continue to improve the ranking.
+            </div>
+          )}
         </Button>
       </div>
       <div className="absolute inset-x-0 bottom-0 h-1 bg-white"></div>
@@ -92,7 +108,8 @@ export const Header: React.FC<HeaderProps> = ({
         style={{
           left: `${Math.min(progressPercentage, 96)}%`,
         }}>
-        <span className="text-red">{voted}</span> of {total}
+        <span className="text-red">{voted}</span> of{' '}
+        {voted < Math.ceil(total / 2) ? Math.ceil(total / 2) : total}
         <div className="absolute inset-x-0 top-0 w-0 h-0 mx-auto -translate-y-full border-b-8 border-x-8 border-x-transparent border-b-white"></div>
       </div>
     </div>

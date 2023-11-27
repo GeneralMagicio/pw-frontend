@@ -9,8 +9,10 @@ import { Pairs } from '@/components/Poll/Pairs'
 import { PairsType } from '@/types/Pairs'
 import { Question } from '@/components/Poll/Pair/Question'
 import { useAccount } from 'wagmi'
+import Confetti from 'react-confetti'
 import { useRouter } from 'next/router'
 import { RankingConfirmationModal } from '@/components/RankingConfirmationModal'
+import { HalfwayConfirmationModal } from '@/components/RankingConfirmationModal/HalfwayConfirmationModal'
 
 export default function Poll() {
   const router = useRouter()
@@ -18,6 +20,7 @@ export default function Poll() {
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [isHalfwayConfirmOpen, setIsHalfwayConfirmOpen] = useState(false)
   // const [showImpactModal, setShowImpactModal] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
@@ -67,6 +70,14 @@ export default function Poll() {
     }
   }, [isConnected, router.query])
 
+  useEffect(() => {
+    if (!pairs) return
+
+    if (pairs.votedPairs === Math.ceil(pairs.totalPairs / 2)) {
+      setIsHalfwayConfirmOpen(true)
+    }
+  }, [pairs])
+
   const onVote = async (pair: PairType[], picked?: number | undefined) => {
     if (!pairs) return
 
@@ -110,6 +121,17 @@ export default function Poll() {
         <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
           <RankingConfirmationModal />
         </Modal>
+      )}
+      {pairs && isHalfwayConfirmOpen && (
+        <>
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+          <Modal
+            isOpen={isHalfwayConfirmOpen}
+            closeOnOutsideClick={false}
+            onClose={() => setIsHalfwayConfirmOpen(false)}>
+            <HalfwayConfirmationModal handleClose={() => setIsHalfwayConfirmOpen(false)}/>
+          </Modal>
+        </>
       )}
 
       <Footer
