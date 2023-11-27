@@ -12,35 +12,24 @@ interface HeaderProps {
   question: string
   handleFinishVoting: () => void
   total: number
-  threshold: number
   name: string
-  voted?: number
-  canFinish?: boolean
+  voted: number
+  minVotesToUnlock: number
 }
 
-const calculateProgressPercentage = (voted: number, total: number) => {
-  if (total === 0) return 4
-
-  if (voted < Math.ceil(total / 2)) {
-    return Math.max((voted / total) * 100 * 2, 4)
-  } else {
-    return Math.max((voted / total) * 100, 4)
-  }
-}
 
 export const Header: React.FC<HeaderProps> = ({
   question,
   handleFinishVoting,
-  total = 0,
-  voted = 0,
-  canFinish,
-  threshold,
+  total,
+  voted,
+  minVotesToUnlock,
   name,
 }) => {
   const router = useRouter()
-  const progressPercentage = calculateProgressPercentage(voted, total)
-  const minVotesToUnlock = Math.ceil(total * threshold)
+  const progressPercentage = Math.max((voted / total) * 100, 4)
   const voteCountsToUnklock = minVotesToUnlock - voted
+  const canFinish = voted >= minVotesToUnlock
 
   return (
     <div
@@ -109,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
           left: `${Math.min(progressPercentage, 96)}%`,
         }}>
         <span className="text-red">{voted}</span> of{' '}
-        {voted < Math.ceil(total / 2) ? Math.ceil(total / 2) : total}
+        {total}
         <div className="absolute inset-x-0 top-0 w-0 h-0 mx-auto -translate-y-full border-b-8 border-x-8 border-x-transparent border-b-white"></div>
       </div>
     </div>
