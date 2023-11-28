@@ -24,6 +24,26 @@ export const pinFileToIPFS = async (list: object) => {
   }
 }
 
+const createListName = (collectionName: string) => {
+  // TODO: It'd be better if a collection being an Individual or a Project is determined in the backend.
+  // TODO: If collection names change in the database, the below array should also reflect that change.
+  const individualCategories = [
+    'International & Multilingual Support',
+    'Content Creation & Media',
+    'Governance Tokenomics and Analytics',
+    'Security & Cross-Chain Solutions',
+    'User Experience & Adoption',
+    'Blockchain Education',
+    'NFTs',
+    'Development & Infrastructure',
+    'Community Building',
+  ]
+
+  return individualCategories.includes(collectionName)
+    ? `${collectionName} - Individuals`
+    : collectionName
+}
+
 export const convertRankingToAttestationFormat = async (
   ranking: CollectionRanking,
   collectionName: string,
@@ -44,7 +64,7 @@ export const convertRankingToAttestationFormat = async (
       .filter((el) => el.OPAmount > 0),
   }
 
-  const listName = collectionName
+  const listName = createListName(collectionName)
   const listMetadataPtrType = 1
 
   const url = await pinFileToIPFS(obj)
@@ -60,7 +80,7 @@ export const getPrevAttestationIds = async (
   address: string,
   schemaId: string,
   gqlUrl: string,
-  category: string
+  collectionName: string
 ): Promise<string[]> => {
   const query = `
   query ExampleQuery($where: AttestationWhereInput) {
@@ -96,6 +116,10 @@ export const getPrevAttestationIds = async (
   }))
 
   return temp
-    .filter((item: any) => item.data[0].value.value === category)
+    .filter(
+      (item: any) =>
+        item.data[0].value.value === collectionName ||
+        item.data[0].value.value === createListName(collectionName)
+    )
     .map((item: any) => item.id)
 }
