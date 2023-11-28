@@ -9,8 +9,10 @@ import { Pairs } from '@/components/Poll/Pairs'
 import { PairsType } from '@/types/Pairs'
 import { Question } from '@/components/Poll/Pair/Question'
 import { useAccount } from 'wagmi'
+import Confetti from 'react-confetti'
 import { useRouter } from 'next/router'
 import { RankingConfirmationModal } from '@/components/RankingConfirmationModal'
+import { HalfwayConfirmationModal } from '@/components/RankingConfirmationModal/HalfwayConfirmationModal'
 
 export default function Poll() {
   const router = useRouter()
@@ -18,9 +20,13 @@ export default function Poll() {
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  // const [showImpactModal, setShowImpactModal] = useState(false)
+  const [isHalfwayConfirmOpen, setIsHalfwayConfirmOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
   const { isConnected } = useAccount()
+
+  const total = pairs?.totalPairs ?? 1
+  const voted = pairs?.votedPairs ?? 0
+  const threshold = pairs?.threshold ?? 1
 
   const goToRanking = () => {
     router.push(`/ranking?c=${cid}`)
@@ -34,30 +40,7 @@ export default function Poll() {
     setPairs(data)
   }
 
-  // useEffect(() => {
-  //   if (router.query.cid === 'root') {
-  //     setShowImpactModal(true)
-  //   }
-  // }, [router.query.cid])
-
   useEffect(() => {
-    // if (pairs?.type === 'collection') {
-    //   setActiveQuestion(
-    //     'Since RetroPGF 2, which of these collections has had a greater positive impact on Optimism?'
-    //   )
-    // } else if (pairs?.type === 'expertise') {
-    //   setActiveQuestion('What area do you feel most confident discussing?')
-    // } else if (pairs?.type === 'project')
-    //   setActiveQuestion(
-    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-    //   )
-    // else if (pairs?.type === 'sub project')
-    //   setActiveQuestion(
-    //     'Since RetroPGF 2, which of these projects has had a greater positive impact on Optimism?'
-    //   )
-    // if (pairs?.type === 'expertise') {
-    //   setActiveQuestion('What area do you feel most confident discussing?')
-    // }
     setActiveQuestion('Which project should receive more RetroPGF funding?')
   }, [pairs])
 
@@ -66,6 +49,14 @@ export default function Poll() {
       fetchData().then(() => setOpen(true))
     }
   }, [isConnected, router.query])
+
+  useEffect(() => {
+    if (!pairs) return
+
+    if (pairs.votedPairs === Math.ceil(pairs.totalPairs / 2)) {
+      setIsHalfwayConfirmOpen(true)
+    }
+  }, [pairs])
 
   const onVote = async (pair: PairType[], picked?: number | undefined) => {
     if (!pairs) return
@@ -80,20 +71,15 @@ export default function Poll() {
     await fetchData()
   }
 
-  const canFinish = pairs?.votedPairs
-    ? pairs?.votedPairs / pairs?.totalPairs >= pairs?.threshold
-    : false
-
   return (
     <>
       <Header
-        canFinish={canFinish}
         handleFinishVoting={() => setIsConfirmOpen(true)}
         name={pairs?.name || ''}
         question={activeQuestion}
-        threshold={pairs?.threshold || 0}
-        total={pairs?.totalPairs || 0}
-        voted={pairs?.votedPairs}
+        total={voted < Math.ceil(total / 2) ? Math.ceil(total / 2) : total}
+        voted={voted}
+        minVotesToUnlock={Math.ceil(total * threshold)}
       />
 
       {pairs?.pairs && (
@@ -110,6 +96,19 @@ export default function Poll() {
         <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
           <RankingConfirmationModal />
         </Modal>
+      )}
+      {pairs && isHalfwayConfirmOpen && (
+        <>
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+          <Modal
+            isOpen={isHalfwayConfirmOpen}
+            closeOnOutsideClick={false}
+            onClose={() => setIsHalfwayConfirmOpen(false)}>
+            <HalfwayConfirmationModal
+              handleClose={() => setIsHalfwayConfirmOpen(false)}
+            />
+          </Modal>
+        </>
       )}
 
       <Footer
