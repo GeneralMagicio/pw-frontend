@@ -38,28 +38,67 @@ export const EditTextField: FC<Props> = ({
 }) => {
   const [isFocused, setFocus] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const prevValue = useRef<number>(value)
 
   useEffect(() => {
     // @ts-ignore
     inputRef.current!.value = value
+      ? value.toLocaleString(undefined, {
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0,
+        })
+      : ''
+    prevValue.current = value
   }, [value])
 
   const debounceChange = useCallback(
     debounce((newValue: number) => {
-      if (newValue != 0) onChange(+newValue)
+      if (newValue) onChange(+newValue)
       else {
         onChange(0)
         // @ts-ignore
         inputRef.current!.value = ''
       }
-    }, 500),
+    }, 1000),
     [onChange]
   )
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(event.target.value)
-    inputRef.current!.value = event.target.value
+    const pattern = /^[0-9,]+$/
+    const incomingValue = event.target.value;
+    
+    const position = event.target.selectionStart
+    
+    const newValue = Number(
+      incomingValue
+        .split('')
+        .filter((char) => char !== ',')
+        .join('')
+        )
 
+    const previousValue = prevValue.current.toLocaleString(undefined, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    })
+    if (!pattern.test(incomingValue)) {
+      inputRef.current!.value = previousValue
+      return;
+    }
+    const localizedIncomingValue = newValue.toLocaleString(undefined, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    })
+    const numOfCommasBefore = previousValue.split('').filter((char) => char === ',').length
+    const numOfCommasAfter = localizedIncomingValue.split('').filter((char) => char === ',').length
+    const diff = numOfCommasAfter - numOfCommasBefore
+
+    inputRef.current!.value = localizedIncomingValue
+    let newPosition = Math.max(0, position! + diff)
+    if (incomingValue.length === 1) {
+      newPosition = 1 
+    }
+    inputRef.current!.setSelectionRange(newPosition, newPosition)
+    prevValue.current = newValue
     debounceChange(newValue)
   }
 
@@ -123,8 +162,8 @@ export const EditTextField: FC<Props> = ({
         />
       </div>
       {error ? (
-        <div className="flex w-8 items-center" title="Invalid value">
-          <Warning className="ml-1 h-4 w-4" />
+        <div className="flex items-center w-8" title="Invalid value">
+          <Warning className="w-4 h-4 ml-1" />
         </div>
       ) : (
         <div className="w-8"></div>
