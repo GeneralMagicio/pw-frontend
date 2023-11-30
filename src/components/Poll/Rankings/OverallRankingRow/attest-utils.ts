@@ -72,7 +72,7 @@ export const convertRankingToAttestationFormat = async (
   return {
     listName,
     listMetadataPtrType,
-    listMetadataPtr: `https://ipfs.io/ipfs/${url}`,
+    listMetadataPtr: `https://giveth.mypinata.cloud/ipfs/${url}`,
   }
 }
 
