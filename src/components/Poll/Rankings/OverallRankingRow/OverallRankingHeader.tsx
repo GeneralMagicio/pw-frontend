@@ -1,11 +1,11 @@
 import { ArrowBackward } from '@/components/Icon/ArrowBackward'
 import { Close } from '@/components/Icon/Close'
 import { Shuffle } from '@/components/Icon/Shuffle'
-import cn from 'classnames'
-import { Star } from '@/components/Icon/Star'
 import { Tick } from '@/components/Icon/Tick'
-import router from 'next/router'
 import Button from '@/components/Button'
+import { Excel } from '@/components/Icon/Excel'
+import { useState } from 'react'
+import { axiosInstance } from '@/utils/axiosInstance'
 
 interface Props {
   onAttest?: () => void
@@ -28,9 +28,19 @@ export const OverallRankingHeader: React.FC<Props> = ({
   error,
   isOverallRanking,
 }) => {
+  const [exportStatus, setExportStatus] = useState<"initial" | "loading" | "download">("initial")
+  const [exportHash, setExportHash] = useState<string>()
+
+  const exportExcel = async () => {
+    setExportStatus("loading")
+    const res = await axiosInstance.get<string>('/flow/ranking/overall/excel')
+    setExportHash(res.data)
+    setExportStatus("download")
+  }
+
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
-      <div className="flex w-64 justify-start">
+      <div className="flex justify-start w-64">
         <Button varient="primary" size="large" onClick={onBack}>
           {!editMode ? (
             <>
@@ -45,14 +55,14 @@ export const OverallRankingHeader: React.FC<Props> = ({
           )}
         </Button>
       </div>
-      <h4 className="font-IBM text-2xl font-bold">
+      <h4 className="text-2xl font-bold font-IBM">
         {editMode
           ? 'Editing…'
           : isOverallRanking
           ? 'Ranking'
           : 'Adjust Project Percentages'}
       </h4>
-      <div className="flex w-64 justify-end">
+      <div className="flex justify-end w-64">
         <div className="flex items-center gap-2">
           {editMode ? (
             <Button
@@ -64,10 +74,25 @@ export const OverallRankingHeader: React.FC<Props> = ({
               <Tick color="currentColor" />
             </Button>
           ) : (
-            <Button varient="primary" size="large" onClick={onEdit}>
-              Edit
-              <Shuffle />
-            </Button>
+            <>
+              {exportStatus === "download" ? (
+                <a href={`https://giveth.mypinata.cloud/ipfs/${exportHash}`} download="proposed_file_name">
+                  <Button varient="primary" size="large">
+                    Download
+                    <Excel />
+                  </Button>
+                </a>
+              ) : (
+                <Button varient="primary" size="large" onClick={exportExcel}>
+                  {exportStatus === "initial" ? 'Export' : 'Loading...'}
+                  <Excel />
+                </Button>
+              )}
+              <Button varient="primary" size="large" onClick={onEdit}>
+                Edit
+                <Shuffle />
+              </Button>
+            </>
           )}
           {onDone ? (
             <Button
