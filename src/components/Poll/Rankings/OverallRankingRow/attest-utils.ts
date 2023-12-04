@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { CollectionRanking } from '../edit-logic/edit'
 import { axiosInstance } from '@/utils/axiosInstance'
 
@@ -122,4 +123,54 @@ export const getPrevAttestationIds = async (
         item.data[0].value.value === createListName(collectionName)
     )
     .map((item: any) => item.id)
+}
+
+export const getListMetadataPtrUids = async (
+  id: string,
+  gqlUrl: string,
+): Promise<string[]> => {
+  const query = `
+  query Query($where: AttestationWhereInput) {
+    findFirstAttestation(
+      where: $where,
+    ) {
+      id
+      decodedDataJson
+    }
+  }
+`
+  let res : any;
+  try {
+    res = await axios.post(gqlUrl, {
+      query: query,
+      operationName: 'Query',
+      variables: {
+        where: {
+          revoked: { equals: false },
+          id: {
+            equals: id,
+          },
+          schemaId: {
+            equals: "0x3e3e2172aebb902cf7aa6e1820809c5b469af139e7a4265442b1c22b97c6b2a5",
+          },
+        },
+      },
+    })
+
+  } catch (e: any) {
+    console.error(e.data)
+  }
+
+
+  // console.log("res.data", res.data)
+
+  const json = res.data.data.findFirstAttestation.decodedDataJson
+
+  const dataLink = JSON.parse(json).find((item: any) => item.name === "listMetadataPtr").value.value
+
+  const res2 = await axios.get(dataLink)
+
+  // console.log("value:", dataLink)
+
+  return res2.data.listContent.map((el: any) => el.RPGF3_Application_UID)
 }
