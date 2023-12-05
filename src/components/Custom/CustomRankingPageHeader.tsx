@@ -3,9 +3,6 @@ import { Close } from '@/components/Icon/Close'
 import { Shuffle } from '@/components/Icon/Shuffle'
 import { Tick } from '@/components/Icon/Tick'
 import Button from '@/components/Button'
-import { Excel } from '@/components/Icon/Excel'
-import { useState } from 'react'
-import { axiosInstance } from '@/utils/axiosInstance'
 
 interface Props {
   onAttest?: () => void
@@ -18,7 +15,7 @@ interface Props {
   isOverallRanking: boolean
 }
 
-export const RankingPageHeader: React.FC<Props> = ({
+export const CustomRankingPageHeader: React.FC<Props> = ({
   onAttest,
   onEdit,
   editMode,
@@ -28,15 +25,6 @@ export const RankingPageHeader: React.FC<Props> = ({
   error,
   isOverallRanking,
 }) => {
-  const [exportStatus, setExportStatus] = useState<"initial" | "loading" | "download">("initial")
-  const [exportHash, setExportHash] = useState<string>()
-
-  const exportExcel = async () => {
-    setExportStatus("loading")
-    const res = await axiosInstance.get<string>('/flow/ranking/overall/excel')
-    setExportHash(res.data)
-    setExportStatus("download")
-  }
 
   return (
     <header className="relative flex  h-[95px] items-center justify-between gap-4 bg-gray-30 px-36 font-IBM text-lg font-semibold text-black">
@@ -74,25 +62,10 @@ export const RankingPageHeader: React.FC<Props> = ({
               <Tick color="currentColor" />
             </Button>
           ) : (
-            <>
-              {exportStatus === "download" ? (
-                <a href={`https://giveth.mypinata.cloud/ipfs/${exportHash}`} download="proposed_file_name">
-                  <Button varient="primary" size="large">
-                    Download
-                    <Excel />
-                  </Button>
-                </a>
-              ) : (
-                <Button varient="primary" size="large" onClick={exportExcel}>
-                  {exportStatus === "initial" ? 'Export' : 'Loading...'}
-                  <Excel />
-                </Button>
-              )}
               <Button varient="primary" size="large" onClick={onEdit}>
                 Edit
                 <Shuffle />
               </Button>
-            </>
           )}
           {onDone ? (
             <Button
@@ -107,6 +80,7 @@ export const RankingPageHeader: React.FC<Props> = ({
               varient="primary"
               theme="black"
               size="large"
+              disabled={editMode}
               onClick={onAttest}>
               Attest
             </Button>
