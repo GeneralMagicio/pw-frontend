@@ -80,7 +80,8 @@ export const AttestationModal: React.FC<Props> = ({
 
   useEffect(() => {
     ;(async () => {
-      setRanking(await getRankings(listId))
+      const res = await getRankings(listId)
+      setRanking(res)
     })()
   }, [listId])
 

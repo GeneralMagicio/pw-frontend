@@ -1,73 +1,33 @@
 import { useEffect, useState } from 'react'
+import { PairType } from '@/types/Pairs/Pair'
 import { useRouter } from 'next/router'
 import { formatRankingValue } from '@/utils/helpers'
+import { Ranking, getRankings } from './RankingConfirmationModal'
+import { EditManualModal } from './EditManualModal'
+import { AttestationModal } from './AttestationModal'
 import Button from '@/components/Button'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { Pencil } from '@/components/Icon/Pencil'
 import { Plus } from '@/components/Icon/Plus'
-import { AttestationModal } from './AttestationModal'
-import { EditManualModal } from './EditManualModal'
-import { getRankingStorageKey } from '../utils'
-import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 
-interface Props {
-  collection: {
-    id: number
-    name: string
-    impactDescription: string
-  }
+export const HalfwayConfirmationModal: React.FC<{
+  handleClose: () => void
   listId: string
-  handleFinish: () => void;
-}
-
-export interface Ranking {
-  id: number;
-  hasRanking: true,
-  type: "collection" | "composite project"
-  isTopLevel: boolean,
-  name: string
-  share: number
-  progress: "Finished"
-  RPGF3Id: string
-  ranking: ProjectRanking[]
-}
-
-export const getRankings = async (listId: string): Promise<Ranking> => {
-  const str = window.localStorage.getItem(getRankingStorageKey(listId))
-  const ranking : ProjectRanking[]  = str ? JSON.parse(str) : []
-
-  return {
-    id: -1,
-    type: "collection",
-    hasRanking: true,
-    isTopLevel: false,
-    name: 'Custom list',
-    progress: "Finished",
-    share: 1,
-    RPGF3Id: "-1",
-    ranking,
-  }
-}
-
-export const RankingConfirmationModal: React.FC<Props> = ({
-  collection,
-  listId,
-}) => {
+}> = ({ handleClose, listId }) => {
   const [open, setOpen] = useState(false)
   const [editConfirmationOpen, setEditConfirmationOpen] = useState(false)
   const [rankings, setRankings] = useState<Ranking>()
-  // const [collection, setCollection] = useState<PairType>()
+  const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
 
   useEffect(() => {
     const main = async () => {
       const data = await getRankings(listId)
+      console.log('data in confirmation is:', data)
       setRankings(data)
     }
     main()
   }, [listId])
-
-  if (!rankings?.ranking) return null
 
   return (
     <>
@@ -93,9 +53,9 @@ export const RankingConfirmationModal: React.FC<Props> = ({
         </header>
 
         <p className="text-xl font-normal">
-          You have finished ranking of{' '}
+          You have finished half the available votes in{' '}
           <span className="font-medium">{collection?.name || ''}</span>, now you
-          can create list or continue ranking other projects.
+          can create list or continue ranking.
         </p>
         <div className="min-h-[270px] rounded-xl bg-grayish py-4 px-6">
           <header className="flex items-center justify-between pb-4 border-b border-gray-10">
@@ -153,6 +113,10 @@ export const RankingConfirmationModal: React.FC<Props> = ({
           </div>
         </div>
         <footer className="flex items-center justify-between">
+          <Button onClick={handleClose} varient="secondary" size="large">
+            {'Continue'}
+            <ArrowForward />
+          </Button>
           <Button
             varient="secondary"
             size="large"

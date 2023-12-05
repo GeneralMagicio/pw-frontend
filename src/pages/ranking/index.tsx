@@ -13,11 +13,9 @@ import {
   validateRanking,
 } from '@/components/Poll/Rankings/edit-logic/utils'
 import { useEffect, useState } from 'react'
-
-import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
 import { LoadingSpinner } from '../../components/Loading/LoadingSpinner'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
-import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
+import { RankingPageHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 import { axiosInstance } from '@/utils/axiosInstance'
 import { getOverallRanking } from '@/utils/poll'
 import { useRouter } from 'next/router'
@@ -110,7 +108,7 @@ export default function RankingPage() {
 
   return (
     <>
-      <OverallRankingHeader
+      <RankingPageHeader
         editMode={editMode}
         error={error}
         isOverallRanking={true}

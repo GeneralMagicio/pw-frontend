@@ -1,7 +1,7 @@
 import { getRankings, getCollection } from '@/utils/poll'
 import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
-import { OverallRankingHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
+import { RankingPageHeader } from '@/components/Poll/Rankings/OverallRankingRow/OverallRankingHeader'
 // import { changePercentage } from '@/components/Poll/Rankings/edit-logic/project-editing'
 import {
   validateRanking,
@@ -94,7 +94,7 @@ export default function RankingPage({
 
   return (
     <>
-      <OverallRankingHeader
+      <RankingPageHeader
         editMode={editMode}
         error={error}
         isOverallRanking={false}
@@ -117,7 +117,7 @@ export default function RankingPage({
       )}
       {!isMoon && (
         <Modal
-          className="mb-96 bg-white"
+          className="bg-white mb-96"
           isOpen={open}
           onClose={() => setOpen(false)}>
           <FinishVoteModal />

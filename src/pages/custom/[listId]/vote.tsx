@@ -8,7 +8,6 @@ import { Footer } from '@/components/Poll/Pair/Footer/Footer'
 import { Question } from '@/components/Poll/Pair/Question'
 import { Pairs } from '@/components/Poll/Pairs'
 // import { RankingConfirmationModal } from '@/components/RankingConfirmationModal'
-import { HalfwayConfirmationModal } from '@/components/RankingConfirmationModal/HalfwayConfirmationModal'
 import { Header } from '@/components/Poll/Pair/Header'
 
 import { PairsType } from '@/types/Pairs'
@@ -18,6 +17,8 @@ import Confetti from 'react-confetti'
 import { useAccount } from 'wagmi'
 import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, sortProjectId } from '../utils'
 import { Ranking, RankingConfirmationModal } from './RankingConfirmationModal'
+import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
+import { HalfwayConfirmationModal } from './HalfwayConfirmationModal'
 
 interface Vote {
   p1Id: number
@@ -117,7 +118,7 @@ const voteProjects = async (
   picked: number | null
 ): Promise<Vote[]> => {
   return new Promise((res, rej) =>
-    setTimeout(() => res([...votes, { p1Id: p1, p2Id: p2, picked }]), 400)
+    setTimeout(() => res([...votes, { p1Id: p1, p2Id: p2, picked }]), 150)
   )
 }
 
@@ -148,16 +149,10 @@ const convertVotesToMatrix = (votes: Vote[], projects: PairType[]) => {
   return matrix;
 }
 
-const calculateRanking = (votes: Vote[], projects: PairType[]) => {
+const calculateRanking = (votes: Vote[], projects: PairType[]) : ProjectRanking[] => {
 
   const matrix = convertVotesToMatrix(votes, projects);
-
-  console.log("matrix:", matrix)
-  
   const ranking = getRankingForSetOfDampingFactors(matrix)
-  
-  console.log("ranking:", ranking)
-
   const projectIds = projects.map((item) => item.id)
 
   return ranking.map((el, index) => {
@@ -165,13 +160,13 @@ const calculateRanking = (votes: Vote[], projects: PairType[]) => {
     const project = projects.find((item) => item.id === projectId)
 
     return {
-      RPGF3Id: project?.RPGF3Id,
-      name: project?.name || '',
+      RPGF3Id: project!.RPGF3Id,
+      name: project!.name,
       share: el,
-      id: -1,
-      type: "collection",
-      hasRanking: false,
-      isTopLevel: false,
+      id: project!.id,
+      type: "project" as const,
+      hasRanking: false as const,
+      isTopLevel: false as const,
     }
   }).sort((a, b) => b.share - a.share)
 
@@ -213,9 +208,13 @@ export default function VotePage({
     setPairs(data)
   }
 
-  const handleFinishVoting = () => {
+  const saveResult = () => {
     const ranking = calculateRanking(votes.current, projects)
     window.localStorage.setItem(getRankingStorageKey(listId), JSON.stringify(ranking))
+  }
+
+  const handleFinishVoting = () => {
+    saveResult()
     setIsConfirmOpen(true)
   }
 
@@ -246,6 +245,8 @@ export default function VotePage({
       id2,
       picked || null
     )
+
+    saveResult()
 
     await fetchData()
   }
@@ -292,6 +293,7 @@ export default function VotePage({
             closeOnOutsideClick={false}
             onClose={() => setIsHalfwayConfirmOpen(false)}>
             <HalfwayConfirmationModal
+              listId={listId}
               handleClose={() => setIsHalfwayConfirmOpen(false)}
             />
           </Modal>
