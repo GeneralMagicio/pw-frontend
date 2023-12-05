@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { CollectionRanking } from '../edit-logic/edit'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { Ranking } from '@/components/Custom/RankingConfirmationModal';
 
 const flattenRanking = (input: CollectionRanking) => {
   const result: { RPGF3Id: string; share: number }[] = []
@@ -76,6 +78,38 @@ export const convertRankingToAttestationFormat = async (
   }
 }
 
+export const convertCustomRankingToAttestationFormat = async (
+  ranking: Ranking,
+  collectionName: string,
+  collectionDescription: string
+) => {
+  const totalOp = 3e7
+
+  const obj = {
+    listDescription: `${collectionDescription} Submitted by Pairwise.`,
+    impactEvaluationLink: 'https://pairwise.vote',
+    impactCategory: ['PAIRWISE'],
+    impactEvaluationDescription: `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
+    listContent: ranking.ranking!
+      .map((item) => ({
+        RPGF3_Application_UID: item.RPGF3Id,
+        OPAmount: Math.floor(totalOp * item.share),
+      }))
+      .filter((el) => el.OPAmount > 0),
+  }
+
+  const listName = createListName(collectionName)
+  const listMetadataPtrType = 1
+
+  const url = await pinFileToIPFS(obj)
+
+  return {
+    listName,
+    listMetadataPtrType,
+    listMetadataPtr: `https://giveth.mypinata.cloud/ipfs/${url}`,
+  }
+}
+
 export const getPrevAttestationIds = async (
   address: string,
   schemaId: string,
@@ -122,4 +156,54 @@ export const getPrevAttestationIds = async (
         item.data[0].value.value === createListName(collectionName)
     )
     .map((item: any) => item.id)
+}
+
+export const getListMetadataPtrUids = async (
+  id: string,
+  gqlUrl: string,
+): Promise<string[]> => {
+  const query = `
+  query Query($where: AttestationWhereInput) {
+    findFirstAttestation(
+      where: $where,
+    ) {
+      id
+      decodedDataJson
+    }
+  }
+`
+  let res : any;
+  try {
+    res = await axios.post(gqlUrl, {
+      query: query,
+      operationName: 'Query',
+      variables: {
+        where: {
+          revoked: { equals: false },
+          id: {
+            equals: id,
+          },
+          schemaId: {
+            equals: "0x3e3e2172aebb902cf7aa6e1820809c5b469af139e7a4265442b1c22b97c6b2a5",
+          },
+        },
+      },
+    })
+
+  } catch (e: any) {
+    console.error(e.data)
+  }
+
+
+  // console.log("res.data", res.data)
+
+  const json = res.data.data.findFirstAttestation.decodedDataJson
+
+  const dataLink = JSON.parse(json).find((item: any) => item.name === "listMetadataPtr").value.value
+
+  const res2 = await axios.get(dataLink)
+
+  // console.log("value:", dataLink)
+
+  return res2.data.listContent.map((el: any) => el.RPGF3_Application_UID)
 }

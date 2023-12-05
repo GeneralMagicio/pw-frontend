@@ -1,29 +1,20 @@
 import {
-  AttestationRequestData,
   EAS,
   SchemaEncoder,
   SchemaRegistry,
 } from '@ethereum-attestation-service/eas-sdk'
-import { CollectionRanking, ProjectRanking } from '../edit-logic/edit'
-import { EASNetworks, SCHEMA_UID, useSigner } from './eas'
-import {
-  convertRankingToAttestationFormat,
-  getPrevAttestationIds,
-} from './attest-utils'
-import { finishCollections, getRankings } from '../../../../utils/poll'
 import { useAccount, useChainId, useConnect } from 'wagmi'
 import { useEffect, useState } from 'react'
-
-import { CircularProgress } from '@chakra-ui/progress'
 import { Close } from '@/components/Icon/Close'
-import Link from 'next/link'
 import { LinkSharp } from '@/components/Icon/LinkSharp'
 import Modal from '@/components/Modal/Modal'
-import { Warning } from '@/components/Icon/Warning'
-import { axiosInstance } from '@/utils/axiosInstance'
 import cn from 'classnames'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import Button from '@/components/Button'
+import { convertCustomRankingToAttestationFormat, getPrevAttestationIds } from '@/components/Poll/Rankings/OverallRankingRow/attest-utils'
+import { useSigner, EASNetworks, SCHEMA_UID } from '@/components/Poll/Rankings/OverallRankingRow/eas'
+import { Ranking, getRankings } from './RankingConfirmationModal'
+import { useRouter } from 'next/router'
 
 interface Props {
   isOpen: boolean
@@ -32,8 +23,6 @@ interface Props {
   colletionDescription: string
   collectionId: number
 }
-
-type AttestItem = Pick<ProjectRanking, 'name' | 'share'>
 
 enum ProgressState {
   'Initial',
@@ -76,7 +65,11 @@ export const AttestationModal: React.FC<Props> = ({
   const [progress, setProgress] = useState<ProgressState>(ProgressState.Initial)
   const [agoraUrl, setAgoraUrl] = useState('')
   const [westUrl, setWestUrl] = useState('')
-  const [ranking, setRanking] = useState<CollectionRanking>()
+  const [ranking, setRanking] = useState<Ranking>()
+
+  const router = useRouter()
+
+  const listId = router.query.listId as string 
 
   const chainId = useChainId()
   const { isConnected, address } = useAccount()
@@ -87,9 +80,10 @@ export const AttestationModal: React.FC<Props> = ({
 
   useEffect(() => {
     ;(async () => {
-      setRanking(await getRankings(collectionId.toString()))
+      const res = await getRankings(listId)
+      setRanking(res)
     })()
-  }, [collectionId])
+  }, [listId])
 
   const handleCreate = async () => {
     try {
@@ -135,7 +129,7 @@ export const AttestationModal: React.FC<Props> = ({
     const schemaEncoder = new SchemaEncoder(schema.schema)
     setProgress(ProgressState.Creating)
     try {
-      const item = await convertRankingToAttestationFormat(
+      const item = await convertCustomRankingToAttestationFormat(
         ranking,
         collectionName,
         colletionDescription
@@ -155,19 +149,19 @@ export const AttestationModal: React.FC<Props> = ({
         },
       ])
 
-      const prevAttestations = await getPrevAttestationIds(
-        address,
-        SCHEMA_UID,
-        easConfig.gqlUrl,
-        collectionName
-      )
+      // const prevAttestations = await getPrevAttestationIds(
+      //   address,
+      //   SCHEMA_UID,
+      //   easConfig.gqlUrl,
+      //   collectionName
+      // )
 
-      if (prevAttestations.length > 0) {
-        setProgress(ProgressState.Revoking)
-        for (const attestation of prevAttestations) {
-          await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
-        }
-      }
+      // if (prevAttestations.length > 0) {
+      //   setProgress(ProgressState.Revoking)
+      //   for (const attestation of prevAttestations) {
+      //     await eas.revoke({ schema: SCHEMA_UID, data: { uid: attestation } })
+      //   }
+      // }
 
       setProgress(ProgressState.Attesting)
       const tx = await eas.attest({
@@ -181,10 +175,10 @@ export const AttestationModal: React.FC<Props> = ({
 
       // const newAttestationUID = ""
       const newAttestationUID = await tx.wait()
-      await finishCollections(collectionId)
-      await axiosInstance.post('/flow/reportAttest', {
-        cid: collectionId,
-      })
+      // await finishCollections(collectionId)
+      // await axiosInstance.post('/flow/reportAttest', {
+      //   cid: collectionId,
+      // })
       setProgress(ProgressState.Finished)
       setAgoraUrl(
         `https://vote.optimism.io/retropgf/3/list/${newAttestationUID}`
