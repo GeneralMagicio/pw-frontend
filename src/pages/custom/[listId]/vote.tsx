@@ -15,10 +15,10 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useRef } from 'react'
 import Confetti from 'react-confetti'
 import { useAccount } from 'wagmi'
-import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, sortProjectId } from '../utils'
-import { Ranking, RankingConfirmationModal } from './RankingConfirmationModal'
+import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, sortProjectId } from '../../../components/Custom/utils'
+import { RankingConfirmationModal } from '../../../components/Custom/RankingConfirmationModal'
 import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
-import { HalfwayConfirmationModal } from './HalfwayConfirmationModal'
+import { HalfwayConfirmationModal } from '../../../components/Custom/HalfwayConfirmationModal'
 
 interface Vote {
   p1Id: number

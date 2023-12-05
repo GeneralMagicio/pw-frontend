@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { CollectionRanking } from '../edit-logic/edit'
 import { axiosInstance } from '@/utils/axiosInstance'
-import { Ranking } from '@/pages/custom/[listId]/RankingConfirmationModal';
+import { Ranking } from '@/components/Custom/RankingConfirmationModal';
 
 const flattenRanking = (input: CollectionRanking) => {
   const result: { RPGF3Id: string; share: number }[] = []

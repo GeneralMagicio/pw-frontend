@@ -7,7 +7,7 @@ import { Pencil } from '@/components/Icon/Pencil'
 import { Plus } from '@/components/Icon/Plus'
 import { AttestationModal } from './AttestationModal'
 import { EditManualModal } from './EditManualModal'
-import { getRankingStorageKey } from '../utils'
+import { getRankingStorageKey } from './utils'
 import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 
 interface Props {

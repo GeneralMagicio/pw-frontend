@@ -17,9 +17,9 @@ import { useEffect, useState } from 'react'
 import { OverallRanking } from '@/components/Poll/Rankings/OverallRanking'
 import { useRouter } from 'next/router'
 import { LoadingSpinner } from '@/components/Loading/LoadingSpinner'
-import { getRankings } from './RankingConfirmationModal'
-import { CustomRankingPageHeader } from './CustomRankingPageHeader'
-import { AttestationModal } from './AttestationModal'
+import { getRankings } from '../../../components/Custom/RankingConfirmationModal'
+import { CustomRankingPageHeader } from '../../../components/Custom/CustomRankingPageHeader'
+import { AttestationModal } from '../../../components/Custom/AttestationModal'
 
 export const flattenRankingData = (
   input: CollectionRanking
