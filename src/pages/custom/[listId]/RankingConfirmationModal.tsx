@@ -5,8 +5,9 @@ import Button from '@/components/Button'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { Pencil } from '@/components/Icon/Pencil'
 import { Plus } from '@/components/Icon/Plus'
-import { AttestationModal } from '@/components/Poll/Rankings/OverallRankingRow/AttestationModal'
-import { EditManualModal } from '@/components/Poll/Rankings/OverallRankingRow/EditManualModal'
+import { AttestationModal } from './AttestationModal'
+import { EditManualModal } from './EditManualModal'
+import { getRankingStorageKey } from '../utils'
 
 interface Props {
   collection: {
@@ -18,21 +19,33 @@ interface Props {
   handleFinish: () => void;
 }
 
-interface Ranking {
+export interface Ranking {
   id: number;
+  hasRanking: true,
+  type: "collection" | "composite project"
+  isTopLevel: boolean,
   name: string
   share: number
-  ranking: null | Omit<Ranking, "ranking">[]
+  progress: "Finished"
+  RPGF3Id: string
+  ranking: Omit<Ranking, "ranking" | "progress">[]
 }
 
-const getRankings = async (listId: string): Promise<Ranking> => {
-  const str = window.localStorage.getItem(`${listId}-Ranking`)
+export const getRankings = async (listId: string): Promise<Ranking> => {
+  console.log("the key:", getRankingStorageKey(listId))
+  const str = window.localStorage.getItem(getRankingStorageKey(listId))
+  console.log("str is:", str)
   const ranking = str ? (JSON.parse(str) as Ranking['ranking']) : []
 
   return {
     id: -1,
+    type: "collection",
+    hasRanking: true,
+    isTopLevel: false,
     name: 'Custom list',
+    progress: "Finished",
     share: 1,
+    RPGF3Id: "-1",
     ranking,
   }
 }
@@ -64,7 +77,7 @@ export const RankingConfirmationModal: React.FC<Props> = ({
           <EditManualModal
             isOpen={editConfirmationOpen}
             onClose={() => setEditConfirmationOpen(false)}
-            collectionId={collection.id}
+            listId={listId}
           />
         )}
         {open && rankings && collection && (
@@ -141,10 +154,6 @@ export const RankingConfirmationModal: React.FC<Props> = ({
           </div>
         </div>
         <footer className="flex items-center justify-between">
-          <Button varient="secondary" size="large">
-            {'Rank other projects'}
-            <ArrowForward />
-          </Button>
           <Button
             varient="secondary"
             size="large"

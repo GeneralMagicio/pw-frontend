@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { CollectionRanking } from '../edit-logic/edit'
 import { axiosInstance } from '@/utils/axiosInstance'
+import { Ranking } from '@/pages/custom/[listId]/RankingConfirmationModal';
 
 const flattenRanking = (input: CollectionRanking) => {
   const result: { RPGF3Id: string; share: number }[] = []
@@ -58,6 +59,38 @@ export const convertRankingToAttestationFormat = async (
     impactCategory: ['PAIRWISE'],
     impactEvaluationDescription: `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
     listContent: flattenRanking(ranking)
+      .map((item) => ({
+        RPGF3_Application_UID: item.RPGF3Id,
+        OPAmount: Math.floor(totalOp * item.share),
+      }))
+      .filter((el) => el.OPAmount > 0),
+  }
+
+  const listName = createListName(collectionName)
+  const listMetadataPtrType = 1
+
+  const url = await pinFileToIPFS(obj)
+
+  return {
+    listName,
+    listMetadataPtrType,
+    listMetadataPtr: `https://giveth.mypinata.cloud/ipfs/${url}`,
+  }
+}
+
+export const convertCustomRankingToAttestationFormat = async (
+  ranking: Ranking,
+  collectionName: string,
+  collectionDescription: string
+) => {
+  const totalOp = 3e7
+
+  const obj = {
+    listDescription: `${collectionDescription} Submitted by Pairwise.`,
+    impactEvaluationLink: 'https://pairwise.vote',
+    impactCategory: ['PAIRWISE'],
+    impactEvaluationDescription: `This list has been carefully curated and ranked by Pairwise among projects related to ${collectionName}.`,
+    listContent: ranking.ranking!
       .map((item) => ({
         RPGF3_Application_UID: item.RPGF3Id,
         OPAmount: Math.floor(totalOp * item.share),

@@ -16,8 +16,8 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useRef } from 'react'
 import Confetti from 'react-confetti'
 import { useAccount } from 'wagmi'
-import { generateZeroMatrix, getRankingForSetOfDampingFactors, sortProjectId } from '../utils'
-import { RankingConfirmationModal } from './RankingConfirmationModal'
+import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, sortProjectId } from '../utils'
+import { Ranking, RankingConfirmationModal } from './RankingConfirmationModal'
 
 interface Vote {
   p1Id: number
@@ -165,8 +165,13 @@ const calculateRanking = (votes: Vote[], projects: PairType[]) => {
     const project = projects.find((item) => item.id === projectId)
 
     return {
+      RPGF3Id: project?.RPGF3Id,
       name: project?.name || '',
       share: el,
+      id: -1,
+      type: "collection",
+      hasRanking: false,
+      isTopLevel: false,
     }
   }).sort((a, b) => b.share - a.share)
 
@@ -210,7 +215,7 @@ export default function VotePage({
 
   const handleFinishVoting = () => {
     const ranking = calculateRanking(votes.current, projects)
-    window.localStorage.setItem(`${listId}-Ranking`, JSON.stringify(ranking))
+    window.localStorage.setItem(getRankingStorageKey(listId), JSON.stringify(ranking))
     setIsConfirmOpen(true)
   }
 

@@ -11,6 +11,7 @@ export interface PairType {
   collection_id: number | null
   created_at: string
   numOfChildren: number
+  RPGF3Id: string
   childProjects?: Array<PairType>
   subProjects?: Array<PairType>
   parentId: number | null

@@ -217,3 +217,7 @@ const divideBySum = (numbers: number[]) => {
 
   return numbers.map((item) => toFixedNumber(item / sum, 2));
 };
+
+export const getRankingStorageKey = (listId: string) => {
+  return `${listId}-Ranking`
+}
