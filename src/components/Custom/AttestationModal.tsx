@@ -80,10 +80,11 @@ export const AttestationModal: React.FC<Props> = ({
 
   useEffect(() => {
     ;(async () => {
-      const res = await getRankings(listId)
+      if (!address) return
+      const res = await getRankings(listId, address)
       setRanking(res)
     })()
-  }, [listId])
+  }, [listId, address])
 
   const handleCreate = async () => {
     try {
