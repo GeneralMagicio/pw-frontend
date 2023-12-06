@@ -9,6 +9,7 @@ import { AttestationModal } from './AttestationModal'
 import { EditManualModal } from './EditManualModal'
 import { getRankingStorageKey } from './utils'
 import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
+import { useAccount } from 'wagmi'
 
 interface Props {
   collection: {
@@ -32,8 +33,8 @@ export interface Ranking {
   ranking: ProjectRanking[]
 }
 
-export const getRankings = async (listId: string): Promise<Ranking> => {
-  const str = window.localStorage.getItem(getRankingStorageKey(listId))
+export const getRankings = async (listId: string, address: string): Promise<Ranking> => {
+  const str = window.localStorage.getItem(getRankingStorageKey(listId, address))
   const ranking : ProjectRanking[]  = str ? JSON.parse(str) : []
 
   return {
@@ -58,14 +59,16 @@ export const RankingConfirmationModal: React.FC<Props> = ({
   const [rankings, setRankings] = useState<Ranking>()
   // const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
+  const {address} = useAccount()
 
   useEffect(() => {
     const main = async () => {
-      const data = await getRankings(listId)
+      if (!address) return;
+      const data = await getRankings(listId, address)
       setRankings(data)
     }
     main()
-  }, [listId])
+  }, [listId, address])
 
   if (!rankings?.ranking) return null
 

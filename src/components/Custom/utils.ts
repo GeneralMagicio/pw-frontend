@@ -109,7 +109,7 @@ const validate = (input: { share: number }[]) => {
   return false;
 };
 
-function makeIt100<T extends { share: number }>(input: T[]) {
+export function makeIt100<T extends { share: number }>(input: T[]) {
   let result = [...input];
 
   let breakLimit = 0;
@@ -218,6 +218,6 @@ const divideBySum = (numbers: number[]) => {
   return numbers.map((item) => toFixedNumber(item / sum, 2));
 };
 
-export const getRankingStorageKey = (listId: string) => {
-  return `${listId}-Ranking`
+export const getRankingStorageKey = (listId: string, address: string) => {
+  return `${listId.slice(0, 8)}-${address.slice(0, 8)}-Ranking`
 }
