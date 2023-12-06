@@ -9,6 +9,7 @@ import Button from '@/components/Button'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
 import { Pencil } from '@/components/Icon/Pencil'
 import { Plus } from '@/components/Icon/Plus'
+import { useAccount } from 'wagmi'
 
 export const HalfwayConfirmationModal: React.FC<{
   handleClose: () => void
@@ -19,15 +20,16 @@ export const HalfwayConfirmationModal: React.FC<{
   const [rankings, setRankings] = useState<Ranking>()
   const [collection, setCollection] = useState<PairType>()
   const router = useRouter()
+  const {address} = useAccount()
 
   useEffect(() => {
     const main = async () => {
-      const data = await getRankings(listId)
-      console.log('data in confirmation is:', data)
+      if (!address) return;
+      const data = await getRankings(listId, address)
       setRankings(data)
     }
     main()
-  }, [listId])
+  }, [listId, address])
 
   return (
     <>

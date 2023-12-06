@@ -20,6 +20,7 @@ import { LoadingSpinner } from '@/components/Loading/LoadingSpinner'
 import { getRankings } from '../../../components/Custom/RankingConfirmationModal'
 import { CustomRankingPageHeader } from '../../../components/Custom/CustomRankingPageHeader'
 import { AttestationModal } from '../../../components/Custom/AttestationModal'
+import { useAccount } from 'wagmi'
 
 export const flattenRankingData = (
   input: CollectionRanking
@@ -38,13 +39,15 @@ export default function RankingPage() {
   const [attestOpen, setAttestOpen] = useState(false)
   const [error, setError] = useState(false)
 
+  const {address} = useAccount()
+
   const collection = {
     id: -1,
     impactDescription: 'Custom list created by Pairwise',
     name: 'Custom list',
   }
 
-  const listId = router.query.listId as string
+  const listId = router.query.listId
 
   useEffect(() => {
     setEditMode(router.query.edit === 'true' ? true : false)
@@ -86,7 +89,8 @@ export default function RankingPage() {
 
   useEffect(() => {
     const main = async () => {
-      const data = await getRankings(listId)
+      if (!address || !listId) return;
+      const data = await getRankings(listId as string, address)
       const temp = {
         id: -2,
         type: 'collection' as const,
@@ -103,7 +107,7 @@ export default function RankingPage() {
       setRankings(addAdditionalProperties(temp))
     }
     main()
-  }, [setRankings, listId])
+  }, [setRankings, listId, address])
 
   useEffect(() => {
     setTempRankings(rankings)

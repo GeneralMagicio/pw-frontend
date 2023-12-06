@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useRef } from 'react'
 import Confetti from 'react-confetti'
 import { useAccount } from 'wagmi'
-import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, sortProjectId } from '../../../components/Custom/utils'
+import { generateZeroMatrix, getRankingForSetOfDampingFactors, getRankingStorageKey, makeIt100, sortProjectId } from '../../../components/Custom/utils'
 import { RankingConfirmationModal } from '../../../components/Custom/RankingConfirmationModal'
 import { ProjectRanking } from '@/components/Poll/Rankings/edit-logic/edit'
 import { HalfwayConfirmationModal } from '../../../components/Custom/HalfwayConfirmationModal'
@@ -155,7 +155,7 @@ const calculateRanking = (votes: Vote[], projects: PairType[]) : ProjectRanking[
   const ranking = getRankingForSetOfDampingFactors(matrix)
   const projectIds = projects.map((item) => item.id)
 
-  return ranking.map((el, index) => {
+  const result = ranking.map((el, index) => {
     const projectId = mapIndexToProject(projectIds, index)
     const project = projects.find((item) => item.id === projectId)
 
@@ -167,8 +167,9 @@ const calculateRanking = (votes: Vote[], projects: PairType[]) : ProjectRanking[
       type: "project" as const,
       hasRanking: false as const,
       isTopLevel: false as const,
-    }
-  }).sort((a, b) => b.share - a.share)
+    }}).sort((a, b) => b.share - a.share)
+
+  return makeIt100(result)
 
 }
 
@@ -179,24 +180,21 @@ export default function VotePage({
 
   const router = useRouter()
   // const cid = router.query.cid
-  const listId = router.query.listId as string
+  const listId = router.query.listId as (string | undefined)
 
   const [pairs, setPairs] = useState<PairsType | undefined>(undefined)
   const [open, setOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const [isHalfwayConfirmOpen, setIsHalfwayConfirmOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState('')
-  const { isConnected } = useAccount()
+  const { address } = useAccount()
 
   const total = pairs?.totalPairs ?? 1
   const voted = pairs?.votedPairs ?? 0
   const threshold = pairs?.threshold ?? 1
 
   const handleFinish = () => {
-    const ranking = calculateRanking(votes.current, projects)
-    
-    console.log("ranking", ranking)
-    // router.push(`/custom/${listId}/ranking`)
+    router.push(`/custom/${listId}/ranking`)
   }
 
   const fetchData = async () => {
@@ -209,8 +207,9 @@ export default function VotePage({
   }
 
   const saveResult = () => {
+    if (!address || !listId) return;
     const ranking = calculateRanking(votes.current, projects)
-    window.localStorage.setItem(getRankingStorageKey(listId), JSON.stringify(ranking))
+    window.localStorage.setItem(getRankingStorageKey(listId, address), JSON.stringify(ranking))
   }
 
   const handleFinishVoting = () => {
@@ -272,7 +271,7 @@ export default function VotePage({
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <Question onStart={() => setOpen(false)} question={activeQuestion} />
       </Modal>
-      {pairs && (
+      {pairs && listId && (
         <Modal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)}>
           <RankingConfirmationModal
             listId={listId}
@@ -285,7 +284,7 @@ export default function VotePage({
           />
         </Modal>
       )}
-      {pairs && isHalfwayConfirmOpen && (
+      {pairs && isHalfwayConfirmOpen && listId && (
         <>
           <Confetti width={window.innerWidth} height={window.innerHeight} />
           <Modal
