@@ -76,13 +76,7 @@ export default function RankingPage() {
     (data: EditingCollectionRanking) => (id: number) => (newValue: number) => {
       const newPercentage = newValue / 3e7
       const newRanking = editPercentage(data, id, newPercentage)
-      if (validateRanking(newRanking)) {
-        setError(false)
-        setTempRankings(resetErrorProperty(newRanking))
-      } else {
-        setError(true)
-        setTempRankings(setErrorProperty(data, id, true))
-      }
+      setTempRankings(resetErrorProperty(newRanking))
     }
 
   const changeLockStatus =
@@ -104,7 +98,7 @@ export default function RankingPage() {
         RPGF3Id: '-2',
         ranking: [data],
       }
-      console.log('data:', data)
+      // console.log('data:', data)
       // data.ranking.sort((a, b) => b.share - a.share)
       setRankings(addAdditionalProperties(temp))
     }
