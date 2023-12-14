@@ -11,14 +11,14 @@ export const ArrowDown: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
       {...props}>
       <path
         d="M5.25 12.5625L12 19.3125L18.75 12.5625"
-        stroke="white"
+        stroke="currentColor"
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"
       />
       <path
         d="M12 18.375V4.6875"
-        stroke="white"
+        stroke="currentColor"
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"

@@ -5,9 +5,8 @@ export const HappySun: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
   return (
     <svg
       fill="none"
-      height="282"
       viewBox="0 0 321 282"
-      width="321"
+      width="360"
       xmlns="http://www.w3.org/2000/svg"
       {...props}>
       <path

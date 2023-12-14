@@ -1,52 +1,159 @@
-import { ArrowForward } from '@/components/Icon/ArrowForward'
-import { PodiumSharp } from '@/components/Icon/PodiumSharp'
-import Modal from '@/components/Modal/Modal'
-import { useEffect, useState } from 'react'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import cn from 'classnames'
-import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
-import { useRouter } from 'next/router'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { CollectionPlanet } from '@/components/Galaxy/CollectionPlanet'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
 import { HappySun } from '@/components/Icon/HappySun'
-import { SadSun } from '@/components/Icon/SadSun'
-import { fetchCollections } from '@/utils/flow'
+import { Help } from '@/components/Icon/Help'
+import { HelpModal } from '@/components/Journey/HelpModal'
+import { LoadingSpinner } from '../../components/Loading/LoadingSpinner'
 import { PairType } from '@/types/Pairs/Pair'
-import { useSession } from '@/context/session'
+import { PodiumSharp } from '@/components/Icon/PodiumSharp'
+import { fetchCollections } from '@/utils/flow'
+import { generateNonOverlappingOrbitCoordinates } from '@/utils/helpers'
+import { useRouter } from 'next/router'
+import { useWindowWidth } from '@react-hook/window-size/throttled'
+import Button from '@/components/Button'
 
 const PLANET_SIZE = 150
 
 export default function Galaxy() {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [cords, setCords] = useState<Array<{ x: number; y: number }>>([])
   const [collections, setCollections] = useState<PairType[]>([])
-  const { flowStatus } = useSession()
+  const isPanning = useRef(false)
+  const [showHelpModal, setShowHelpModal] = useState(() =>
+    Boolean(router.query.welcome)
+  )
+  // const [showNewSectionsModal, setShowNewSectionsModal] = useState(false)
+  // const [showCustomizeModal, setShowCustomizeModal] = useState(true)
+  // const { flowStatus, updateFlowStatus } = useSession()
+  const width = useWindowWidth()
 
-  useEffect(() => {
-    if (
-      (!flowStatus.impact || !flowStatus.expertise) &&
-      flowStatus.checkpoint.type !== 'initial'
-    ) {
-      setOpen(true)
-    }
-  }, [flowStatus])
+  // useEffect(() => {
+  //   const func = async () => {
+  //     const status = await updateFlowStatus()
+  //     if (
+  //       (!status.impact || !status.expertise) &&
+  //       status.checkpoint.type !== 'initial'
+  //     ) {
+  //       setOpen(true)
+  //     }
+  //   }
+
+  //   func()
+  // }, [updateFlowStatus])
 
   useEffect(() => {
     fetchCollections()
-      .then((data) => setCollections(data.concat(data)))
+      .then((data) => setCollections(data))
       .catch((err) => console.log(err))
-    setCords(
-      generateNonOverlappingOrbitCoordinates(5, 4)
-        .concat(generateNonOverlappingOrbitCoordinates(10, 2))
-        .concat(generateNonOverlappingOrbitCoordinates(20, 1.3))
-    )
   }, [])
+
+  useEffect(() => {
+    setCords(
+      generateNonOverlappingOrbitCoordinates(5, width < 1600 ? 2 : 2.5)
+        .concat(
+          generateNonOverlappingOrbitCoordinates(10, width < 1600 ? 1.3 : 1.4)
+        )
+        .concat(generateNonOverlappingOrbitCoordinates(20, 1.1))
+    )
+  }, [width])
+
+  const handlePlanetClick = (collection: PairType) => () => {
+    if (isPanning.current) return
+    if (
+      (collection.progress === 'Finished' ||
+        collection.progress === 'Attested') &&
+      !collection.hasSubcollections &&
+      !collection.hasCompositeProjects
+    )
+      return router.push(`/ranking`)
+    if (collection.hasSubcollections || collection.hasCompositeProjects) {
+      return router.push(`/galaxy/${collection.id}`)
+    }
+    return router.push(`/poll/${collection.id}`)
+  }
+
+  const checkShowHelpModalCondition = useCallback(() => {
+    // This is a workaround until the backend returns a better checkpoint response
+    const justOnePlanetUnlockedUnstarted =
+      collections.filter(
+        (collection) => !collection.locked || collection.started
+      ).length === 1
+
+    const bool = justOnePlanetUnlockedUnstarted
+
+    return bool
+  }, [collections])
+
+  useEffect(() => {
+    setShowHelpModal(checkShowHelpModalCondition())
+  }, [checkShowHelpModalCondition])
+
+  // useEffect(() => {
+  //   const hasUnlockedUnstartedCollection = collections.some(
+  //     (collection) => !collection.locked && !collection.started
+  //   )
+
+  //   if (
+  //     flowStatus.checkpoint.type !== 'initial' &&
+  //     hasUnlockedUnstartedCollection &&
+  //     !checkShowHelpModalCondition()
+  //   )
+  //     setShowNewSectionsModal(true)
+  //   else setShowNewSectionsModal(false)
+  // }, [collections, showHelpModal, checkShowHelpModalCondition, flowStatus])
+
+  // if (
+  //   checkShowHelpModalCondition() &&
+  //   (showCustomizeModal || collections.length === 0)
+  // ) {
+  //   setTimeout(() => setShowCustomizeModal(false), 3 * 1000)
+  //   return <CustomizeExperienceModal isOpen={true} onClose={() => {}} />
+  // }
+
+  if (collections.length === 0) {
+    return (
+      <div
+        className="flex w-full items-center justify-center"
+        style={{ height: 'calc(100vh - 60px)' }}>
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-hidden">
+      {/* {showNewSectionsModal && (
+        <NewSectionsModal
+          isOpen={true}
+          onClose={() => {
+            setShowNewSectionsModal(false)
+          }}
+        />
+      )} */}
+      {(showHelpModal || router.query.welcome) && (
+        <HelpModal
+          isOpen={true}
+          onClose={() => {
+            setShowHelpModal(false)
+            if (router.query.welcome) router.replace('', { query: {} })
+          }}
+        />
+      )}
+
       <ColoredGrid className="absolute max-h-screen-content w-full text-white" />
-      <TransformWrapper centerOnInit initialScale={2.5}>
+      <TransformWrapper
+        centerOnInit
+        initialScale={2.5}
+        onPanning={() => (isPanning.current = true)}
+        onPanningStop={() => {
+          setTimeout(() => {
+            isPanning.current = false
+          }, 50)
+        }}>
         <TransformComponent>
           <div
             className="flex w-screen items-center justify-center overflow-hidden p-10"
@@ -65,16 +172,13 @@ export default function Galaxy() {
 
                     return (
                       <div
-                        className="absolute flex cursor-pointer items-center justify-center"
-                        key={x + y}
-                        onClick={() =>
-                          !collection.locked &&
-                          router.push(
-                            `/${
-                              collection.hasSubcollections ? 'galaxy' : 'poll'
-                            }/${collection.id}`
-                          )
-                        }
+                        className={`absolute flex ${
+                          collection.locked
+                            ? 'cursor-default'
+                            : 'cursor-pointer'
+                        } items-center justify-center`}
+                        key={collection.id}
+                        onClick={handlePlanetClick(collection)}
                         style={{
                           width: `${PLANET_SIZE}px`,
                           height: `${PLANET_SIZE}px`,
@@ -82,63 +186,37 @@ export default function Galaxy() {
                           top: `${y - PLANET_SIZE / 2}px`,
                         }}>
                         <CollectionPlanet
-                          locked={collection.locked}
+                          hasCompositeProjects={collection.hasCompositeProjects}
+                          hasSubcollections={collection.hasSubcollections}
+                          locked={false}
                           name={collection.name}
+                          progress={collection.progress}
                         />
                       </div>
                     )
                   })}
-                {open ? <SadSun /> : <HappySun />}
+                <HappySun />
               </div>
             </div>
           </div>
         </TransformComponent>
       </TransformWrapper>
 
-      <Modal className="mt-80" isOpen={open} onClose={() => setOpen(false)}>
-        <div className="flex max-w-lg flex-col gap-4 font-IBM text-black">
-          <p className="text-lg font-bold">Starting the journey!</p>
-          <p className="text-xl">
-            Just two simple question to create more personalized voting
-            experience for you.
-          </p>
-          <button
-            className="mx-auto mt-4 flex h-[50px] min-w-fit items-center justify-center rounded-full border border-black bg-black p-2 px-8 text-sm text-white"
-            onClick={() => {
-              router.push('/start-journey')
-            }}>
-            {"Let's start"} <ArrowForward className="ml-1" />
-          </button>
-        </div>
-      </Modal>
+      {/* <MainQuestionsModal isOpen={open} onClose={() => setOpen(false)} /> */}
       <div className="fixed bottom-0 flex h-[113px]  w-full  items-center justify-between rounded-t-[25%] bg-gray-10 px-48 text-lg text-black">
-        <div className="flex items-center">
-          <h4 className="font-IBM text-3xl font-bold">Governance Orbit</h4>
-          <span className="ml-5 font-medium">40% voted</span>
-          <div className="-mt-1 ml-4 flex items-center">
-            <span className="text-3xl">[</span>
-            <div className="flex items-center gap-2 p-2">
-              {Array(13)
-                .fill(Infinity)
-                .map((_, idx) => (
-                  <div
-                    className={cn('h-3 w-[2px] bg-red', {
-                      'h-[6px] bg-black opacity-10': idx > 5,
-                    })}
-                    key={idx}
-                  />
-                ))}
-            </div>
-
-            <span className="text-3xl">]</span>
-          </div>
+        <Button varient="primary" onClick={() => setShowHelpModal(true)}>
+          Help
+          <Help />
+        </Button>
+        <p>
+          <strong>Click a planet to begin ranking</strong>
+        </p>
+        <div>
+          <Button varient="primary" onClick={() => router.push('/ranking')}>
+            Ranking
+            <PodiumSharp />
+          </Button>
         </div>
-        <button
-          className="flex items-center gap-2  whitespace-nowrap rounded-xl border-6 border-gray-30 bg-gray-50 px-6 py-2 text-lg"
-          onClick={() => {}}>
-          Check votes
-          <PodiumSharp />
-        </button>
       </div>
     </div>
   )

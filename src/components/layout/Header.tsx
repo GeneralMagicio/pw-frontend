@@ -1,23 +1,23 @@
 import Link from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { SITE_NAME } from '@/utils/config'
-import { useEffect, useRef } from 'react'
-import cn from 'classnames'
-import { useAccount, useNetwork, useSignMessage, useSwitchNetwork } from 'wagmi'
-import { login, logout } from '@/utils/auth'
-import { Logo } from '../Icon/Logo'
-import { useRouter } from 'next/router'
-import { ConnectWalletButton } from '../ConnectWalletButton'
+import { ConnectWalletButton } from '@/components/ConnectWalletButton'
+import Image from 'next/image'
 
 export function Header() {
   return (
-    <header className="z-10 flex h-[60px] items-center justify-between bg-gray-4 px-5">
+    <header className="z-30 flex h-[60px] items-center justify-between bg-gray-4 px-10">
       <Link href="/">
         <div className="ml-20">
-          <Logo />
+          <Image
+            alt="Pairwise"
+            height={100}
+            src="/images/pairwise-logo.svg"
+            width={150}
+          />
         </div>
       </Link>
-      <ConnectWalletButton className="h-[36px] bg-red" />
+      <div className="relative">
+        <ConnectWalletButton size="small" inactiveClassName="bg-red" />
+      </div>
     </header>
   )
 }

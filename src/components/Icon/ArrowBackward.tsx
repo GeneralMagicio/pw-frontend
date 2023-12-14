@@ -15,7 +15,7 @@ export const ArrowBackward: React.FC<SVGProps<SVGSVGElement>> = ({
         <path
           d="M11.9375 19.25L5.1875 12.5L11.9375 5.75"
           id="Vector"
-          stroke="#1B1E23"
+          stroke="currentColor"
           strokeLinecap="square"
           strokeMiterlimit="10"
           strokeWidth="2"
@@ -23,7 +23,7 @@ export const ArrowBackward: React.FC<SVGProps<SVGSVGElement>> = ({
         <path
           d="M6.125 12.5H19.8125"
           id="Vector_2"
-          stroke="#1B1E23"
+          stroke="currentColor"
           strokeLinecap="square"
           strokeMiterlimit="10"
           strokeWidth="2"

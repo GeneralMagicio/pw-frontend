@@ -1,13 +1,25 @@
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
-import { ReactNode } from 'react'
 import '@rainbow-me/rainbowkit/styles.css'
+
+import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
+import { SITE_NAME, WEB3_CHAINS } from '@/utils/config'
+import { WagmiConfig, configureChains, createConfig } from 'wagmi'
+
+import { ReactNode } from 'react'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { infuraProvider } from 'wagmi/providers/infura'
+import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   WEB3_CHAINS,
-  [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc: () => ({
+        http: process.env.NEXT_PUBLIC_QUICKNODE_HTTP_PROVIDER_URL || ''
+      }),
+    }),
+    infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY || '' }),
+    publicProvider(),
+  ]
 )
 const { connectors } = getDefaultWallets({
   appName: SITE_NAME,
@@ -29,7 +41,9 @@ interface Web3ProviderProps {
 export function Web3Provider({ children }: Web3ProviderProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider chains={chains} modalSize="compact">
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   )
 }

@@ -9,8 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'app.optimism.io',
-        port: '',
+        hostname: '**',
       },
     ],
   },

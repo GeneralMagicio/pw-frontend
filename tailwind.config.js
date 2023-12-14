@@ -3,11 +3,14 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      button: {
+        fontWeight: '500',
+      },
       minHeight: {
         'screen-content': 'calc(100vh - 177.45px)',
       },
       maxHeight: {
-        'screen-content': 'calc(100vh - 60px - 120px)',
+        'screen-content': 'calc(100vh - 60px)',
       },
       borderWidth: {
         6: '6px',
@@ -28,6 +31,7 @@ module.exports = {
         'black-3': 'var(--black-3)',
         'black-30': 'var(--black-30)',
         screen: '#FFF',
+        grayish: '#F1F5FB',
       },
       fontFamily: {
         IBM: ['var(--font-IBM)'],
@@ -36,6 +40,7 @@ module.exports = {
       boxShadow: {
         card: '-8px 8px 0px 0px rgba(255, 255, 255, 0.20)',
         card2: '0px 2px 15px 0px rgba(27, 30, 35, 0.10)',
+        card3: '0px 2px 12px 0px rgba(27, 30, 35, 0.06)',
       },
     },
   },
