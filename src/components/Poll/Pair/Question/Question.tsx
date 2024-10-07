@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ArrowForward } from '@/components/Icon/ArrowForward'
+import Button from '@/components/Button'
 
 interface QuestionProps {
   question: string
   onStart: () => void
 }
 
-export const Question: React.FC<QuestionProps> = ({
-  question,
-  onStart,
-}) => {
+export const Question: React.FC<QuestionProps> = ({ question, onStart }) => {
   const [seconds, setSeconds] = useState(3)
   const isStarted = seconds === 0
   useEffect(() => {
@@ -20,10 +18,10 @@ export const Question: React.FC<QuestionProps> = ({
   return (
     <div className="flex max-w-lg flex-col gap-10 font-IBM text-black">
       <p className="text-center text-lg font-medium">{question}</p>
-      <button
-        className={`mx-auto flex h-[50px] min-w-fit items-center justify-center rounded-full border border-dark p-2 px-8 text-sm ${
-          isStarted ? 'border-black bg-black text-white' : ''
-        } `}
+      <Button
+        className="min-w-fit mx-auto"
+        varient="secondary"
+        size="large"
         onClick={onStart}>
         {isStarted ? (
           <>
@@ -32,7 +30,7 @@ export const Question: React.FC<QuestionProps> = ({
         ) : (
           `Start in ${seconds}`
         )}
-      </button>
+      </Button>
     </div>
   )
 }

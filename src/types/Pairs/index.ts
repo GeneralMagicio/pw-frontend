@@ -4,9 +4,9 @@ export interface PairsType {
   pairs: Array<Array<PairType>>
   totalPairs: number
   votedPairs: number
-  type: 'project' | 'collection'
+  type: 'expertise'
   threshold: number
-  collectionTitle: string
+  name: string
 }
 
 export enum VOTES {
@@ -14,10 +14,4 @@ export enum VOTES {
   LEFT,
   RIGHT,
   ABSTAIN,
-}
-
-export enum PollType {
-  NORMAL = 'normal',
-  EXPERTISE = 'expertise',
-  IMPACT = 'root',
 }

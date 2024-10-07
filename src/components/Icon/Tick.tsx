@@ -1,6 +1,6 @@
 import { SVGProps } from 'react'
 
-export const Tick: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
+export const Tick: React.FC<SVGProps<SVGSVGElement>> = ({ color, ...props }) => {
   return (
     <svg
       fill="none"
@@ -11,7 +11,7 @@ export const Tick: React.FC<SVGProps<SVGSVGElement>> = ({ ...props }) => {
       {...props}>
       <path
         d="M19.5 6.5L9 18.5L4.5 14"
-        stroke="white"
+        stroke={color || "white"}
         strokeLinecap="square"
         strokeMiterlimit="10"
         strokeWidth="2"

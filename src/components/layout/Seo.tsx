@@ -8,10 +8,12 @@ import {
 import { DefaultSeo } from 'next-seo'
 
 export function Seo() {
-  const origin =
-    typeof window !== 'undefined' && window.location.origin
-      ? window.location.origin
-      : SITE_URL
+  // const origin =
+  //   typeof window !== 'undefined' && window.location.origin
+  //     ? window.location.origin
+  //     : SITE_URL
+
+  const origin = SITE_URL
 
   return (
     <DefaultSeo
@@ -25,7 +27,7 @@ export function Seo() {
         url: origin,
         images: [
           {
-            url: `${origin}/og.png`,
+            url: `${origin}/pw-logo.png`,
             alt: `${SITE_NAME} Open Graph Image`,
           },
         ],

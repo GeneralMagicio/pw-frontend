@@ -1,11 +1,12 @@
-import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { ArrowDown } from '@/components/Icon/ArrowDown'
 import { CollectionsLeft } from '@/components/Icon/CollectionsLeft'
 import { CollectionsRight } from '@/components/Icon/CollectionsRight'
 import { ColoredGrid } from '@/components/Icon/ColoredGrid'
+import { ConnectWalletButton } from '@/components/ConnectWalletButton'
 import { Discord } from '@/components/Icon/Discord'
 import { GMIcon } from '@/components/Icon/GMIcon'
 import { Github } from '@/components/Icon/Github'
+import Image from 'next/image'
 import { Linkedin } from '@/components/Icon/Linkedin'
 import { Medium } from '@/components/Icon/Medium'
 import { Star } from '@/components/Icon/Star'
@@ -15,7 +16,7 @@ import { VectorHorizontal2 } from '@/components/Icon/VectorHorizontal2'
 import { VectorHorizontal3 } from '@/components/Icon/VectorHorizontal3'
 import { VectorHorizontal4 } from '@/components/Icon/VectorHorizontal4'
 import { Votes } from '@/components/Icon/Votes'
-import Image from 'next/image'
+import Button from '@/components/Button'
 
 export default function Home() {
   return (
@@ -28,23 +29,26 @@ export default function Home() {
           src="/images/right-side-planet.svg"
           width="686"
         />
-        <Image
-          alt="Galaxy"
-          className=" mx-auto h-full w-full  max-w-[1041px]"
-          height="1016"
-          src="/images/center-universe.svg"
-          width="1289"
-        />
-        <Star className="absolute right-80    top-40" />
-        <div className="absolute inset-0 m-auto mt-28 flex w-[739px] flex-col items-center justify-center gap-6 rounded-2xl text-center font-IBM      leading-[63px] text-black ">
-          <h2 className="text-[64px] font-bold text-red">
-            Retroactive Public Goods Funding
-          </h2>
-          <p className="text-2xl ">Changing the way impact is rewarded</p>
-          <ConnectWalletButton
-            alternativeText="Start voting"
-            className="flex h-12 items-center bg-black"
+        <div className="absolute z-0 w-full">
+          <Image
+            alt="Galaxy"
+            className="mx-auto h-full w-full max-w-[1041px]"
+            height="1016"
+            src="/images/center-universe.svg"
+            width="1289"
           />
+        </div>
+        <Star className="absolute right-80 top-40" />
+        <div
+          className="relative z-10 m-auto flex w-[739px] flex-col items-center justify-center"
+          style={{ height: 'calc(100vh - 60px)' }}>
+          <div className="flex flex-col items-center justify-center gap-6 text-center font-IBM leading-[63px] text-black">
+            <h2 className="text-[64px] font-bold text-red">
+              Curate RetroPGF 3 Voting Lists with Pairwise
+            </h2>
+            <p className="text-2xl ">Making OP Allocations Easy!</p>
+            <ConnectWalletButton alternativeText="Start" />
+          </div>
         </div>
         <Image
           alt="Galaxy"
@@ -65,19 +69,21 @@ export default function Home() {
           src="/images/happy-sun.svg"
           width="290"
         />
-        <Star className="absolute right-16    top-28" />
+        <Star className="absolute right-16 top-28" />
         <h2 className="relative w-[899px] text-[44px] font-bold">
-          {`Your decision is not just wanted, it's needed!`}
+          Empowering BadgeHolders
         </h2>
         <p className="relative text-center text-[24px]">
-          {`Join the Optimism Collective's mission! With 30 million OP tokens up
-          for distribution in the third round of RetroPGF, your vote will shape
-          the direction of our collective future.`}
+          Pairwise is a platform for quickly curating project lists for RetroPGF
+          3 voting! Contribute to allocating funding in the Optimism ecosystem
+          and have fun doing it!
         </p>
-        <button className="relative flex h-12 shrink-0 items-center rounded-[100px] bg-black px-10 text-white">
-          Learn now
-          <ArrowDown className="ml-2" />
-        </button>
+        <a href="#section1">
+          <Button varient="brand" size="large">
+            Learn more
+            <ArrowDown />
+          </Button>
+        </a>
         <Star className="absolute -bottom-20 -left-28" height={35} width={35} />
       </div>
       <div className="relative mx-auto mb-40 w-[871px]">
@@ -90,79 +96,85 @@ export default function Home() {
         />
 
         <h2 className="text-center text-[52px] font-bold text-red">
-          Begin Your Journey
+          Beginning Your Journey
         </h2>
+        <a id="section1" />
         <VectorHorizontal className="mx-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">
-            Embark on the RetroPGF Odyssey
-          </h3>
+          <h3 className="text-[32px] font-bold">Simplifying Project Review</h3>
           <p className="text-lg font-medium">
-            Dive into the RetroPGF universe and discover a realm of projects
-            that hold the promise of positive change. Browse through our
-            collection and get a sneak peek into the potential impact you can
-            drive.
+            Crafted for RPGF, Pairwise transforms the overwhelming task of
+            reviewing numerous projects into a manageable and focused activity.
+            Concentrate on the projects you know best, and contribute to a more
+            informed and balanced allocation of funds.
           </p>
         </div>
         <VectorHorizontal2 className="mx-auto" />
         <div className="my-6 -mr-32 ml-auto flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Galactic Governance Awaits</h3>
+          <h3 className="text-[32px] font-bold">Streamlining List Creation</h3>
           <p className="text-lg font-medium">
-            Step into the RetroPGF cosmos, where your votes will determine the
-            trajectory of projects destined to shape our universe. Each
-            selection you make sends ripples through the space of innovation.
+            With Pairwise, you can easily create, edit, and share curated lists
+            of projects, to be imported directly into Agora and West for final
+            voting. By progressing through planets and moons, the process of
+            list-making is engaging and fun!
           </p>
           <CollectionsLeft className="absolute -left-[350px] -mt-[300px]" />
         </div>
         <VectorHorizontal3 className="mx-auto" />
         <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Unlock More Collections</h3>
+          <h3 className="text-[32px] font-bold">Leveraging Your Expertise</h3>
           <p className="text-lg font-medium">
-            Unleash your influence by voting on the unlocked collection. Your
-            votes are your voice, shaping the future of these projects. Every
-            click is a step toward making a difference.
+            Pairwise streamlines the review process, guiding you to the
+            categories and projects that align with your expertise. Your
+            insights are crucial; they ensure that funds are distributed to
+            projects that truly make an impact in the Optimism ecosystem.
           </p>
           <CollectionsRight className="absolute -right-[320px] -mt-[40%]" />
         </div>
-        <VectorHorizontal4 className="ml-28 mr-auto" />
-        <div className="my-6 -ml-36 flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
-          <h3 className="text-[32px] font-bold">Check and Modify Your Votes</h3>
+        <VectorHorizontal4 className="mr-auto ml-28" />
+        <div className="my-6 -mr-32 ml-auto  flex w-[494px] flex-col gap-6 rounded-[32px] border border-white px-11 pb-14 pt-24 text-center text-black">
+          <h3 className="text-[32px] font-bold">Fostering Collective Impact</h3>
           <p className="text-lg font-medium">
-            Review and refine your votes at any time. Your opinions matter, and
-            we want to make sure your choices reflect your passion for the
-            projects that resonate with you.
+            Pairwise is more than just a tool; it’s a community of informed
+            badge holders shaping the outcomes and future of RetroPGF. Join us
+            in making a lasting impact, guaranteeing that projects with proven
+            impact and value receive the recognition and resources they deserve.
           </p>
-          <Votes className="absolute -right-[350px] -mt-[60px]" />
+          <img
+            alt="Voted Projects"
+            className="absolute -left-[160px] -mt-[98px] w-3/4"
+            src="/images/voted-projects.png"
+          />
         </div>
       </div>
 
       <div className="relative mx-auto mb-60 mt-[340px] flex w-[662px] flex-col items-center justify-center gap-10 text-center">
-        <Star className="absolute -top-40    right-0" height={35} width={35} />
+        <Star className="absolute right-0 -top-40" height={35} width={35} />
         <h2 className="text-5xl font-bold text-red">
-          Ready to Shape the Galaxy?
+          Ready to shape the solar system?
         </h2>
         <p className="text-[32px]  font-medium text-black">
           Kickstart Your Journey: Connect Your Wallet Now
         </p>
         <ConnectWalletButton
-          alternativeText="Start voting"
-          className="flex h-12 items-center bg-black"
+          alternativeText="Start"
+          activeClassName="flex h-12 items-center"
         />
-        <Star
-          className="absolute -bottom-20    -left-20"
-          height={35}
-          width={35}
-        />
+        <Star className="absolute -bottom-20 -left-20" height={35} width={35} />
       </div>
-      <footer className="flex w-full justify-between px-20 py-8">
+      <footer className="flex justify-between w-full px-20 py-8">
         <div className="flex gap-6">
-          <Twitter />
-          <Linkedin />
-          <Github />
-          <Discord />
-          <Medium />
+          <a href="https://twitter.com/generalmagicio">
+            <Twitter />
+          </a>
+          <a href="https://github.com/GeneralMagicio/pw-frontend">
+            <Github />
+          </a>
+          <a href="https://discord.gg/72HUmabwEs">
+            <Discord />
+          </a>
         </div>
-        <div className="flex items-center gap-2 font-Inter text-lg text-black">
+        <div className="flex items-center gap-2 text-lg text-black">
           Magically crafted by <GMIcon />
         </div>
       </footer>

@@ -1,33 +1,40 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
-import { useSwitchNetwork } from 'wagmi'
+import { useAccount, useSwitchNetwork } from 'wagmi'
+import Button, { ButtonProps } from '../Button'
 
-export const ConnectWalletButton: React.FC<{
-  className?: string
-  alternativeText?: string
-}> = ({ className = 'bg-red', alternativeText }) => {
+export const ConnectWalletButton: React.FC<
+  {
+    alternativeText?: string
+    activeClassName?: string
+    inactiveClassName?: string
+  } & Omit<ButtonProps, 'className'>
+> = ({ alternativeText, activeClassName, inactiveClassName, ...props }) => {
   const router = useRouter()
   const { chains, switchNetworkAsync } = useSwitchNetwork()
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
-        const connected = mounted && account && chain
-        if (!connected) {
+        if (!mounted) return null
+        if (!account || !chain) {
           return (
-            <button
-              className={cn(className, 'min-w-[120px] rounded-full  px-4 ')}
+            <Button
+              varient="brand"
+              size="large"
+              className={inactiveClassName}
+              {...props}
               onClick={openConnectModal}>
-              <span className="font-bold text-white">Connect Wallet</span>
-            </button>
+              <span className="font-bold ">Connect Wallet</span>
+            </Button>
           )
         }
         return (
-          <button
-            className={cn(
-              'min-w-[120px] rounded-full border border-black bg-transparent px-4  text-black',
-              className
-            )}
+          <Button
+            size="large"
+            className={activeClassName}
+            {...props}
+            varient="secondary"
             onClick={
               !alternativeText
                 ? async () => {
@@ -36,12 +43,12 @@ export const ConnectWalletButton: React.FC<{
                     }
                     openAccountModal && openAccountModal()
                   }
-                : () => router.push('/galaxy')
+                : () => router.push('/galaxy?welcome=yes')
             }>
             <span className="font-bold">
               {alternativeText || account.displayName}
             </span>
-          </button>
+          </Button>
         )
       }}
     </ConnectButton.Custom>
